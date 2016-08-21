@@ -1,0 +1,13 @@
+package com.android.backchina.fragment;
+
+import com.android.backchina.adapter.ViewPageFragmentAdapter;
+import com.android.backchina.base.BaseViewPagerFragment;
+
+public class TabNewFragment extends BaseViewPagerFragment{
+
+    @Override
+    protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+        // TODO Auto-generated method stub
+        
+    }
+}

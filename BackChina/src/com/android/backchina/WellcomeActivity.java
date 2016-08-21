@@ -4,17 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
 
 public class WellcomeActivity extends Activity{
     
-    private ImageView ivSkip;
+    private Handler handler = new Handler();
     
-    private Handler _handler = new Handler();
-    
-    private Runnable _runnable;
+    private Runnable runnable;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +21,11 @@ public class WellcomeActivity extends Activity{
     }
     
 	private void setupView() {
-		_handler.removeCallbacks(_runnable);
-		redirectTo();
+	    handler.removeCallbacks(runnable);
 	}
     
     private void init(){
-        _runnable = new Runnable() {
+        runnable = new Runnable() {
             
             @Override
             public void run() {
@@ -39,13 +33,20 @@ public class WellcomeActivity extends Activity{
                 redirectTo();
             }
         };
-        _handler.postDelayed(_runnable, 3000);
+        handler.postDelayed(runnable, 2000);
     } 
     
     private void redirectTo(){
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
         finish();
+    }
+    
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
     }
     
 }

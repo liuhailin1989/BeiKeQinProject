@@ -135,13 +135,11 @@ public class EmptyLayout extends LinearLayout implements
                     img.setBackgroundResource(R.drawable.page_icon_network);
                 }
                 img.setVisibility(View.VISIBLE);
-                mLoading.setVisibility(View.VISIBLE);
                 mLoading.setVisibility(View.GONE);
                 clickEnable = true;
                 break;
             case NETWORK_LOADING:
                 mErrorState = NETWORK_LOADING;
-                mLoading.setVisibility(View.VISIBLE);
                 mLoading.setVisibility(View.VISIBLE);
                 img.setVisibility(View.GONE);
                 tv.setText(R.string.error_view_loading);
@@ -152,7 +150,6 @@ public class EmptyLayout extends LinearLayout implements
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
                 img.setBackgroundResource(R.drawable.page_icon_empty);
                 img.setVisibility(View.VISIBLE);
-                mLoading.setVisibility(View.INVISIBLE);
                 mLoading.setVisibility(View.GONE);
                 setTvNoDataContent();
                 clickEnable = true;
@@ -165,7 +162,6 @@ public class EmptyLayout extends LinearLayout implements
                 mErrorState = NODATA_ENABLE_CLICK;
                 img.setBackgroundResource(R.drawable.page_icon_empty);
                 img.setVisibility(View.VISIBLE);
-                mLoading.setVisibility(View.INVISIBLE);
                 mLoading.setVisibility(View.GONE);
                 setTvNoDataContent();
                 clickEnable = true;

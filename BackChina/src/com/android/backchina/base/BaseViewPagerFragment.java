@@ -43,6 +43,11 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
             onSetupTabAdapter(mTabsAdapter);
 
             mRoot = root;
+        }else{
+        	 ViewGroup parent = (ViewGroup) mRoot.getParent();
+             if (null != parent) {
+                 parent.removeView(mRoot);
+             }
         }
         return mRoot;
     }

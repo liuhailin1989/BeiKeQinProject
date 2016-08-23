@@ -17,6 +17,9 @@
     <string name="error_view_loading">Loading…</string>
     <string name="error_view_load_error_click_to_refresh">LoadingFailed\r\nClickToRefresh</string>
     <string name="error_view_network_error_click_to_refresh">NoNetWork</string>
-        <string name="error_view_no_data">NoData</string>
+    <string name="error_view_no_data">NoData</string>
 
+    <string name="subscribe_my_category">我的频道</string>
+    <string name="subscribe_manager_category_info_2">单击增删频道，长按拖拽排序</string>
+       <string name="subscribe_more_category">更多频道</string>
 </resources>

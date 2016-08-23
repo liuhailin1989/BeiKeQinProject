@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	
+
     <!-- 常用颜色值 -->
     <color name="white40">#40FFFFFF</color>
     <color name="white">#FFFFFF</color>
@@ -18,7 +18,6 @@
     <color name="graywhite">#F5F5F5</color>
     <color name="grayslate">#708090</color>
     <color name="lightblue">#0083FF</color>
-    
     <color name="main_green">#40AA53</color>
     <color name="main_gray">#9A9A9A</color>
     <color name="main_black">#333</color>
@@ -26,33 +25,47 @@
     <color name="actionbar_background">@color/main_green</color>
     <color name="transparent">#00000000</color>
     <color name="window_background">#EBEBEB</color>
-    
     <color name="comment_yellow">#FFFFEE</color>
-    
     <color name="split_line_color">#dad9d9</color>
-    
     <color name="actionbar_item_background_normal">@color/transparent</color>
     <color name="actionbar_item_background_pressed">#0b751e</color>
-
-    <color name="ui_dialog_list_text">#5E5E5E</color>    
+    <color name="ui_dialog_list_text">#5E5E5E</color>
     <color name="text_dark">#af000000</color>
     <color name="text_light">#3f000000</color>
-    <color name="light_gray">#1a000000</color>    
-    <color name="lightest_gray">#0a000000</color>    
+    <color name="light_gray">#1a000000</color>
+    <color name="lightest_gray">#0a000000</color>
     <color name="divider_color">#DADADA</color>
     <color name="list_divider_color">#DADADA</color>
     <color name="ui_dialog_divider">@color/list_divider_color</color>
-    
-    <color name="bg_touch">@color/lightest_gray</color> 
-    
+    <color name="bg_touch">@color/lightest_gray</color>
     <color name="background_color">#F1F1F1</color>
     <color name="intro_color">#585858</color>
     <color name="group_color">#898989</color>
     <color name="title_bar_bg_color">#FFFFFF</color>
     <color name="title_bar_text_color">#282828</color>
     <color name="item_selected">#33333333</color>
-    
     <color name="recycle_view_item_title_text_color">#2a2a2a</color>
     <color name="recycle_view_item_sub_title_text_color">#cccccc</color>
+
+    <!--  -->
+    <color name="default_text">#ff454545</color>
+    <color name="subscribe_activity_bg">#ffefefef</color>
+    <color name="subscribe_bg">#fff5f5f5</color>
+    <color name="subscribe_tip_text">#ff2e2e2e</color>
+    <color name="subscribe_seperate_line">#ffcdcdcd</color>
+    <color name="subscribe_item_drag_stroke">#ffd2d2d2</color>
+    <color name="subscribe_item_drag_bg">#fff5f5f5</color>
+    <color name="subscribe_item_selected_bg">#ffffffff</color>
+    <color name="subscribe_item_selected_stroke">#ffcc3131</color>
+    <color name="subscribe_item_disabled_bg">#ffefefef</color>
+    <color name="subscribe_item_disabled_stroke">#ffd9d9d9</color>
+    <color name="subscribe_item_pressed_bg">#fff9f9f9</color>
+    <color name="subscribe_item_pressed_stroke">#ffcdcdcd</color>
+    <color name="subscribe_item_normal_bg">#fff5f5f5</color>
+    <color name="subscribe_item_normal_stroke">#ffcdcdcd</color>
     
+   <item name="subscribe_item_text_color_normal" type="color">@color/default_text</item>
+
+    <color name="subscribe_item_text_color_pressed">#ffb9b9b9</color>
+
 </resources>

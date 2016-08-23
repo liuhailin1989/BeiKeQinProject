@@ -10,4 +10,11 @@ public class TabNewFragment extends BaseViewPagerFragment{
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    protected void enterChannelManagerActivity() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

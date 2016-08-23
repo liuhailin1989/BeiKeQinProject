@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 public abstract class BaseViewPagerFragment extends BaseFragment {
     
@@ -19,6 +21,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     protected EmptyLayout mErrorLayout;
     protected View mRoot;
 
+    protected ImageView mBtnChannel;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -35,6 +38,17 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
 
             mViewPager = (ViewPager) root.findViewById(R.id.pager);
 
+            mBtnChannel = (ImageView) root.findViewById(R.id.iv_btn_add_tab);
+            
+            mBtnChannel.setOnClickListener(new OnClickListener() {
+                
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    enterChannelManagerActivity();
+                }
+            });
+            
             mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
 
             mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(),
@@ -64,4 +78,6 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     }
 
     protected abstract void onSetupTabAdapter(ViewPageFragmentAdapter adapter);
+    
+    protected abstract void enterChannelManagerActivity();
 }

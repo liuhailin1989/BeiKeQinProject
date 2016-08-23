@@ -1,5 +1,6 @@
 package com.android.backchina.viewpagerfragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.android.backchina.fragment.BlogFragment;
 import com.android.backchina.fragment.NewsFragment;
 import com.android.backchina.fragment.VideoFragment;
 import com.android.backchina.interf.OnTabReselectListener;
+import com.android.backchina.ui.ChannelActivity;
 
 /**
  * 新闻
@@ -72,5 +74,13 @@ public class NewsViewPagerFragment extends BaseViewPagerFragment implements
 //        if (fragment != null && fragment instanceof BaseGeneralListFragment) {
 //            ((BaseGeneralListFragment) fragment).onTabReselect();
 //        }
+    }
+
+    @Override
+    protected void enterChannelManagerActivity() {
+        // TODO Auto-generated method stub
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ChannelActivity.class);
+        getActivity().startActivity(intent);
     }
 }

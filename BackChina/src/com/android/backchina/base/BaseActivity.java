@@ -9,9 +9,6 @@ public abstract class BaseActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        init();
-        setupView(savedInstanceState);
-        loadData();
     }
     
     @Override
@@ -48,10 +45,4 @@ public abstract class BaseActivity extends Activity{
     public int getContentViewId(){
         return 0;
     }
-    
-    public abstract void init();
-    
-    public abstract void setupView(Bundle savedInstanceState);
-    
-    public abstract void loadData();
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.android.backchina.base.BaseApplication;
 import com.android.backchina.db.DataBaseHelper;
 import com.android.backchina.utils.StringUtils;
+import com.google.gson.Gson;
 
 import android.app.Application;
 import android.content.pm.PackageInfo;
@@ -104,5 +105,12 @@ public class BackChinaApplication extends BaseApplication {
             setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
         }
         return uniqueID;
+    }
+    
+    public static Gson createGson() {
+        com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
+        //gsonBuilder.setExclusionStrategies(new SpecificClassExclusionStrategy(null, Model.class));
+        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        return gsonBuilder.create();
     }
 }

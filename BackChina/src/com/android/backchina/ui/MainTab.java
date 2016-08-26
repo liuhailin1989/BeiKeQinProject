@@ -1,17 +1,16 @@
 package com.android.backchina.ui;
 
 import com.android.backchina.R;
-import com.android.backchina.fragment.TabBlogFragment;
 import com.android.backchina.fragment.TabMeFragment;
-import com.android.backchina.fragment.TabNewFragment;
 import com.android.backchina.fragment.TabSubscribeFragment;
 import com.android.backchina.fragment.TabVideoFragment;
-import com.android.backchina.viewpagerfragment.NewsViewPagerFragment;
+import com.android.backchina.viewpagerfragment.TabBlogFragment;
+import com.android.backchina.viewpagerfragment.TabNewsFragment;
 
 
 public enum MainTab {
     
-    NEWS(0,R.string.tab_name_news,R.drawable.tab_drawable_news,NewsViewPagerFragment.class),
+    NEWS(0,R.string.tab_name_news,R.drawable.tab_drawable_news,TabNewsFragment.class),
     
     BLOG(1,R.string.tab_name_blog,R.drawable.tab_drawable_blog,TabBlogFragment.class),
     

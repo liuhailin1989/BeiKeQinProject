@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_49"
         android:background="@color/background_color"
-        app:allowWidthFull="true"
+        app:allowWidthFull="false"
         app:slidingBlock="@drawable/image_sliding_block"
         android:layout_toLeftOf="@id/iv_btn_add_tab">
 

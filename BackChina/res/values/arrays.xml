@@ -4,5 +4,9 @@
     <string-array name="news_viewpage_arrays">
         <item>滚动</item>
     </string-array>
+    
+    <string-array name="blog_viewpage_arrays">
+        <item>最新推荐</item>
+    </string-array>
 
 </resources>

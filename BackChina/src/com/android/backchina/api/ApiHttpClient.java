@@ -16,8 +16,8 @@ import java.util.Locale;
 
 public class ApiHttpClient {
 
-    public final static String HOST = "www.oschina.net";
-    private static String API_URL = "http://www.oschina.net/%s";
+    public final static String HOST = "www.backchina.com";
+    private static String API_URL = "http://www.backchina.com/%s";
     //    public final static String HOST = "192.168.1.58:8080";
     //private static String API_URL = "http://192.168.1.15:8000/%s";
 
@@ -119,13 +119,13 @@ public class ApiHttpClient {
 
     public static void setHttpClient(AsyncHttpClient c) {
         client = c;
-        client.addHeader("Accept-Language", Locale.getDefault().toString());
-        client.addHeader("Host", HOST);
-        client.addHeader("Connection", "Keep-Alive");
+//        client.addHeader("Accept-Language", Locale.getDefault().toString());
+//        client.addHeader("Host", HOST);
+//        client.addHeader("Connection", "Keep-Alive");
         client.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 
-        setUserAgent(ApiClientHelper.getUserAgent(BackChinaApplication.getInstance()));
+//        setUserAgent(ApiClientHelper.getUserAgent(BackChinaApplication.getInstance()));
     }
 
     public static void setUserAgent(String userAgent) {

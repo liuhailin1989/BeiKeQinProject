@@ -178,4 +178,10 @@ public class TabVideoFragment extends BaseFragment{
         webView.destroy();
         webView = null;
     }
+
+	@Override
+	protected int getLayoutId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

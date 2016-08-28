@@ -1,274 +1,193 @@
 package com.android.backchina.ui;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
+import java.util.List;
 
-import android.graphics.Bitmap;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.android.backchina.BackChinaApplication;
 import com.android.backchina.R;
 import com.android.backchina.adapter.DragAdapter;
-import com.android.backchina.adapter.OtherAdapter;
+import com.android.backchina.adapter.UnsignedAdapter;
+import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseActivity;
 import com.android.backchina.bean.ChannelItem;
-import com.android.backchina.manager.ChannelManage;
-import com.android.backchina.widget.DragGrid;
-import com.android.backchina.widget.OtherGridView;
+import com.android.backchina.bean.News;
+import com.android.backchina.bean.base.ChannelBean;
+import com.android.backchina.bean.base.PageBean;
+import com.android.backchina.bean.base.ResultBean;
+import com.android.backchina.interf.DragItemTouchHelperCallBack;
+import com.android.backchina.listener.OnItemClickListener;
+import com.android.backchina.listener.OnItemLongPressListener;
+import com.android.backchina.listener.OnItemRemovedListener;
+import com.android.backchina.manager.DragGridLayoutManager;
+import com.android.backchina.utils.TLog;
+import com.android.backchina.widget.DragRecyclerView;
+import com.android.backchina.widget.UnsignedRecyclerView;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.auth.ChallengeState;
+
 /**
  * 频道管理
  */
-public class ChannelActivity extends BaseActivity implements OnItemClickListener {
+public class ChannelActivity extends BaseActivity {
 	public static String TAG = "ChannelActivity";
-	/** 用户栏目的GRIDVIEW */
-	private DragGrid userGridView;
-	/** 其它栏目的GRIDVIEW */
-	private OtherGridView otherGridView;
-	/** 用户栏目对应的适配器，可以拖动 */
-	DragAdapter userAdapter;
-	/** 其它栏目对应的适配器 */
-	OtherAdapter otherAdapter;
-	/** 其它栏目列表 */
-	ArrayList<ChannelItem> otherChannelList = new ArrayList<ChannelItem>();
-	/** 用户栏目列表 */
-	ArrayList<ChannelItem> userChannelList = new ArrayList<ChannelItem>();
-	/** 是否在移动，由于这边是动画结束后才进行的数据更替，设置这个限制为了避免操作太频繁造成的数据错乱。 */	
-	boolean isMove = false;
+
+	private UnsignedRecyclerView mUnsignedView;
+	private DragRecyclerView mDragView;
 	
-	private ImageButton mBtnClose;
+	private DragAdapter mDragAdapter;
+	private UnsignedAdapter mUnsignedAdapter;
+	private ItemTouchHelper mItemTouchHelper;
+	
+	private DragGridLayoutManager mDragGridManager;
+	
+	private DragGridLayoutManager mUnsignedGridManager;
+	
+    private int mKeepItemCount = 1;
+    
+    private Context mContext;
+    
+    private Button mBtnDeleteChannel;
+    
+    private static boolean sIsDeleteFinish = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.channel);
-		initView();
-		initData();
-	}
-	
-	/** 初始化数据*/
-	private void initData() {
-	    userChannelList = ((ArrayList<ChannelItem>)ChannelManage.getManage(BackChinaApplication.getInstance().getSQLHelper()).getUserChannel());
-	    otherChannelList = ((ArrayList<ChannelItem>)ChannelManage.getManage(BackChinaApplication.getInstance().getSQLHelper()).getOtherChannel());
-	    userAdapter = new DragAdapter(this, userChannelList);
-	    userGridView.setAdapter(userAdapter);
-	    otherAdapter = new OtherAdapter(this, otherChannelList);
-	    otherGridView.setAdapter(otherAdapter);
-	    //设置GRIDVIEW的ITEM的点击监听
-	    otherGridView.setOnItemClickListener(this);
-	    userGridView.setOnItemClickListener(this);
-	}
-	
-	/** 初始化布局*/
-	private void initView() {
-		userGridView = (DragGrid) findViewById(R.id.userGridView);
-		otherGridView = (OtherGridView) findViewById(R.id.otherGridView);
-		mBtnClose = (ImageButton) findViewById(R.id.btn_close);
-		mBtnClose.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                saveChannel();
-                finish();
-            }
-        });
+		setContentView(R.layout.activity_channel_manager);
+
+		mContext = this;
+		sIsDeleteFinish = true;
+		setupViews();
+		init();
+		requeseData();
 	}
 
-	/** GRIDVIEW对应的ITEM点击监听接口  */
-	@Override
-	public void onItemClick(AdapterView<?> parent, final View view, final int position,long id) {
-		//如果点击的时候，之前动画还没结束，那么就让点击事件无效
-		if(isMove){
-			return;
-		}
-		switch (parent.getId()) {
-		case R.id.userGridView:
-			//position为 0，1 的不可以进行任何操作
-			if (position != 0 && position != 1) {
-				final ImageView moveImageView = getView(view);
-				if (moveImageView != null) {
-					TextView newTextView = (TextView) view.findViewById(R.id.text_item);
-					final int[] startLocation = new int[2];
-					newTextView.getLocationInWindow(startLocation);
-					final ChannelItem channel = ((DragAdapter) parent.getAdapter()).getItem(position);//获取点击的频道内容
-					otherAdapter.setVisible(false);
-					//添加到最后一个
-					otherAdapter.addItem(channel);
-					new Handler().postDelayed(new Runnable() {
-						public void run() {
-							try {
-								int[] endLocation = new int[2];
-								//获取终点的坐标
-								otherGridView.getChildAt(otherGridView.getLastVisiblePosition()).getLocationInWindow(endLocation);
-								MoveAnim(moveImageView, startLocation , endLocation, channel,userGridView);
-								userAdapter.setRemove(position);
-							} catch (Exception localException) {
-							}
-						}
-					}, 50L);
-				}
-			}
-			break;
-		case R.id.otherGridView:
-			final ImageView moveImageView = getView(view);
-			if (moveImageView != null){
-				TextView newTextView = (TextView) view.findViewById(R.id.text_item);
-				final int[] startLocation = new int[2];
-				newTextView.getLocationInWindow(startLocation);
-				final ChannelItem channel = ((OtherAdapter) parent.getAdapter()).getItem(position);
-				userAdapter.setVisible(false);
-				//添加到最后一个
-				userAdapter.addItem(channel);
-				new Handler().postDelayed(new Runnable() {
-					public void run() {
-						try {
-							int[] endLocation = new int[2];
-							//获取终点的坐标
-							userGridView.getChildAt(userGridView.getLastVisiblePosition()).getLocationInWindow(endLocation);
-							MoveAnim(moveImageView, startLocation , endLocation, channel,otherGridView);
-							otherAdapter.setRemove(position);
-						} catch (Exception localException) {
-						}
-					}
-				}, 50L);
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	/**
-	 * 点击ITEM移动动画
-	 * @param moveView
-	 * @param startLocation
-	 * @param endLocation
-	 * @param moveChannel
-	 * @param clickGridView
-	 */
-	private void MoveAnim(View moveView, int[] startLocation,int[] endLocation, final ChannelItem moveChannel,
-			final GridView clickGridView) {
-		int[] initLocation = new int[2];
-		//获取传递过来的VIEW的坐标
-		moveView.getLocationInWindow(initLocation);
-		//得到要移动的VIEW,并放入对应的容器中
-		final ViewGroup moveViewGroup = getMoveViewGroup();
-		final View mMoveView = getMoveView(moveViewGroup, moveView, initLocation);
-		//创建移动动画
-		TranslateAnimation moveAnimation = new TranslateAnimation(
-				startLocation[0], endLocation[0], startLocation[1],
-				endLocation[1]);
-		moveAnimation.setDuration(300L);//动画时间
-		//动画配置
-		AnimationSet moveAnimationSet = new AnimationSet(true);
-		moveAnimationSet.setFillAfter(false);//动画效果执行完毕后，View对象不保留在终止的位置
-		moveAnimationSet.addAnimation(moveAnimation);
-		mMoveView.startAnimation(moveAnimationSet);
-		moveAnimationSet.setAnimationListener(new AnimationListener() {
+	private void setupViews() {
+		mDragView = (DragRecyclerView) findViewById(R.id.myChanel);
+		mUnsignedView = (UnsignedRecyclerView) findViewById(R.id.moreChanel);
+		mBtnDeleteChannel = (Button) findViewById(R.id.btn_delete_channel);
+		mBtnDeleteChannel.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onAnimationStart(Animation animation) {
-				isMove = true;
-			}
-			
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-			}
-			
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				moveViewGroup.removeView(mMoveView);
-				// instanceof 方法判断2边实例是不是一样，判断点击的是DragGrid还是OtherGridView
-				if (clickGridView instanceof DragGrid) {
-					otherAdapter.setVisible(true);
-					otherAdapter.notifyDataSetChanged();
-					userAdapter.remove();
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if(sIsDeleteFinish){
+					sIsDeleteFinish = false;
+					mBtnDeleteChannel.setText("完成");
+					mDragAdapter.requestLongPressMode();
 				}else{
-					userAdapter.setVisible(true);
-					userAdapter.notifyDataSetChanged();
-					otherAdapter.remove();
+					sIsDeleteFinish = true;
+					mBtnDeleteChannel.setText("排序删除");
+					mDragAdapter.quitLongPressMode();
 				}
-				isMove = false;
+			}
+		});
+	}
+
+	private void init() {
+		mDragGridManager = new DragGridLayoutManager(mContext, 4);
+		mUnsignedGridManager = new DragGridLayoutManager(mContext, 4);
+		mDragAdapter = new DragAdapter();
+		mDragAdapter.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(ViewHolder holder, int position) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		mDragAdapter.setOnLongPressListener(new OnItemLongPressListener() {
+			
+			@Override
+			public void onLongPress() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		mDragAdapter.setOnItemRemovedListener(new OnItemRemovedListener<ChannelItem>() {
+			
+			@Override
+			public void onItemRemoved(int position, ChannelItem removedItem) {
+				// TODO Auto-generated method stub
+				mUnsignedAdapter.onItemInsert(position, removedItem);
+			}
+		});
+		mDragView.setAdapter(mDragAdapter);
+		mDragView.setLayoutManager(mDragGridManager);
+		DragItemTouchHelperCallBack callBack = new DragItemTouchHelperCallBack(mDragAdapter, mKeepItemCount);
+	    mItemTouchHelper = new ItemTouchHelper(callBack);
+	    mItemTouchHelper.attachToRecyclerView(mDragView);
+	    mDragAdapter.setItemTouchHelper(mItemTouchHelper);
+		
+		mUnsignedAdapter = new UnsignedAdapter();
+		mUnsignedAdapter.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(ViewHolder holder, int position) {
+				// TODO Auto-generated method stub
+				mUnsignedAdapter.onItemRemoved(position);
+			}
+		});
+		
+		mUnsignedAdapter.setOnItemRemovedListener(new OnItemRemovedListener<ChannelItem>() {
+			
+			@Override
+			public void onItemRemoved(int position, ChannelItem removedItem) {
+				// TODO Auto-generated method stub
+				mDragAdapter.onItemInsert(position, removedItem);
+			}
+		});
+		
+		mUnsignedView.setAdapter(mUnsignedAdapter);
+		mUnsignedView.setLayoutManager(mUnsignedGridManager);
+	}
+	
+	protected Type getType() {
+		// TODO Auto-generated method stub
+		 return new TypeToken<ChannelBean<ChannelItem>>() {
+	        }.getType();
+	}
+	
+	private void requeseData(){
+		
+		BackChinaApi.getChannelList( new TextHttpResponseHandler() {
+			
+			@Override
+			public void onSuccess(int arg0, Header[] headers, String responseString) {
+				// TODO Auto-generated method stub
+				TLog.d("called");
+				ChannelBean<ChannelItem> channelBean = BackChinaApplication.createGson().fromJson(responseString, getType());
+				if(channelBean != null && channelBean.getItems() != null){
+					setListData(channelBean.getItems());
+				}
+			}
+			
+			@Override
+			public void onFailure(int arg0, Header[] headers, String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				TLog.d("called");
 			}
 		});
 	}
 	
-	/**
-	 * 获取移动的VIEW，放入对应ViewGroup布局容器
-	 * @param viewGroup
-	 * @param view
-	 * @param initLocation
-	 * @return
-	 */
-	private View getMoveView(ViewGroup viewGroup, View view, int[] initLocation) {
-		int x = initLocation[0];
-		int y = initLocation[1];
-		viewGroup.addView(view);
-		LinearLayout.LayoutParams mLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		mLayoutParams.leftMargin = x;
-		mLayoutParams.topMargin = y;
-		view.setLayoutParams(mLayoutParams);
-		return view;
+	private void setListData(List<ChannelItem> dataList){
+		TLog.d("called dataList size =" +dataList.size());
+		if(mUnsignedAdapter != null){
+			mUnsignedAdapter.setDatas(dataList);
+		}
 	}
-	
-	/**
-	 * 创建移动的ITEM对应的ViewGroup布局容器
-	 */
-	private ViewGroup getMoveViewGroup() {
-		ViewGroup moveViewGroup = (ViewGroup) getWindow().getDecorView();
-		LinearLayout moveLinearLayout = new LinearLayout(this);
-		moveLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		moveViewGroup.addView(moveLinearLayout);
-		return moveLinearLayout;
-	}
-	
-	/**
-	 * 获取点击的Item的对应View，
-	 * @param view
-	 * @return
-	 */
-	private ImageView getView(View view) {
-		view.destroyDrawingCache();
-		view.setDrawingCacheEnabled(true);
-		Bitmap cache = Bitmap.createBitmap(view.getDrawingCache());
-		view.setDrawingCacheEnabled(false);
-		ImageView iv = new ImageView(this);
-		iv.setImageBitmap(cache);
-		return iv;
-	}
-	
-	/** 退出时候保存选择后数据库的设置  */
-	private void saveChannel() {
-		ChannelManage.getManage(BackChinaApplication.getInstance().getSQLHelper()).deleteAllChannel();
-		ChannelManage.getManage(BackChinaApplication.getInstance().getSQLHelper()).saveUserChannel(userAdapter.getChannnelLst());
-		ChannelManage.getManage(BackChinaApplication.getInstance().getSQLHelper()).saveOtherChannel(otherAdapter.getChannnelLst());
-	}
-	
-	@Override
-	public void onBackPressed() {
-		saveChannel();
-//		if(userAdapter.isListChanged()){
-//			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//			setResult(MainActivity.CHANNELRESULT, intent);
-//			finish();
-//			Log.d(TAG, "数据发生改变");
-//		}else{
-//			super.onBackPressed();
-//		}
-//		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-		super.onBackPressed();
-	}
+
 }

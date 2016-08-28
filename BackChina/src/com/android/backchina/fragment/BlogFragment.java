@@ -24,4 +24,10 @@ public class BlogFragment extends BaseFragment implements OnTabReselectListener 
         view.setBackgroundColor(getResources().getColor(R.color.red));
         return view;
     }
+
+	@Override
+	protected int getLayoutId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

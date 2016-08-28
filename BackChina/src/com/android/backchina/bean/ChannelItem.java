@@ -1,76 +1,55 @@
 package com.android.backchina.bean;
 
-import java.io.Serializable;
-
 /** 
  * ITEM的对应可序化队列属性
  *  */
-public class ChannelItem implements Serializable {
+public class ChannelItem extends Entity {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6465237897027410019L;
-	/** 
-	 * 栏目对应ID
-	 *  */
-	public Integer id;
-	/** 
-	 * 栏目对应NAME
-	 *  */
-	public String name;
-	/** 
-	 * 栏目在整体中的排序顺序  rank
-	 *  */
-	public Integer orderId;
-	/** 
-	 * 栏目是否选中
-	 *  */
-	public Integer selected;
+	
+	private int typeid;
+	
+	private String name;
+	
+	private String url;
+	
+	private String urlapi;
 
 	public ChannelItem() {
+		
 	}
 
-	public ChannelItem(int id, String name, int orderId,int selected) {
-		this.id = Integer.valueOf(id);
-		this.name = name;
-		this.orderId = Integer.valueOf(orderId);
-		this.selected = Integer.valueOf(selected);
+	public int getTypeid() {
+		return typeid;
 	}
 
-	public int getId() {
-		return this.id.intValue();
+	public void setTypeid(int typeid) {
+		this.typeid = typeid;
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
-	public int getOrderId() {
-		return this.orderId.intValue();
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Integer getSelected() {
-		return this.selected;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setId(int paramInt) {
-		this.id = Integer.valueOf(paramInt);
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
-	public void setName(String paramString) {
-		this.name = paramString;
+	public String getUrlapi() {
+		return urlapi;
 	}
 
-	public void setOrderId(int paramInt) {
-		this.orderId = Integer.valueOf(paramInt);
-	}
-
-	public void setSelected(Integer paramInteger) {
-		this.selected = paramInteger;
-	}
-
-	public String toString() {
-		return "ChannelItem [id=" + this.id + ", name=" + this.name
-				+ ", selected=" + this.selected + "]";
+	public void setUrlapi(String urlapi) {
+		this.urlapi = urlapi;
 	}
 }

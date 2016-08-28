@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import com.android.backchina.utils.ImageLoader;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.TLog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
@@ -27,12 +28,14 @@ public abstract class BaseFragment<T> extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TLog.d("called");
         mBundle = getArguments();
         initBundle(mBundle);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	TLog.d("called");
         if (mRoot != null) {
             ViewGroup parent = (ViewGroup) mRoot.getParent();
             if (parent != null)
@@ -52,11 +55,13 @@ public abstract class BaseFragment<T> extends Fragment{
     public void onDestroyView() {
         // TODO Auto-generated method stub
         super.onDestroyView();
+        TLog.d("called");
     }
     
     @Override
     public void onDestroy() {
         super.onDestroy();
+        TLog.d("called");
         RequestManager manager = mImgLoader;
         if (manager != null) {
             manager.onDestroy();
@@ -96,8 +101,9 @@ public abstract class BaseFragment<T> extends Fragment{
      * @return RequestManager
      */
     public synchronized RequestManager getImgLoader() {
-        if (mImgLoader == null)
+        if (mImgLoader == null){
             mImgLoader = Glide.with(this);
+        }
         return mImgLoader;
     }
 

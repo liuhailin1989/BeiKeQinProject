@@ -1,9 +1,5 @@
 package com.android.backchina.bean.base;
 
-/**
- * Created by huanghaibin
- * on 16-5-23.
- */
 public class ResultBean<T> {
     public static final int RESULT_SUCCESS = 1;
     public static final int RESULT_UNKNOW = 0;
@@ -12,10 +8,10 @@ public class ResultBean<T> {
     public static final int RESULT_NOT_LOGIN = 201;
     public static final int RESULT_TOKEN_EXPRIED = 202;
     public static final int RESULT_NOT_PERMISSION = 203;
+    
     private T result;
-    private int code;
-    private String message;
-    private String time;
+    
+    private int page;
 
     public T getResult() {
         return result;
@@ -25,31 +21,13 @@ public class ResultBean<T> {
         this.result = result;
     }
 
-    public int getCode() {
-        return code;
-    }
+	public int getPage() {
+		return page;
+	}
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public boolean isSuccess() {
-        return code == RESULT_SUCCESS && result != null;
-    }
+	public void setPage(int page) {
+		this.page = page;
+	}
+    
+    
 }

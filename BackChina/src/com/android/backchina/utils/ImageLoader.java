@@ -1,14 +1,11 @@
 package com.android.backchina.utils;
 
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
-import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 /**
  * Glide 图片加载辅助类
@@ -36,6 +33,7 @@ public class ImageLoader {
     }
 
     public static void loadImage(RequestManager loader, ImageView view, String url, int placeholder, int error, boolean isCenterCrop) {
+    	TLog.d("url = "+url);
         if (TextUtils.isEmpty(url)) {
             view.setImageResource(placeholder);
         } else {

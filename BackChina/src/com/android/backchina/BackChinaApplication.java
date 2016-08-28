@@ -3,24 +3,27 @@ package com.android.backchina;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.android.backchina.base.BaseApplication;
-import com.android.backchina.db.DataBaseHelper;
-import com.android.backchina.utils.StringUtils;
-import com.google.gson.Gson;
-
-import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+import com.android.backchina.api.ApiHttpClient;
+import com.android.backchina.base.BaseApplication;
+import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.TLog;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.PersistentCookieStore;
+
 public class BackChinaApplication extends BaseApplication {
 	private static BackChinaApplication instance;
-	private DataBaseHelper sqlHelper;
 	
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		instance = this;
+		init();
+		initLogin();
 	}
 	
 	/** 获取Application */
@@ -28,20 +31,22 @@ public class BackChinaApplication extends BaseApplication {
 		return instance;
 	}
 	
-	/** 获取数据库Helper */
-	public DataBaseHelper getSQLHelper() {
-		if (sqlHelper == null)
-			sqlHelper = new DataBaseHelper(instance);
-		return sqlHelper;
+	private void init(){
+		//
+        TLog.DEBUG = true;
+        TLog.d("called");
+        
+		// 初始化网络请求
+        AsyncHttpClient client = new AsyncHttpClient();
+        PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
+        client.setCookieStore(myCookieStore);
+        ApiHttpClient.setHttpClient(client);
+        ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
+        
 	}
 	
-	@Override
-	public void onTerminate() {
-		// TODO Auto-generated method stub
-		if (sqlHelper != null)
-			sqlHelper.close();
-		super.onTerminate();
-		//整体摧毁的时候调用这个方法
+	private void initLogin(){
+		
 	}
 	
     /**

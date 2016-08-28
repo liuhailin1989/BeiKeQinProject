@@ -25,4 +25,10 @@ public class VideoFragment extends BaseFragment implements OnTabReselectListener
         view.setBackgroundColor(getResources().getColor(R.color.blue));
         return view;
     }
+
+	@Override
+	protected int getLayoutId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

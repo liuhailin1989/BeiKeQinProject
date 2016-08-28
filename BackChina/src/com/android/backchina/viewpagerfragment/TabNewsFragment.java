@@ -30,11 +30,11 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
         String[] title = getResources().getStringArray(
                 R.array.news_viewpage_arrays);
 
-        adapter.addTab(title[0], "news", NewsFragment.class,
+        adapter.addTab(title[0], "滚动", NewsFragment.class,
                 null);
-        adapter.addTab(title[0], "news1", BlogFragment.class,
+        adapter.addTab(title[0], "news1", NewsFragment.class,
                 null);
-        adapter.addTab(title[0], "news2", VideoFragment.class,
+        adapter.addTab(title[0], "news2", NewsFragment.class,
                 null);
         adapter.addTab(title[0], "news3", NewsFragment.class,
                 null);
@@ -61,13 +61,6 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
         mViewPager.setOffscreenPageLimit(3);
     }
 
-
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
     @Override
     public void onTabReselect() {
         Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());
@@ -83,4 +76,10 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
         intent.setClass(getActivity(), ChannelActivity.class);
         getActivity().startActivity(intent);
     }
+
+	@Override
+	protected int getLayoutId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -1,50 +1,138 @@
 package com.android.backchina.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.android.backchina.utils.StringUtils;
-
-
 /**
  * 新闻实体类
  */
 public class News extends Entity {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8399190484147014388L;
+
 	public final static int NEWSTYPE_NEWS = 0x00;//0 新闻
 	
 	private String title;
 	
+	/**
+	 * 封面
+	 */
+	private String pic;
+	
+	/**
+	 * 高清封面
+	 */
+	private String bigpic;
+	
+	/**
+	 * 
+	 */
+	private String video;
+	
+	/**
+	 * 
+	 */
+	private String isad;
+	
+	/**
+	 * 
+	 */
+	private String todayhot;
+	
+	/**
+	 * 来源
+	 */
+	private String from;
+	
+	/**
+	 * 
+	 */
+	private String redirect;
+	
+	/**
+	 * 
+	 */
+	private String allowcomment;
+	
+	/**
+	 * 简介
+	 */
+	private String summary;
+	
+	/**
+	 * 发布日期
+	 */
+	private long dateline;
+	
+	/**
+	 * 分类名称
+	 */
+	private String catname;
+	
+	/**
+	 * 分类网址
+	 */
+	private String caturl;
+	
+	/**
+	 * 网址
+	 */
 	private String url;
 	
-	private String body;
+	/**
+	 * api接口
+	 */
+	private String urlapi;
 	
-	private String author;
+	/**
+	 * 评论或者回帖数
+	 */
+	private int comments = 0;
 	
-	private int authorId;
+	/**
+	 * 点击数量
+	 */
+	private int views;
 	
-	private int commentCount;
+	/**
+	 * 评论网址
+	 */
+	private String commurl;
 	
-	private String pubDate;
+	/**
+	 * 评论API接口
+	 */
+	private String commurlapi;
 	
-	private String softwareLink;
+	/**
+	 * 作者ID
+	 */
+	private String authorid;
 	
-	private String softwareName;
+	/**
+	 * 用户名
+	 */
+	private String username;
 	
-	private int favorite;
+	/**
+	 * 用户头像（小）
+	 */
+	private String avatar;
 	
-	private NewsType newsType;
+	/**
+	 * 用户头像（中）
+	 */
+	private String avatar_middle;
 	
-	private List<Relative> relatives = new ArrayList<Relative>();
+	/**
+	 * 用户头像（大）
+	 */
+	private String avatar_big;
 	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	/**
+	 * 用户头像（默认）
+	 */
+	private String avatar_default;
 
 	public String getTitle() {
 		return title;
@@ -52,6 +140,102 @@ public class News extends Entity {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+
+	public String getBigpic() {
+		return bigpic;
+	}
+
+	public void setBigpic(String bigpic) {
+		this.bigpic = bigpic;
+	}
+
+	public String getVideo() {
+		return video;
+	}
+
+	public void setVideo(String video) {
+		this.video = video;
+	}
+
+	public String getIsad() {
+		return isad;
+	}
+
+	public void setIsad(String isad) {
+		this.isad = isad;
+	}
+
+	public String getTodayhot() {
+		return todayhot;
+	}
+
+	public void setTodayhot(String todayhot) {
+		this.todayhot = todayhot;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getRedirect() {
+		return redirect;
+	}
+
+	public void setRedirect(String redirect) {
+		this.redirect = redirect;
+	}
+
+	public String getAllowcomment() {
+		return allowcomment;
+	}
+
+	public void setAllowcomment(String allowcomment) {
+		this.allowcomment = allowcomment;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public long getDateline() {
+		return dateline;
+	}
+
+	public void setDateline(long dateline) {
+		this.dateline = dateline;
+	}
+
+	public String getCatname() {
+		return catname;
+	}
+
+	public void setCatname(String catname) {
+		this.catname = catname;
+	}
+
+	public String getCaturl() {
+		return caturl;
+	}
+
+	public void setCaturl(String caturl) {
+		this.caturl = caturl;
 	}
 
 	public String getUrl() {
@@ -62,135 +246,91 @@ public class News extends Entity {
 		this.url = url;
 	}
 
-	public String getBody() {
-		return body;
+	public String getUrlapi() {
+		return urlapi;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public void setUrlapi(String urlapi) {
+		this.urlapi = urlapi;
 	}
 
-	public String getAuthor() {
-		return author;
+	public int getComments() {
+		return comments;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setComments(int comments) {
+		this.comments = comments;
 	}
 
-	public int getAuthorId() {
-		return authorId;
+	public int getViews() {
+		return views;
 	}
 
-	public void setAuthorId(String authorId) {
-		this.authorId = StringUtils.toInt(authorId, 0);
+	public void setViews(int views) {
+		this.views = views;
 	}
 
-	public int getCommentCount() {
-		return commentCount;
+	public String getCommurl() {
+		return commurl;
 	}
 
-	public void setCommentCount(int commentCount) {
-		this.commentCount = commentCount;
+	public void setCommurl(String commurl) {
+		this.commurl = commurl;
 	}
 
-	public String getPubDate() {
-		return pubDate;
+	public String getCommurlapi() {
+		return commurlapi;
 	}
 
-	public void setPubDate(String pubDate) {
-		this.pubDate = pubDate;
+	public void setCommurlapi(String commurlapi) {
+		this.commurlapi = commurlapi;
 	}
 
-	public String getSoftwareLink() {
-		return softwareLink;
+	public String getAuthorid() {
+		return authorid;
 	}
 
-	public void setSoftwareLink(String softwareLink) {
-		this.softwareLink = softwareLink;
+	public void setAuthorid(String authorid) {
+		this.authorid = authorid;
 	}
 
-	public String getSoftwareName() {
-		return softwareName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setSoftwareName(String softwareName) {
-		this.softwareName = softwareName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public int getFavorite() {
-		return favorite;
+	public String getAvatar() {
+		return avatar;
 	}
 
-	public void setFavorite(int favorite) {
-		this.favorite = favorite;
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
-	public NewsType getNewType() {
-		return newsType;
+	public String getAvatar_middle() {
+		return avatar_middle;
 	}
 
-	public void setNewType(NewsType newType) {
-		this.newsType = newType;
+	public void setAvatar_middle(String avatar_middle) {
+		this.avatar_middle = avatar_middle;
 	}
 
-	public List<Relative> getRelatives() {
-		return relatives;
+	public String getAvatar_big() {
+		return avatar_big;
 	}
 
-	public void setRelatives(List<Relative> relatives) {
-		this.relatives = relatives;
+	public void setAvatar_big(String avatar_big) {
+		this.avatar_big = avatar_big;
 	}
-	
-	public class NewsType implements Serializable{
-		private int type;
-		private String attachment;
-		private int authoruid2;
-		private String eventUrl;
-		
-		public String getEventUrl() {
-			return eventUrl;
-		}
-		public void setEventUrl(String eventUrl) {
-			this.eventUrl = eventUrl;
-		}
-		public int getType() {
-			return type;
-		}
-		public void setType(int type) {
-			this.type = type;
-		}
-		public String getAttachment() {
-			return attachment;
-		}
-		public void setAttachment(String attachment) {
-			this.attachment = attachment;
-		}
-		public int getAuthoruid2() {
-			return authoruid2;
-		}
-		public void setAuthoruid2(int authoruid2) {
-			this.authoruid2 = authoruid2;
-		}
-	} 
-	
-	public class Relative implements Serializable{
-		
-		public String title;
-		
-		public String url;
-		
-		public String getTitle() {
-			return title;
-		}
-		public void setTitle(String title) {
-			this.title = title;
-		}
-		public String getUrl() {
-			return url;
-		}
-		public void setUrl(String url) {
-			this.url = url;
-		}
-	} 
+
+	public String getAvatar_default() {
+		return avatar_default;
+	}
+
+	public void setAvatar_default(String avatar_default) {
+		this.avatar_default = avatar_default;
+	}
 }

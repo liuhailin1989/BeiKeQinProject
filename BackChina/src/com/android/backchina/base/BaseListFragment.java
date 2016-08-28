@@ -20,8 +20,10 @@ import com.android.backchina.bean.base.PageBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.SuperRefreshLayout;
 import com.loopj.android.http.TextHttpResponseHandler;
+
 import cz.msebera.android.httpclient.Header;
 
 public abstract class BaseListFragment<T> extends BaseFragment<T> implements SuperRefreshLayout.SuperRefreshLayoutListener, 
@@ -91,13 +93,14 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
         // TODO Auto-generated method stub
         super.initData();
         //when open this fragment,read the obj
-
+        TLog.d("called");
         mAdapter = getListAdapter();
         mListView.setAdapter(mAdapter);
 
         mHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            	TLog.d("called");
                 onRequestError(statusCode);
                 onRequestFinish();
             }
@@ -106,8 +109,8 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     ResultBean<PageBean<T>> resultBean = BackChinaApplication.createGson().fromJson(responseString, getType());
-                    if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
-                        onRequestSuccess(resultBean.getCode());
+                    if (resultBean != null  && resultBean.getResult().getItems() != null) {
+                        onRequestSuccess(1);
                         setListData(resultBean);
                     } else {
                         setFooterType(TYPE_NO_MORE);
@@ -127,7 +130,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
                 mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
                 //if is the first loading
                 if (mBean == null) {
-                    mBean = new PageBean<>();
+                    mBean = new PageBean<T>();
                     mBean.setItems(new ArrayList<T>());
                     onRefreshing();
                 } else {
@@ -155,6 +158,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     @Override
     public void onRefreshing() {
         // TODO Auto-generated method stub
+    	TLog.d("called");
         mIsRefresh = true;
         requestData();
     }
@@ -162,6 +166,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     @Override
     public void onLoadMore() {
         // TODO Auto-generated method stub
+    	TLog.d("called");
         requestData();
     }
     
@@ -169,6 +174,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
      * request network data
      */
     protected void requestData() {
+    	TLog.d("called");
         onRequestStart();
         setFooterType(TYPE_LOADING);
     }
@@ -232,14 +238,14 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         //is refresh
-        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
+//        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
             //cache the time
-            mTime = resultBean.getTime();
+//            mTime = resultBean.getTime();
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addItem(mBean.getItems());
-            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+//            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore();
             AppOperator.runOnThread(new Runnable() {
                 @Override

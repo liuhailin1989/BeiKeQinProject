@@ -63,7 +63,6 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
         title.setText(info.title);
         mPagerStrip.addTab(v);
         }
-
         mTabs.add(info);
         notifyDataSetChanged();
     }

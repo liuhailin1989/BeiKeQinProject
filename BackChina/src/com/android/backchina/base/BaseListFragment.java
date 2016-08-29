@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.base.PageBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.cache.CacheManager;
+import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.SuperRefreshLayout;
@@ -27,7 +29,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
 
 public abstract class BaseListFragment<T> extends BaseFragment<T> implements SuperRefreshLayout.SuperRefreshLayoutListener, 
-             OnItemClickListener, BaseListAdapter.Callback, View.OnClickListener{
+             OnItemClickListener, BaseListAdapter.Callback, View.OnClickListener,OnTabReselectListener {
 
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_LOADING = 1;
@@ -36,8 +38,6 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     public static final int TYPE_NET_ERROR = 4;
     
     //
-    protected String CACHE_NAME = getClass().getName();
-    
     protected ListView mListView;
     
     protected SuperRefreshLayout mRefreshLayout;
@@ -50,7 +50,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     
     protected TextHttpResponseHandler mHandler;
     
-    protected PageBean<T> mBean;
+//    protected PageBean<T> mBean;
     
     private String mTime;
     
@@ -60,6 +60,24 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     
     private TextView mFooterText;
     
+    protected int mCurrentPage = 0;
+    
+    
+    
+    @Override
+    protected void initBundle(Bundle bundle) { 
+        // TODO Auto-generated method stub
+        super.initBundle(bundle);
+    }
+    
+    protected String getCacheKeyPrefix() {
+        return null;
+    }
+    
+    private String getCacheKey() {
+        return getCacheKeyPrefix() + "_" + mCurrentPage;
+    }
+    
     @Override
     protected int getLayoutId() {
         // TODO Auto-generated method stub
@@ -67,9 +85,9 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     }
     
     @Override
-    protected void initWidget(View root) {
+    protected void setupViews(View root) {
         // TODO Auto-generated method stub
-        super.initWidget(root);
+        super.setupViews(root);
         mListView = (ListView) root.findViewById(R.id.listView);
         mRefreshLayout = (SuperRefreshLayout) root.findViewById(R.id.superRefreshLayout);
         mRefreshLayout.setColorSchemeResources(
@@ -103,15 +121,16 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
             	TLog.d("called");
                 onRequestError(statusCode);
                 onRequestFinish();
-            }
+            } 
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                TLog.d("called");
                 try {
                     ResultBean<PageBean<T>> resultBean = BackChinaApplication.createGson().fromJson(responseString, getType());
                     if (resultBean != null  && resultBean.getResult().getItems() != null) {
                         onRequestSuccess(1);
-                        setListData(resultBean);
+                        setListData(resultBean.getResult());
                     } else {
                         setFooterType(TYPE_NO_MORE);
                         //mRefreshLayout.setNoMoreData();
@@ -124,30 +143,53 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
             }
         };
 
+//        AppOperator.runOnThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
+//                //if is the first loading
+//                if (mBean == null) {
+//                    mBean = new PageBean<T>();
+//                    mBean.setItems(new ArrayList<T>());
+//                    onRefreshing();
+//                } else {
+//                    if (mRoot != null) {
+//                        mRoot.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mAdapter.addItem(mBean.getItems());
+//                                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+//                                mRefreshLayout.setVisibility(View.VISIBLE);
+//                                onRefreshing();
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        });
+    }
+
+    public void show(){
         AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
-                mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
+                TLog.d("CACHE_KEY = " + getCacheKey());
+                final PageBean<T> bean = (PageBean<T>) CacheManager.readObject(getActivity(), getCacheKey());
                 //if is the first loading
-                if (mBean == null) {
-                    mBean = new PageBean<T>();
-                    mBean.setItems(new ArrayList<T>());
+                if (bean == null) {
                     onRefreshing();
                 } else {
                     mRoot.post(new Runnable() {
                         @Override
                         public void run() {
-                            mAdapter.addItem(mBean.getItems());
-                            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                            mRefreshLayout.setVisibility(View.VISIBLE);
-                            onRefreshing();
+                            setListData(bean);
                         }
                     });
                 }
             }
-        });
+        });    
     }
-
+    
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
@@ -236,27 +278,22 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
         mIsRefresh = false;
     }
     
-    protected void setListData(ResultBean<PageBean<T>> resultBean) {
+    protected void setListData(final PageBean<T> pageBean) {
         //is refresh
-//        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
-            //cache the time
-//            mTime = resultBean.getTime();
-            mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
-            mAdapter.addItem(mBean.getItems());
-//            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mAdapter.addItem(pageBean.getItems());
             mRefreshLayout.setCanLoadMore();
             AppOperator.runOnThread(new Runnable() {
                 @Override
                 public void run() {
-                    CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
+                    CacheManager.saveObject(getActivity(), pageBean, getCacheKey());
                 }
             });
         } else {
-            mAdapter.addItem(resultBean.getResult().getItems());
+            mAdapter.addItem(pageBean.getItems());
         }
-        if (resultBean.getResult().getItems().size() < 20) {
+        if (pageBean.getItems().size() < 20) {
             setFooterType(TYPE_NO_MORE);
             //mRefreshLayout.setNoMoreData();
         }
@@ -266,6 +303,18 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
         }
+    }
+    
+    @Override
+    public void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+    }
+    
+    @Override
+    public void onDestroyView() {
+        // TODO Auto-generated method stub
+        super.onDestroyView();
     }
     
     @Override

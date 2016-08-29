@@ -45,7 +45,7 @@ public abstract class BaseFragment<T> extends Fragment{
             if (savedInstanceState != null) {
                 onRestartInstance(savedInstanceState);
             }
-            initWidget(mRoot);
+            setupViews(mRoot);
             initData();
         }
         return mRoot;
@@ -65,9 +65,10 @@ public abstract class BaseFragment<T> extends Fragment{
         RequestManager manager = mImgLoader;
         if (manager != null) {
             manager.onDestroy();
+            mImgLoader = null;
         }
-        mRoot = null;
-        mBundle = null;
+//        mRoot = null;
+//        mBundle = null;
     }
     
     protected abstract int getLayoutId();
@@ -76,7 +77,7 @@ public abstract class BaseFragment<T> extends Fragment{
 
     }
     
-    protected void initWidget(View root) {
+    protected void setupViews(View root) {
 
     }
 

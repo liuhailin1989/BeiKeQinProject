@@ -183,7 +183,7 @@ public class ViewHolder {
     }
 
     public void setImageForNet(int viewId, String imgUrl) {
-        setImageForNet(viewId, imgUrl, R.drawable.bg_normal);
+        setImageForNet(viewId, imgUrl, R.drawable.ic_launcher);
     }
 
     // 设置头像

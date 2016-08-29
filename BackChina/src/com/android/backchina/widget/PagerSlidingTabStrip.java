@@ -436,16 +436,17 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		if (disableViewPager)
 			return;
 		this.viewPager = viewPager;
-		this.viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+		this.viewPager.addOnPageChangeListener(new OnPageChangeListener() {
 			@Override
-			public void onPageSelected(int position) {
+			public void onPageSelected(int position) { 
 			    TLog.d("position =" +position);
 				selectedTab(position);
 				if (onPageChangeListener != null) {
 					onPageChangeListener.onPageSelected(position);
 				}
-				if (listener != null)
+				if (listener != null){
 					listener.onChanged(position);
+				}
 			}
 
 			@Override

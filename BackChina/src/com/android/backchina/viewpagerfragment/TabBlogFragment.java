@@ -1,5 +1,7 @@
 package com.android.backchina.viewpagerfragment;
 
+import java.lang.reflect.Type;
+
 import android.os.Bundle;
 
 import com.android.backchina.R;
@@ -34,6 +36,12 @@ public class TabBlogFragment extends BaseViewPagerFragment{
     protected int getLayoutId() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    protected Type getType() {
+        // TODO Auto-generated method stub
+        return null;
     }
     
     

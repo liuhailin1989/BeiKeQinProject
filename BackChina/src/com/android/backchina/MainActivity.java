@@ -2,6 +2,7 @@ package com.android.backchina;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
+import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.DoubleClickExitHelper;
 import com.android.backchina.ui.MainTab;
 import com.android.backchina.widget.MainFragmentTabHost;
@@ -76,13 +78,41 @@ public class MainActivity extends FragmentActivity implements OnTouchListener,On
     @Override
     public void onTabChanged(String tabId) {
         // TODO Auto-generated method stub
-        
+        final int size = mTabHost.getTabWidget().getTabCount();
+        for (int i = 0; i < size; i++) {
+            View v = mTabHost.getTabWidget().getChildAt(i);
+            if (i == mTabHost.getCurrentTab()) {
+                v.setSelected(true);
+            } else {
+                v.setSelected(false);
+            }
+        }
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         // TODO Auto-generated method stub
-        return false;
+        boolean consumed = false;
+        // use getTabHost().getCurrentTabView to decide if the current tab is
+        // touched again
+        if (event.getAction() == MotionEvent.ACTION_DOWN
+                && v.equals(mTabHost.getCurrentTabView())) {
+            // use getTabHost().getCurrentView() to get a handle to the view
+            // which is displayed in the tab - and to get this views context
+            Fragment currentFragment = getCurrentFragment();
+            if (currentFragment != null
+                    && currentFragment instanceof OnTabReselectListener) {
+                OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
+                listener.onTabReselect();
+                consumed = true;
+            }
+        }
+        return consumed;
+    }
+    
+    private Fragment getCurrentFragment() {
+        return getSupportFragmentManager().findFragmentByTag(
+                mTabHost.getCurrentTabTag());
     }
     
     @Override

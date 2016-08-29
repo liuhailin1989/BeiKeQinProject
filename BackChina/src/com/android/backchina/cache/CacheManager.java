@@ -28,8 +28,7 @@ public class CacheManager {
      * @param file
      * @throws IOException
      */
-    public static boolean saveObject(Context context, Serializable ser,
-	    String file) {
+    public static boolean saveObject(Context context, Serializable ser,String file) {
 	FileOutputStream fos = null;
 	ObjectOutputStream oos = null;
 	try {

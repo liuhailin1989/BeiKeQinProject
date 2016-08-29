@@ -1,6 +1,8 @@
 package com.android.backchina.bean.base;
 
-public class ResultBean<T> {
+import java.io.Serializable;
+
+public class ResultBean<T> implements Serializable{
     public static final int RESULT_SUCCESS = 1;
     public static final int RESULT_UNKNOW = 0;
     public static final int RESULT_ERROR = -1;

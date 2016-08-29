@@ -1,10 +1,21 @@
 package com.android.backchina.base;
 
+import java.lang.reflect.Type;
+
+import com.android.backchina.AppOperator;
+import com.android.backchina.BackChinaApplication;
 import com.android.backchina.R;
 import com.android.backchina.adapter.ViewPageFragmentAdapter;
+import com.android.backchina.bean.ChannelItem;
+import com.android.backchina.bean.base.ChannelBean;
+import com.android.backchina.bean.base.PageBean;
+import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.PagerSlidingTabStrip;
+import com.loopj.android.http.TextHttpResponseHandler;
 
+import cz.msebera.android.httpclient.Header;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -22,6 +33,9 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     protected View mRoot;
 
     protected ImageView mBtnChannel;
+    
+    protected TextHttpResponseHandler mHandler;
+    
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -54,9 +68,10 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
             mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(),
                     mTabStrip, mViewPager);
             setScreenPageLimit();
-            onSetupTabAdapter(mTabsAdapter);
-
+//            onSetupTabAdapter(mTabsAdapter);
             mRoot = root;
+            setupViews(mRoot);
+            initData();
         }else{
         	 ViewGroup parent = (ViewGroup) mRoot.getParent();
              if (null != parent) {
@@ -73,9 +88,78 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
             mViewPager.setCurrentItem(pos, true);
         }
     }
+    
+    @Override
+    protected void initData() {
+        // TODO Auto-generated method stub
+        super.initData();
+        mHandler = new TextHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                // TODO Auto-generated method stub
+                TLog.d("called");
+                onRequestError(statusCode);
+                onRequestFinish();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                // TODO Auto-generated method stub
+                try {
+                    ChannelBean<ChannelItem> channelBean = BackChinaApplication.createGson().fromJson(responseString, getType());
+                    if (channelBean != null && channelBean.getItems() != null) {
+                        //
+                        onRequestSuccess(1);
+                        setListData(channelBean);
+                    }
+                    onRequestFinish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+            
+        };
+        AppOperator.runOnThread(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                requestData();
+            }
+        });
+    }
+    
+    protected void requestData() {
+        onRequestStart();
+    }
+    
+    protected void setListData(ChannelBean<ChannelItem> channelBean) {
+        
+    }
+    
+    
+    protected void onRequestStart() {
+
+    }
+    
+    protected void onRequestSuccess(int code) {
+
+    }
+    
+    protected void onRequestError(int code) {
+        
+    }
+    
+    protected void onRequestFinish() {
+        
+    }
 
     protected void setScreenPageLimit() {
     }
+    
+    protected abstract Type getType();
 
     protected abstract void onSetupTabAdapter(ViewPageFragmentAdapter adapter);
     

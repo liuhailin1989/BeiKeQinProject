@@ -34,14 +34,18 @@ public class BackChinaApi {
      * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
-    public static void getNewsList(String pageToken, AsyncHttpResponseHandler handler) {
+    public static void getNewsList(AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        if (!StringUtils.isEmpty(pageToken)) {
-//            params.put("pageToken", pageToken);
-        }
-//        ApiHttpClient.get("action/apiv2/news", params, handler);
         ApiHttpClient.get("http://www.backchina.com/news/?page=1&appxml=1&json=1", params, handler);
-        
+    }
+    
+    public static void getNewsList(String url, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+//        if (!StringUtils.isEmpty(pageToken)) {
+//            params.put("pageToken", pageToken);
+//        }
+//        ApiHttpClient.get("action/apiv2/news", params, handler);
+        ApiHttpClient.get(url, params, handler);
     }
     
     public static void getChannelList(AsyncHttpResponseHandler handler){

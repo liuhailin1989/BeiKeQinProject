@@ -38,7 +38,6 @@ public class TabVideoFragment extends BaseFragment{
     	// TODO Auto-generated method stub
     	super.onViewCreated(view, savedInstanceState);
     	 TLog.i("called");
-    	setupViews(view);
     }
     
     private void setResetWebViewSettings(WebView webView){
@@ -56,7 +55,7 @@ public class TabVideoFragment extends BaseFragment{
         ws.setSupportMultipleWindows(true);// 新加
     }
     
-    private void setupViews(View view){
+    protected void setupViews(View view){
     	webView = (WebView) view.findViewById(R.id.webview);
         video_fullView = (FrameLayout) view.findViewById(R.id.video_fullview);
         //

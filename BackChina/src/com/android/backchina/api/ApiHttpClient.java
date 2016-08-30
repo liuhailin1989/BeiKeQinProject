@@ -3,7 +3,7 @@ package com.android.backchina.api;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.backchina.BackChinaApplication;
+import com.android.backchina.AppContext;
 import com.android.backchina.utils.TLog;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -142,7 +142,7 @@ public class ApiHttpClient {
         appCookie = "";
     }
 
-    public static String getCookie(BackChinaApplication appContext) {
+    public static String getCookie(AppContext appContext) {
         if (appCookie == null || appCookie == "") {
             appCookie = appContext.getProperty("cookie");
         }

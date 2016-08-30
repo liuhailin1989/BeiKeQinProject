@@ -14,8 +14,8 @@ import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
 
-public class BackChinaApplication extends BaseApplication {
-	private static BackChinaApplication instance;
+public class AppContext extends BaseApplication {
+	private static AppContext instance;
 	
 	@Override
 	public void onCreate() {
@@ -27,7 +27,7 @@ public class BackChinaApplication extends BaseApplication {
 	}
 	
 	/** 获取Application */
-	public static BackChinaApplication getInstance() {
+	public static AppContext getInstance() {
 		return instance;
 	}
 	

@@ -19,6 +19,7 @@ import com.android.backchina.bean.base.PageBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 
@@ -106,7 +107,10 @@ public class NewsFragment extends BaseListFragment<News> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // TODO Auto-generated method stub
-        super.onItemClick(parent, view, position, id);
+//        super.onItemClick(parent, view, position, id);
+        News item = mAdapter.getItem(position);
+//        UIHelper.enterNewsDetail(getActivity(), item.getId(),20);
+        UIHelper.enterNewsDetail(getActivity(), item);
     }
 
     @Override

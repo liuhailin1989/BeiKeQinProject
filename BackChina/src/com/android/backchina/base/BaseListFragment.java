@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.backchina.AppOperator;
-import com.android.backchina.BackChinaApplication;
+import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.base.PageBean;
@@ -127,7 +127,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 TLog.d("called");
                 try {
-                    ResultBean<PageBean<T>> resultBean = BackChinaApplication.createGson().fromJson(responseString, getType());
+                    ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
                     if (resultBean != null  && resultBean.getResult().getItems() != null) {
                         onRequestSuccess(1);
                         setListData(resultBean.getResult());
@@ -244,7 +244,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     protected void saveToReadedList(String fileName, String key) {
 
         // 放入已读列表
-        BackChinaApplication.putReadedPostList(fileName, key, "true");
+        AppContext.putReadedPostList(fileName, key, "true");
     }
     
 

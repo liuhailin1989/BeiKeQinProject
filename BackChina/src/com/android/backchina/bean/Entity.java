@@ -1,7 +1,14 @@
 
 package com.android.backchina.bean;
 
-public abstract class Entity extends Base {
+import java.io.Serializable;
+
+public abstract class Entity implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8825907945528736250L;
 
     protected int id;
 

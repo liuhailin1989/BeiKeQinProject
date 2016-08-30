@@ -129,6 +129,15 @@ public class StringUtils {
 		return ftime;
 	}
 
+    public static String friendlyTime(long time) {
+            Date d = new Date(time * 1000);
+            String paramDate = dateFormater2.get().format(d);
+	        String[] split = paramDate.split("-");
+	        StringBuilder builder = new StringBuilder();
+	        return builder.append(split[0]).append("年").append(split[1])
+	                .append("月").append(split[2]).append("日").toString();
+	 }
+	   
 	public static String friendlyTime(String sTime) {
 		String tempTime = sTime.substring(0, sTime.indexOf(" "));
 		String[] split = tempTime.split("-");

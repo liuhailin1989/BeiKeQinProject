@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.android.backchina.BackChinaApplication;
+import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.adapter.DragAdapter;
 import com.android.backchina.adapter.UnsignedAdapter;
@@ -169,7 +169,7 @@ public class ChannelActivity extends BaseActivity {
 			public void onSuccess(int arg0, Header[] headers, String responseString) {
 				// TODO Auto-generated method stub
 				TLog.d("called");
-				ChannelBean<ChannelItem> channelBean = BackChinaApplication.createGson().fromJson(responseString, getType());
+				ChannelBean<ChannelItem> channelBean = AppContext.createGson().fromJson(responseString, getType());
 				if(channelBean != null && channelBean.getItems() != null){
 					setListData(channelBean.getItems());
 				}

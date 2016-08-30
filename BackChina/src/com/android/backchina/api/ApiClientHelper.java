@@ -1,6 +1,6 @@
 package com.android.backchina.api;
 
-import com.android.backchina.BackChinaApplication;
+import com.android.backchina.AppContext;
 
 
 public class ApiClientHelper {
@@ -10,7 +10,7 @@ public class ApiClientHelper {
 	 * @param appContext
 	 * @return
 	 */
-	public static String getUserAgent(BackChinaApplication appContext) {
+	public static String getUserAgent(AppContext appContext) {
 		StringBuilder ua = new StringBuilder("OSChina.NET");
 		ua.append('/' + appContext.getPackageInfo().versionName + '_'
 				+  appContext.getPackageInfo().versionCode);// app版本信息

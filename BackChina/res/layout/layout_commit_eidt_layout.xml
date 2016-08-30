@@ -10,7 +10,10 @@
         android:id="@+id/et_put"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:hint="发表评论" />
 
     <TextView
         android:id="@+id/tv_commit_count"

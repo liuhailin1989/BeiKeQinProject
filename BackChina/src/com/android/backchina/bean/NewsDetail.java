@@ -3,20 +3,20 @@ package com.android.backchina.bean;
 /** 
  * 资讯详情
  */
-public class NewsDetail extends Entity {
+public class NewsDetail extends BaseBean {
 	
 	/**
      * 
      */
     private static final long serialVersionUID = 3315333109780307014L;
     
-    private News news;
+    private String content;
 
-	public News getNews() {
-		return news;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setNews(News news) {
-		this.news = news;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

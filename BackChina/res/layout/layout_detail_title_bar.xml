@@ -20,7 +20,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
         android:layout_weight="1"
-        android:text="标题"/>
+        android:text="资讯详情"/>
     
     <TextView 
         android:id="@+id/tv_comment_count"

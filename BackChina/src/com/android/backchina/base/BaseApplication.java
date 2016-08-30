@@ -59,4 +59,15 @@ public class BaseApplication extends Application{
         return context().getSharedPreferences(prefName,
                 Context.MODE_MULTI_PROCESS);
     }
+    
+    public static SharedPreferences getPreferences() {
+        SharedPreferences pre = context().getSharedPreferences(PREF_NAME,
+                Context.MODE_MULTI_PROCESS);
+        return pre;
+    }
+    
+    public static boolean get(String key, boolean defValue) {
+        return getPreferences().getBoolean(key, defValue);
+    }
+    
 }

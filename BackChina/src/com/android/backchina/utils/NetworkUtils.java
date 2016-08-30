@@ -3,7 +3,8 @@
  */
 package com.android.backchina.utils;
 
-import com.android.backchina.BackChinaApplication;
+import com.android.backchina.AppContext;
+import com.android.backchina.base.BaseApplication;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -40,6 +41,24 @@ public class NetworkUtils {
 			return false;
 		}
 	}
+	public static boolean isWifiOpen() {
+	  boolean isWifiConnect = false;
+      ConnectivityManager cm = (ConnectivityManager) BaseApplication
+              .context().getSystemService(Context.CONNECTIVITY_SERVICE);
+      // check the networkInfos numbers
+      NetworkInfo[] networkInfos = cm.getAllNetworkInfo();
+      for (int i = 0; i < networkInfos.length; i++) {
+          if (networkInfos[i].getState() == NetworkInfo.State.CONNECTED) {
+              if (networkInfos[i].getType() == ConnectivityManager.TYPE_MOBILE) {
+                  isWifiConnect = false;
+              }
+              if (networkInfos[i].getType() == ConnectivityManager.TYPE_WIFI) {
+                  isWifiConnect = true;
+              }
+          }
+      }
+      return isWifiConnect;
+	}
 	
     /**
      * 获取当前网络类型
@@ -48,7 +67,7 @@ public class NetworkUtils {
      */
     public static int getNetworkType() {
         int netType = 0;
-        ConnectivityManager connectivityManager = (ConnectivityManager) BackChinaApplication.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) AppContext.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null) {
             return netType;

@@ -3,7 +3,7 @@ package com.android.backchina.base;
 import java.lang.reflect.Type;
 
 import com.android.backchina.AppOperator;
-import com.android.backchina.BackChinaApplication;
+import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.adapter.ViewPageFragmentAdapter;
 import com.android.backchina.bean.ChannelItem;
@@ -107,7 +107,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 // TODO Auto-generated method stub
                 try {
-                    ChannelBean<ChannelItem> channelBean = BackChinaApplication.createGson().fromJson(responseString, getType());
+                    ChannelBean<ChannelItem> channelBean = AppContext.createGson().fromJson(responseString, getType());
                     if (channelBean != null && channelBean.getItems() != null) {
                         //
                         onRequestSuccess(1);

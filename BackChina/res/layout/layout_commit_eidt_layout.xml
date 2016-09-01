@@ -5,7 +5,7 @@
     android:gravity="center_vertical"
     android:background="@color/background_color"
     android:orientation="horizontal" >
-
+<!-- 
     <EditText
         android:id="@+id/et_put"
         android:layout_width="0dp"
@@ -14,27 +14,38 @@
         android:imeOptions="actionSend"
         android:inputType="text"
         android:hint="发表评论" />
+     -->
+    <TextView 
+        android:id="@+id/tv_put"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/ql_textfield_default_emui_new"
+        android:hint="发表评论"/>
 
     <TextView
         android:id="@+id/tv_commit_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="2" />
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_comment_count_bg"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/iv_set_font_size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/ic_launcher" />
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/ic_font_size" />
 
     <ImageView
         android:id="@+id/iv_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/ic_launcher" />
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/ic_share_normal" />
 
 </LinearLayout>

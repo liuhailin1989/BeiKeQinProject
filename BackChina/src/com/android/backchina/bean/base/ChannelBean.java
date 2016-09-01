@@ -25,5 +25,4 @@ public class ChannelBean<T> implements Serializable{
 	public void setVersion(long version) {
 		this.version = version;
 	}
-    
 }

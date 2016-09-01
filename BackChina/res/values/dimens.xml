@@ -69,7 +69,7 @@
     <dimen name="skip_btn_w">40dp</dimen>
     <dimen name="skip_btn_h">20dp</dimen>
     
-    <dimen name="tabhost_height">47dp</dimen>
+    <dimen name="tabhost_height">40dp</dimen>
     <dimen name="app_title_bar_layout_height">58dp</dimen>
     
     <dimen name="news_item_height">120dp</dimen>

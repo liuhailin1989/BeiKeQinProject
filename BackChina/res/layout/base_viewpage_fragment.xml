@@ -2,35 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/background_color" >
 
     <!-- 导航标题栏 -->
-    <ImageView
-        android:id="@+id/iv_btn_add_tab"
-        android:layout_width="@dimen/space_49"
-        android:layout_height="@dimen/space_49"
-        android:layout_gravity="center_vertical"
-        android:layout_alignParentRight="true"
-        android:clickable="true"
-        android:src="@drawable/selector_btn_add_tab"
-        android:background="@color/background_color"/>
-                
+    <LinearLayout 
+        android:id="@+id/lay_title_tab_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_35"
+        android:orientation="horizontal">
+
     <com.android.backchina.widget.PagerSlidingTabStrip
         android:id="@+id/pager_tabstrip"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/space_49"
-        android:background="@color/background_color"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         app:allowWidthFull="false"
-        app:slidingBlock="@drawable/image_sliding_block"
-        android:layout_toLeftOf="@id/iv_btn_add_tab">
+        app:slidingBlock="@color/transparent">
 
     </com.android.backchina.widget.PagerSlidingTabStrip>
+    
+     <ImageView
+        android:id="@+id/iv_btn_add_tab"
+        android:layout_width="@dimen/space_30"
+        android:layout_height="@dimen/space_30"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/selector_btn_add_tab"
+        android:background="@color/background_color"
+        android:scaleType="fitXY"/>
+    </LinearLayout>
     
     <View
         android:id="@+id/view_pager_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/pager_tabstrip"
+        android:layout_below="@id/lay_title_tab_container"
         android:background="@color/split_line_color" />
 
     <android.support.v4.view.ViewPager

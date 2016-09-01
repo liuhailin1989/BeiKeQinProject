@@ -1,14 +1,6 @@
 
 package com.android.backchina.base;
 
-import java.io.Serializable;
-
-import com.android.backchina.utils.ImageLoader;
-import com.android.backchina.utils.StringUtils;
-import com.android.backchina.utils.TLog;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.backchina.utils.ImageLoader;
+import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.TLog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 
 public abstract class BaseFragment<T> extends Fragment{
 
@@ -87,13 +85,6 @@ public abstract class BaseFragment<T> extends Fragment{
 
     protected <T extends View> T findView(int viewId) {
         return (T) mRoot.findViewById(viewId);
-    }
-
-    protected <T extends Serializable> T getBundleSerializable(String key) {
-        if (mBundle == null) {
-            return null;
-        }
-        return (T) mBundle.getSerializable(key);
     }
 
     /**

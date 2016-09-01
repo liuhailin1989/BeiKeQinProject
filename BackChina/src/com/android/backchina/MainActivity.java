@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener,On
                     null);
             title.setText(getString(mainTab.getTitleId()));
             tabSpec.setIndicator(indicator);
-            tabSpec.setContent(new TabContentFactory() {
+            tabSpec.setContent(new TabContentFactory() { 
 
                 @Override
                 public View createTabContent(String tag) {

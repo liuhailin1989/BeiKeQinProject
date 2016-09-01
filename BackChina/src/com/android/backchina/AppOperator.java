@@ -4,6 +4,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.os.Handler;
+
 /**
  * 
  */
@@ -11,6 +13,8 @@ import java.util.concurrent.Executors;
 public final class AppOperator {
     private static ExecutorService EXECUTORS_INSTANCE;
 
+    private static Handler mHandler = new Handler();
+    
     public static Executor getExecutor() {
         if (EXECUTORS_INSTANCE == null) {
             synchronized (AppOperator.class) {
@@ -26,6 +30,10 @@ public final class AppOperator {
 
     public static void runOnThread(Runnable runnable) {
         getExecutor().execute(runnable);
+    }
+    
+    public static void runOnMainThread(Runnable runnable){
+        mHandler.post(runnable);
     }
 
 }

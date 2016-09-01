@@ -1,9 +1,13 @@
 package com.android.backchina.fragment;
 
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -20,9 +24,15 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     private TextView mPubTime;
     private TextView mFrom;
     
-    private EditText mEditInput;
+    private TextView mInput;
     
     private CommentsView mComments;
+    
+    private LinearLayout layCommit;
+    
+    private RelativeLayout layRealComentEdit;
+    
+    private EditText mCommentEditView;
     
     @Override
     protected int getLayoutId() {
@@ -41,20 +51,59 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         
         mComments = (CommentsView) root.findViewById(R.id.lay_comment_view);
         
-        mEditInput = (EditText) root.findViewById(R.id.et_put);
+        layCommit = (LinearLayout) root.findViewById(R.id.lay_commit_edit);
+        layCommit.setVisibility(View.VISIBLE);
         
-        mEditInput.setOnEditorActionListener(new OnEditorActionListener() {
+        layRealComentEdit = (RelativeLayout) root.findViewById(R.id.lay_real_comment_edit);
+        layRealComentEdit.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                hideCommentView();
+            }
+        });
+        layRealComentEdit.setVisibility(View.GONE);
+        
+        mCommentEditView = (EditText) root.findViewById(R.id.et_comment);
+        mCommentEditView.setOnEditorActionListener(new OnEditorActionListener() {
             
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 // TODO Auto-generated method stub
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    handleSendComment();
-                    return true;
-                }
                 return false;
             }
         });
+        
+        mInput = (TextView) root.findViewById(R.id.tv_put);
+        
+        mInput.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                layCommit.setVisibility(View.GONE);
+                layRealComentEdit.setVisibility(View.VISIBLE);
+                mCommentEditView.setFocusable(true);  
+                mCommentEditView.setFocusableInTouchMode(true);  
+                mCommentEditView.requestFocus();
+                showSoftInput(mCommentEditView);
+            }
+        });
+    }
+    
+    public void showSoftInput(View input) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+    }
+    
+    public void hideCommentView() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(mCommentEditView.getWindowToken(), 0);  
+        layRealComentEdit.setVisibility(View.GONE);
+        layCommit.setVisibility(View.VISIBLE);
     }
     
     @Override
@@ -81,6 +130,6 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     }
     
     private void handleSendComment() {
-        iDetail.toSendComment(mEditInput.getText().toString());
+//        iDetail.toSendComment(mEditInput.getText().toString());
     }
 }

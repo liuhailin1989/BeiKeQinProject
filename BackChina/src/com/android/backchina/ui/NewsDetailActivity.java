@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.R;
@@ -39,6 +42,10 @@ public class NewsDetailActivity extends BaseActivity implements IContractDetail{
     
     private NewsDetail mDetail;
     
+    private ImageView btnBack;
+    
+    private TextView tvCommentCount;
+    
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
         intent.putExtra("id", id);
@@ -67,9 +74,24 @@ public class NewsDetailActivity extends BaseActivity implements IContractDetail{
     
     private void setupViews(){
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
+        btnBack = (ImageView) findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                finish();
+            }
+        });
+        tvCommentCount = (TextView) findViewById(R.id.tv_comment_count);
     }
     
-    private void initData(){
+    private void initData() {
+        if (currentNews != null) {
+            tvCommentCount.setText(String.valueOf(currentNews.getComments()));
+        } else {
+            tvCommentCount.setText("0");
+        }
         requestData();
     }
     

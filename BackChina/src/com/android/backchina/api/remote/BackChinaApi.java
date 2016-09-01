@@ -53,6 +53,11 @@ public class BackChinaApi {
         ApiHttpClient.get("http://www.backchina.com/api/appxml/topchannel.php", params, handler);
     }
     
+    public static void getBlogChannelList(AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        ApiHttpClient.get("http://www.backchina.com/api/appxml/topchannel.php", params, handler);
+    }
+    
     public static void getNewsDetail(String url,AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
         ApiHttpClient.get(url, params, handler);

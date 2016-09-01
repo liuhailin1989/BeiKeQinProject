@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Process;
 
 import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.base.BaseApplication;

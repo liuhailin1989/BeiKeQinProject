@@ -133,7 +133,6 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
                         setListData(resultBean.getResult());
                     } else {
                         setFooterType(TYPE_NO_MORE);
-                        //mRefreshLayout.setNoMoreData();
                     }
                     onRequestFinish();
                 } catch (Exception e) {
@@ -180,11 +179,11 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
                     onRefreshing();
                 } else {
                     mRoot.post(new Runnable() {
-                        @Override
+                        @Override 
                         public void run() {
                             setListData(bean);
                         }
-                    });
+                    }); 
                 }
             }
         });    

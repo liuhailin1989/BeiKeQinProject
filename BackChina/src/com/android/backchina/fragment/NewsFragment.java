@@ -151,6 +151,13 @@ public class NewsFragment extends BaseListFragment<News> {
     }
     
     @Override
+    public void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        TLog.d("called = "  + currentChannelItem.getName());
+    }
+    
+    @Override
     public void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();

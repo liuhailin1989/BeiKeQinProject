@@ -25,19 +25,34 @@ public class TabVideoFragment extends BaseFragment{
     private VideoWebChromeClient chromeClient;
 	
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-    		Bundle savedInstanceState) {
-    	// TODO Auto-generated method stub
-    	 TLog.i("called");
-    	View view =  inflater.inflate(R.layout.fragment_vedio_layout, null);
-    	return view;
+    protected int getLayoutId() {
+        // TODO Auto-generated method stub
+        return R.layout.fragment_vedio_layout;
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-    	// TODO Auto-generated method stub
-    	super.onViewCreated(view, savedInstanceState);
-    	 TLog.i("called");
+    protected void initBundle(Bundle bundle) {
+        // TODO Auto-generated method stub
+        super.initBundle(bundle);
+    }
+    
+    @Override
+    protected void setupViews(View view){
+        webView = (WebView) view.findViewById(R.id.webview);
+        video_fullView = (FrameLayout) view.findViewById(R.id.video_fullview);
+        //
+        setResetWebViewSettings(webView);
+        chromeClient = new VideoWebChromeClient();
+        webView.setWebChromeClient(chromeClient);
+        webView.setWebViewClient(new VideoWebViewClient());
+        webView.loadUrl("http://look.appjx.cn/mobile_api.php?mod=news&id=12603");
+ 
+    }
+    
+    @Override
+    protected void initData() {
+        // TODO Auto-generated method stub
+        super.initData();
     }
     
     private void setResetWebViewSettings(WebView webView){
@@ -53,18 +68,6 @@ public class TabVideoFragment extends BaseFragment{
         ws.setGeolocationDatabasePath("/data/data/org.itri.html5webview/databases/");// 设置定位的数据库路径
         ws.setDomStorageEnabled(true);
         ws.setSupportMultipleWindows(true);// 新加
-    }
-    
-    protected void setupViews(View view){
-    	webView = (WebView) view.findViewById(R.id.webview);
-        video_fullView = (FrameLayout) view.findViewById(R.id.video_fullview);
-        //
-        setResetWebViewSettings(webView);
-        chromeClient = new VideoWebChromeClient();
-        webView.setWebChromeClient(chromeClient);
-        webView.setWebViewClient(new VideoWebViewClient());
-        webView.loadUrl("http://look.appjx.cn/mobile_api.php?mod=news&id=12603");
- 
     }
     
     public class VideoWebViewClient extends WebViewClient {
@@ -178,9 +181,4 @@ public class TabVideoFragment extends BaseFragment{
         webView = null;
     }
 
-	@Override
-	protected int getLayoutId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

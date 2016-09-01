@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Process;
 
 public class BaseApplication extends Application{
     

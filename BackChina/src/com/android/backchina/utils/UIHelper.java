@@ -2,6 +2,7 @@
 package com.android.backchina.utils;
 
 import com.android.backchina.bean.News;
+import com.android.backchina.ui.LoginActivity;
 import com.android.backchina.ui.NewsDetailActivity;
 
 import android.content.Context;
@@ -19,5 +20,9 @@ public class UIHelper {
     
     public static void enterNewsDetail(Context context, News news) {
         NewsDetailActivity.show(context, news);
+    }
+    
+    public static void enterLoginActivity(Context context){
+    	LoginActivity.show(context);
     }
 }

@@ -10,7 +10,7 @@
         android:background="@color/back_china_color" >
 
         <TextView
-            android:id="@+id/btn_login"
+            android:id="@+id/tv_click_login"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

@@ -195,8 +195,7 @@ public class NewsDetailActivity extends BaseActivity implements IContractDetail{
             return;
         }
         int id = currentNews.getId();
-        String url = "http://www.backchina.com/plugin.php?id=bkc_app_androidphone:user&func=reply&aid="+id+"&subject=test&message=verygood";
-        BackChinaApi.sendNewsComment(url,  new TextHttpResponseHandler() {
+        BackChinaApi.sendNewsComment(id,comment,new TextHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

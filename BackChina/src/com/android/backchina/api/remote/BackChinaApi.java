@@ -16,11 +16,13 @@ public class BackChinaApi {
      */
     public static void login(String username, String password,
                              AsyncHttpResponseHandler handler) {
+        //http://www.backchina.com/plugin.php?id=bkc_app_iphone:user
+    	//&func=login&username=xxx&password=xxx
         RequestParams params = new RequestParams();
+        params.put("func", "login");
         params.put("username", username);
-        params.put("pwd", password);
-        params.put("keep_login", 1);
-        String loginurl = "action/api/login_validate";
+        params.put("password", password);
+        String loginurl = "plugin.php?id=bkc_app_iphone:user";
         ApiHttpClient.post(loginurl, params, handler);
     }
 
@@ -68,8 +70,13 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
-    public static void sendNewsComment(String url,AsyncHttpResponseHandler handler){
+    public static void sendNewsComment(int aid,String message,AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
+        params.put("func", "reply");
+        params.put("aid", aid);
+        params.put("subject", "test");
+        params.put("message", message);
+        String url = "plugin.php?id=bkc_app_iphone:user";
         ApiHttpClient.post(url, params, handler);
     }
 }

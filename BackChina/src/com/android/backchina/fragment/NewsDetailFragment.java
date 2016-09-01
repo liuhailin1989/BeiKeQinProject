@@ -5,6 +5,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,6 +34,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     private RelativeLayout layRealComentEdit;
     
     private EditText mCommentEditView;
+    
+    private Button mBtnSend;
     
     @Override
     protected int getLayoutId() {
@@ -90,6 +93,17 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
                 showSoftInput(mCommentEditView);
             }
         });
+        
+        mBtnSend = (Button) root.findViewById(R.id.btn_send);
+        mBtnSend.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				handleSendComment();
+				hideCommentView();
+			}
+		});
     }
     
     public void showSoftInput(View input) {
@@ -130,6 +144,6 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     }
     
     private void handleSendComment() {
-//        iDetail.toSendComment(mEditInput.getText().toString());
+        iDetail.toSendComment(mCommentEditView.getText().toString());
     }
 }

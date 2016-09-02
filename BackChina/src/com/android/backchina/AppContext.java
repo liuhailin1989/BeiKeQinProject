@@ -11,6 +11,9 @@ import android.os.Process;
 
 import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.base.BaseApplication;
+import com.android.backchina.bean.UserInfo;
+import com.android.backchina.cache.DataCleanManager;
+import com.android.backchina.utils.MethodsCompat;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.google.gson.Gson;
@@ -20,6 +23,10 @@ import com.loopj.android.http.PersistentCookieStore;
 public class AppContext extends BaseApplication {
 	private static AppContext instance;
 	
+    private int loginUid;
+
+    private boolean login;
+    
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -48,9 +55,15 @@ public class AppContext extends BaseApplication {
         
 	}
 	
-	private void initLogin(){
-		
-	}
+    private void initLogin() {
+        UserInfo user = getLoginUser();
+        if (null != user && user.getUid() > 0) {
+            login = true;
+            loginUid = user.getUid();
+        } else {
+            this.cleanLoginInfo();
+        }
+    }
 	
     /**
      * 获取App安装包信息
@@ -67,6 +80,107 @@ public class AppContext extends BaseApplication {
         if (info == null)
             info = new PackageInfo();
         return info;
+    }
+    
+    public UserInfo getLoginUser() {
+        UserInfo user = new UserInfo();
+        user.setUid(StringUtils.toInt(getProperty("user.uid"),0));
+        user.setUsername(getProperty("user.username"));
+        user.setAlbums(StringUtils.toInt(getProperty("user.albums"),0));
+        user.setAvatar(getProperty("user.avatar"));
+        user.setBlogs(StringUtils.toInt(getProperty("user.blogs"),0));
+        user.setDoings(StringUtils.toInt(getProperty("user.doings"),0));
+        user.setFriends(StringUtils.toInt(getProperty("user.friends"),0));
+        user.setGroupid(StringUtils.toInt(getProperty("user.groupid"),0));
+        user.setNewprompt(StringUtils.toInt(getProperty("user.newprompt"),0));
+        user.setRegdate(getProperty("user.regdate"));
+        user.setThreads(StringUtils.toInt(getProperty("user.threads"),0));
+        user.setViews(StringUtils.toInt(getProperty("user.views"),0));
+        return user;
+    }
+    
+    public void saveUserInfo(final UserInfo user) {
+        if(user == null){
+            return;
+        }
+        this.loginUid = user.getUid();
+        this.login = true;
+        setProperties(new Properties() {
+            {
+                setProperty("user.uid", String.valueOf(user.getUid()));
+                setProperty("user.username", user.getUsername());
+                setProperty("user.albums", String.valueOf(user.getAlbums()));
+                setProperty("user.avatar", user.getAvatar());
+                setProperty("user.blogs", String.valueOf(user.getBlogs()));
+                setProperty("user.doings", String.valueOf(user.getDoings()));
+                setProperty("user.friends", String.valueOf(user.getFriends()));
+                setProperty("user.groupid", String.valueOf(user.getGroupid()));
+                setProperty("user.newprompt", String.valueOf(user.getNewprompt()));
+                setProperty("user.regdate", user.getRegdate());
+                setProperty("user.threads", String.valueOf(user.getThreads()));
+                setProperty("user.views", String.valueOf(user.getViews()));
+            }
+        });
+    }
+    
+    public void updateUserInfo(final UserInfo user){
+        if(user == null){
+            return;
+        }
+        setProperties(new Properties() {
+            {
+                setProperty("user.username", user.getUsername());
+                setProperty("user.albums", String.valueOf(user.getAlbums()));
+                setProperty("user.avatar", user.getAvatar());
+                setProperty("user.blogs", String.valueOf(user.getBlogs()));
+                setProperty("user.doings", String.valueOf(user.getDoings()));
+                setProperty("user.friends", String.valueOf(user.getFriends()));
+                setProperty("user.groupid", String.valueOf(user.getGroupid()));
+                setProperty("user.newprompt", String.valueOf(user.getNewprompt()));
+                setProperty("user.regdate", user.getRegdate());
+                setProperty("user.threads", String.valueOf(user.getThreads()));
+                setProperty("user.views", String.valueOf(user.getViews()));
+            }
+        });
+    }
+    
+    public void cleanLoginInfo() {
+        this.loginUid = 0;
+        this.login = false;
+        removeProperty("user.uid", "user.username", "user.albums", "user.avatar",
+                "user.blogs", "user.doings", "user.friends","user.groupid", 
+                "user.newprompt", "user.regdate", "user.threads", "user.views");
+    }
+    
+
+    /**
+     * 清除app缓存
+     */
+    public void clearAppCache() {
+        DataCleanManager.cleanDatabases(this);
+        // 清除数据缓存
+        DataCleanManager.cleanInternalCache(this);
+        // 2.2版本才有将应用缓存转移到sd卡的功能
+        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
+            DataCleanManager.cleanCustomCache(MethodsCompat.getExternalCacheDir(this));
+        }
+        // 清除编辑器保存的临时内容
+        Properties props = getProperties();
+        for (Object key : props.keySet()) {
+            String _key = key.toString();
+            if (_key.startsWith("temp"))
+                removeProperty(_key);
+        }
+//        Core.getKJBitmap().cleanCache();
+    }
+    
+    
+    public int getLoginUid() {
+        return loginUid;
+    }
+    
+    public boolean isLogin() {
+        return login;
     }
     
     public boolean containsProperty(String key) {
@@ -99,6 +213,12 @@ public class AppContext extends BaseApplication {
 
     public void removeProperty(String... key) {
         AppConfig.getAppConfig(this).remove(key);
+    }
+    
+    
+    public static boolean isMethodsCompat(int VersionCode) {
+        int currentVersion = android.os.Build.VERSION.SDK_INT;
+        return currentVersion >= VersionCode;
     }
     
     /**

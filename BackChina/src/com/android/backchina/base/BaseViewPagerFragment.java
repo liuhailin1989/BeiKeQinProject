@@ -8,7 +8,7 @@ import com.android.backchina.R;
 import com.android.backchina.adapter.ViewPageFragmentAdapter;
 import com.android.backchina.bean.ChannelItem;
 import com.android.backchina.bean.base.ChannelBean;
-import com.android.backchina.bean.base.PageBean;
+import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;

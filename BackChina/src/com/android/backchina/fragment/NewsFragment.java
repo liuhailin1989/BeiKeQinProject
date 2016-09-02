@@ -15,7 +15,7 @@ import com.android.backchina.base.BaseListFragment;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.ChannelItem;
 import com.android.backchina.bean.News;
-import com.android.backchina.bean.base.PageBean;
+import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
@@ -128,7 +128,7 @@ public class NewsFragment extends BaseListFragment<News> {
     @Override
     protected Type getType() {
         // TODO Auto-generated method stub
-        return new TypeToken<ResultBean<PageBean<News>>>() {
+        return new TypeToken<ResultBean<NewsListBean<News>>>() {
         }.getType();
     }
 
@@ -139,7 +139,7 @@ public class NewsFragment extends BaseListFragment<News> {
     }
 
     @Override
-    protected void setListData(PageBean<News> pageBean) {
+    protected void setListData(NewsListBean<News> pageBean) {
         // TODO Auto-generated method stub
         super.setListData(pageBean);
     }

@@ -3,7 +3,7 @@ package com.android.backchina.bean.base;
 import java.io.Serializable;
 import java.util.List;
 
-public class PageBean<T> implements Serializable {
+public class NewsListBean<T> implements Serializable {
 	
     private List<T> newslist;
     

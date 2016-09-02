@@ -10,7 +10,7 @@
         android:background="@color/back_china_color" >
 
         <TextView
-            android:id="@+id/tv_click_login"
+            android:id="@+id/tv_user_name"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -26,7 +26,7 @@
             android:id="@+id/iv_avatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_above="@id/btn_login"
+            android:layout_above="@id/tv_user_name"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:scaleType="fitXY"
@@ -140,6 +140,15 @@
                 android:text="清除缓存"
                 android:textColor="@color/black"
                 android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/tv_cache_size"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="10M"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
 
             <ImageView
                 android:layout_width="wrap_content"

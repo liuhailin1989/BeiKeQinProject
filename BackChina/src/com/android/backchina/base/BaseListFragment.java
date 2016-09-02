@@ -17,7 +17,7 @@ import com.android.backchina.AppOperator;
 import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
-import com.android.backchina.bean.base.PageBean;
+import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
@@ -127,7 +127,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 TLog.d("called");
                 try {
-                    ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
+                    ResultBean<NewsListBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
                     if (resultBean != null  && resultBean.getResult().getItems() != null) {
                         onRequestSuccess(1);
                         setListData(resultBean.getResult());
@@ -173,7 +173,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
             @Override
             public void run() {
                 TLog.d("CACHE_KEY = " + getCacheKey());
-                final PageBean<T> bean = (PageBean<T>) CacheManager.readObject(getActivity(), getCacheKey());
+                final NewsListBean<T> bean = (NewsListBean<T>) CacheManager.readObject(getActivity(), getCacheKey());
                 //if is the first loading
                 if (bean == null) {
                     onRefreshing();
@@ -277,7 +277,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
         mIsRefresh = false;
     }
     
-    protected void setListData(final PageBean<T> pageBean) {
+    protected void setListData(final NewsListBean<T> pageBean) {
         //is refresh
         if (mIsRefresh) {
             mAdapter.clear();

@@ -25,7 +25,25 @@ public class BackChinaApi {
         String loginurl = "plugin.php?id=bkc_app_iphone:user";
         ApiHttpClient.post(loginurl, params, handler);
     }
+    
+    public static void syncLogin(String username, String password,AsyncHttpResponseHandler handler){
+        //http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=synlogin&username=admin&password=admin
+        RequestParams params = new RequestParams();
+        params.put("func", "synlogin");
+        params.put("username", username);
+        params.put("password", password);
+        String loginurl = "plugin.php?id=bkc_app_iphone:user";
+        ApiHttpClient.post(loginurl, params, handler);
+    }
 
+    public static void getUserInfo(AsyncHttpResponseHandler handler){
+        //http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=getuserinfo
+        RequestParams params = new RequestParams();
+        params.put("func", "getuserinfo");
+        String url = "plugin.php?id=bkc_app_iphone:user";
+        ApiHttpClient.post(url, params, handler);
+    }
+    
     public static void openIdLogin(String s) {
 
     }
@@ -43,10 +61,6 @@ public class BackChinaApi {
     
     public static void getNewsList(String url, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-//        if (!StringUtils.isEmpty(pageToken)) {
-//            params.put("pageToken", pageToken);
-//        }
-//        ApiHttpClient.get("action/apiv2/news", params, handler);
         ApiHttpClient.get(url, params, handler);
     }
     
@@ -78,5 +92,23 @@ public class BackChinaApi {
         params.put("message", message);
         String url = "plugin.php?id=bkc_app_iphone:user";
         ApiHttpClient.post(url, params, handler);
+    }
+    
+    public static void getHotSubscribeList(AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("hot", "1");
+        ApiHttpClient.get("api/appxml/subscription.php?json=1", params, handler);
+    }
+    
+    public static void getNewSubscribeList(AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("new", "1");
+        ApiHttpClient.get("api/appxml/subscription.php?json=1", params, handler);
+    }
+    
+    public static void getFunnySubscribeList(AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("fan", "1");
+        ApiHttpClient.get("api/appxml/subscription.php?json=1", params, handler);
     }
 }

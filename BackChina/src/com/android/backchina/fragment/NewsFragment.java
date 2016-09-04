@@ -107,7 +107,6 @@ public class NewsFragment extends BaseListFragment<News> {
 						onRequestSuccess();
 					} else {
 						onRequestError(statusCode);
-						setFooterType(TYPE_NO_MORE);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -123,7 +122,6 @@ public class NewsFragment extends BaseListFragment<News> {
 		if (isrefresh) {
 			mAdapter.clear();
 			mAdapter.addItem(pageBean.getItems());
-			mRefreshLayout.setCanLoadMore();
 			AppOperator.runOnThread(new Runnable() {
 				@Override
 				public void run() {
@@ -133,15 +131,6 @@ public class NewsFragment extends BaseListFragment<News> {
 			});
 		} else {
 			mAdapter.addItem(pageBean.getItems());
-		}
-		if (pageBean.getItems().size() < 20) {
-			setFooterType(TYPE_NO_MORE);
-		}
-		if (mAdapter.getDatas().size() > 0) {
-			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-			mRefreshLayout.setVisibility(View.VISIBLE);
-		} else {
-			mErrorLayout.setErrorType(EmptyLayout.NODATA);
 		}
 	}
 
@@ -161,7 +150,7 @@ public class NewsFragment extends BaseListFragment<News> {
 					public void run() {
 						// TODO Auto-generated method stub
 						if (bean == null) {
-							onRefreshing();
+							onRefresh();
 						} else {
 							setListData(bean, false);
 							onRequestSuccess();

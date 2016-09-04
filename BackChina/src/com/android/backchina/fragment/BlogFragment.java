@@ -102,7 +102,6 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 						onRequestSuccess();
 					} else {
 						onRequestError(statusCode);
-						setFooterType(TYPE_NO_MORE);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -118,7 +117,6 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 		if (isrefresh) {
 			mAdapter.clear();
 			mAdapter.addItem(resultBean.getItems());
-			mRefreshLayout.setCanLoadMore();
 			AppOperator.runOnThread(new Runnable() {
 				@Override
 				public void run() {
@@ -128,15 +126,6 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 			});
 		} else {
 			mAdapter.addItem(resultBean.getItems());
-		}
-		if (resultBean.getItems().size() < 20) {
-			setFooterType(TYPE_NO_MORE);
-		}
-		if (mAdapter.getDatas().size() > 0) {
-			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-			mRefreshLayout.setVisibility(View.VISIBLE);
-		} else {
-			mErrorLayout.setErrorType(EmptyLayout.NODATA);
 		}
 	}
 
@@ -171,7 +160,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 					public void run() {
 						// TODO Auto-generated method stub
 						if (resultBean == null) {
-							onRefreshing();
+							onRefresh();
 						} else {
 							setListData(resultBean, false);
 							onRequestSuccess();

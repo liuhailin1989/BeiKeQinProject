@@ -47,6 +47,9 @@
     <color name="recycle_view_item_title_text_color">#2a2a2a</color>
     <color name="recycle_view_item_sub_title_text_color">#cccccc</color>
 
+    <!--  -->
+    <color name="title_color">#333333</color>
+
     <!-- back_china_color -->
     <color name="back_china_color">#005500</color>
     <color name="subscribe_btn_pressed_color">#4CD964</color>

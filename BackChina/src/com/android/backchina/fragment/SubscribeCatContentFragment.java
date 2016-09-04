@@ -98,7 +98,6 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 						onRequestSuccess();
 					} else {
 						onRequestError(statusCode);
-						setFooterType(TYPE_NO_MORE);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -112,7 +111,6 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 		if (isrefresh) {
 			mAdapter.clear();
 			mAdapter.addItem(resultListBean.getItems());
-			mRefreshLayout.setCanLoadMore();
 			AppOperator.runOnThread(new Runnable() {
 				@Override
 				public void run() {
@@ -122,9 +120,6 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 			});
 		}else{
 			mAdapter.addItem(resultListBean.getItems());
-		}
-		if (resultListBean.getItems().size() < 20) {
-			setFooterType(TYPE_NO_MORE);
 		}
 	}
 
@@ -145,7 +140,7 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 						}
 						// TODO Auto-generated method stub
 						if (resultListBean == null) {
-							onRefreshing();
+							onRefresh();
 						} else {
 							setListData(resultListBean, false);
 							onRequestSuccess();

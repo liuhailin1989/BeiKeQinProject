@@ -3,12 +3,9 @@ package com.android.backchina.base;
 import java.lang.reflect.Type;
 import java.util.Date;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.backchina.AppContext;
@@ -17,9 +14,9 @@ import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;
-import com.android.backchina.widget.SuperRefreshLayout;
+import com.android.backchina.widget.XListView;
 
-public abstract class BaseListFragment<T> extends BaseFragment<T> implements SuperRefreshLayout.SuperRefreshLayoutListener, 
+public abstract class BaseListFragment<T> extends BaseFragment<T> implements XListView.IXListViewListener,
              OnItemClickListener, BaseListAdapter.Callback, View.OnClickListener,OnTabReselectListener {
 
     public static final int TYPE_NORMAL = 0;
@@ -29,20 +26,11 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     public static final int TYPE_NET_ERROR = 4;
     
     //
-    protected ListView mListView;
-    
-    protected SuperRefreshLayout mRefreshLayout;
+    protected XListView mListView;
     
     protected EmptyLayout mErrorLayout;
     
     protected BaseListAdapter<T> mAdapter;
-    
-    private View mFooterView; //加载更多
-    
-    private ProgressBar mFooterProgressBar;//加载更多
-    
-    private TextView mFooterText;//加载更多
-    
     
     @Override
     protected int getLayoutId() {
@@ -54,22 +42,11 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     protected void setupViews(View root) {
         // TODO Auto-generated method stub
         super.setupViews(root);
-        mListView = (ListView) root.findViewById(R.id.listView);
-        mRefreshLayout = (SuperRefreshLayout) root.findViewById(R.id.superRefreshLayout);
-        mRefreshLayout.setColorSchemeResources(
-                R.color.swiperefresh_color1, R.color.swiperefresh_color2,
-                R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+        mListView = (XListView) root.findViewById(R.id.pull_and_load_listview);
         mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
-        mRefreshLayout.setSuperRefreshLayoutListener(this);
-        mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
-        mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
-        mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
+        mListView.setXListViewListener(this);
         mListView.setOnItemClickListener(this);
-        setFooterType(TYPE_LOADING);
         mErrorLayout.setOnLayoutClickListener(this);
-        if (isNeedFooter()){
-            mListView.addFooterView(mFooterView);
-        }
     }
     
     @Override
@@ -77,7 +54,6 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
         // TODO Auto-generated method stub
         super.initData();
         //when open this fragment,read the obj
-        TLog.d("called");
         mAdapter = getListAdapter();
         mListView.setAdapter(mAdapter);
     }
@@ -85,31 +61,40 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
-        onRefreshing();
+    	requestData();
     }
 
     @Override
-    public void onRefreshing() {
-        // TODO Auto-generated method stub
-    	TLog.d("called");
-        requestData();
-    }
-
-    @Override
-    public void onLoadMore() {
-        // TODO Auto-generated method stub
-    	TLog.d("called");
-        requestData();
+    public void onRefresh() {
+    	// TODO Auto-generated method stub
+    	requestData();
     }
     
+    public void refreshComplete(){
+    	mListView.stopRefresh();
+    }
+    
+    @Override
+    public void onLoadMore() {
+    	// TODO Auto-generated method stub
+    	
+    }
+    
+    public void loadMoreComplete(){
+    	mListView.stopLoadMore();
+    }
     /**
      * request network data
      */
     private void requestData() {
     	TLog.d("called");
-    	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
     	onRequestData();
-        setFooterType(TYPE_LOADING);
+    }
+    
+    @Override
+    protected void onShow() {
+    	// TODO Auto-generated method stub
+    	super.onShow();
     }
     
     @Override
@@ -131,13 +116,18 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     }
     
 	protected void onRequestError(int code) {
-		setFooterType(TYPE_NET_ERROR);
-		mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+		refreshComplete();
 	}
     
     protected void onRequestSuccess() {
-    	mRefreshLayout.onLoadComplete();
+    	refreshComplete();
     	mErrorLayout.dismiss();
+    }
+    
+    protected void setEmptyLayoutStatus(int type){
+    	if (mErrorLayout != null) {
+			mErrorLayout.setErrorType(type);
+		}
     }
     
     /**
@@ -175,28 +165,6 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     
     protected boolean isNeedFooter() {
         return true;
-    }
-
-    protected void setFooterType(int type) {
-        switch (type) {
-            case TYPE_NORMAL:
-            case TYPE_LOADING:
-                mFooterText.setText(getResources().getString(R.string.footer_type_loading));
-                mFooterProgressBar.setVisibility(View.VISIBLE);
-                break;
-            case TYPE_NET_ERROR:
-                mFooterText.setText(getResources().getString(R.string.footer_type_net_error));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
-            case TYPE_ERROR:
-                mFooterText.setText(getResources().getString(R.string.footer_type_error));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
-            case TYPE_NO_MORE:
-                mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
-        }
     }
     
     protected abstract BaseListAdapter<T> getListAdapter();

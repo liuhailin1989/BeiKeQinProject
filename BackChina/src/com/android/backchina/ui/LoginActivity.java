@@ -17,24 +17,18 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
-import com.android.backchina.AppOperator;
 import com.android.backchina.Constants;
 import com.android.backchina.R;
 import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseActivity;
 import com.android.backchina.bean.Login;
-import com.android.backchina.bean.News;
 import com.android.backchina.bean.UserInfo;
 import com.android.backchina.bean.base.ActivitiesBean;
-import com.android.backchina.bean.base.NewsListBean;
-import com.android.backchina.bean.base.ResultBean;
-import com.android.backchina.cache.CacheManager;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;

@@ -74,6 +74,23 @@ public class ChannelManager {
         return getChannelItemsFromDb(context,DataProvider.CHANNEL_NEWS_ALL_URI);
     }
     
+    //
+    public void saveBlogChannelItemToTabLocal(Context context, List<ChannelItem> channelItems) {
+        saveChannelItemToDb(context,DataProvider.CHANNEL_BLOG_LOCAL_URI,channelItems);
+    }
+    
+    public void saveBlogChannelItemToTabAll(Context context,List<ChannelItem> channelItems){
+        saveChannelItemToDb(context,DataProvider.CHANNEL_BLOG_ALL_URI,channelItems);
+    }
+    
+    public List<ChannelItem> getBlogChannelItemsFromTabLocal(Context context){
+        return getChannelItemsFromDb(context,DataProvider.CHANNEL_BLOG_LOCAL_URI);
+    }
+    
+    public List<ChannelItem> getBlogChannelItemsFromTabAll(Context context){
+        return getChannelItemsFromDb(context,DataProvider.CHANNEL_BLOG_ALL_URI);
+    }
+    
     private List<ChannelItem> getChannelItemsFromDb(Context context,Uri uri){
         List<ChannelItem> localChannelItems = null;
         ContentResolver contentResolver = context.getContentResolver();

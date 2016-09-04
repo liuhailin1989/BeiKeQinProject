@@ -64,18 +64,35 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
+    public static void getBlogList(String url, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        ApiHttpClient.get(url, params, handler);
+    }
+    
     public static void getChannelList(AsyncHttpResponseHandler handler){
     	RequestParams params = new RequestParams();
-        ApiHttpClient.get("http://www.backchina.com/api/appxml/topchannel.php", params, handler);
+        ApiHttpClient.get("api/appxml/topchannel.php", params, handler);
     }
     
     public static void getBlogChannelList(AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
-        ApiHttpClient.get("http://www.backchina.com/api/appxml/topchannel.php", params, handler);
+        params.put("blognav", "1");
+        ApiHttpClient.get("api/appxml/topchannel.php?", params, handler);
+    }
+    
+    public static void getVideoChannelList(AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("videonav", "1");
+        ApiHttpClient.get("api/appxml/topchannel.php?", params, handler);
     }
     
     public static void getNewsDetail(String url,AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
+        ApiHttpClient.get(url, params, handler);
+    }
+    
+    public static void getBlogDetail(String url,AsyncHttpResponseHandler handler){
+    	RequestParams params = new RequestParams();
         ApiHttpClient.get(url, params, handler);
     }
     
@@ -110,5 +127,17 @@ public class BackChinaApi {
         RequestParams params = new RequestParams();
         params.put("fan", "1");
         ApiHttpClient.get("api/appxml/subscription.php?json=1", params, handler);
+    }
+    
+    public static void getSubscribeList(String url, AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        ApiHttpClient.get(url, params, handler);
+    }
+    
+    public static void getSubscribeCatList(AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("catlist", "1");
+        params.put("json", "1");
+        ApiHttpClient.get("api/appxml/subscription.php?", params, handler);
     }
 }

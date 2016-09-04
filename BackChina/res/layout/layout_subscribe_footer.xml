@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/white"
     android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/ll_subscribe_footer_container"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:background="@color/background_color" >
         
         <TextView 
             android:layout_width="wrap_content"

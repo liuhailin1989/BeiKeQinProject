@@ -2,55 +2,56 @@ package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
 
-import android.R.color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
-import com.android.backchina.adapter.NewsAdapter;
+import com.android.backchina.adapter.SubscribeAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseListFragment;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.ChannelItem;
 import com.android.backchina.bean.News;
+import com.android.backchina.bean.Subscribe;
+import com.android.backchina.bean.SubscribeCat;
 import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultBean;
+import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.ui.empty.EmptyLayout;
-import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
-import com.android.backchina.utils.UIHelper;
-import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class NewsFragment extends BaseListFragment<News> {
+public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 
-	public static final String HISTORY_NEWS = "history_news";
-
-	public static final String NEWS_SYSTEM_TIME = "news_system_time";
-
-	private static final String CACHE_KEY_PREFIX = "newslist_";
-
+	private static final String CACHE_KEY_PREFIX = "subscribe_list_";
+	
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
-	public static final String BUNDLE_KEY_CHANNELITEM = "BUNDLE_KEY_CHANNELITEM";
-
-	private int mCatlog = 0;
-
-	private int mCurrentPage = 0;
-
-	private Handler handler = new Handler();
-
-	private ChannelItem currentChannelItem;
-
+	public static final String BUNDLE_KEY_SUBSCRIBECATITEM = "BUNDLE_KEY_SUBSCRIBECATITEM";
+	
 	protected TextHttpResponseHandler mHandler;
 
+	private SubscribeCat mCurrentSubscribeCat;
+	
+	private int mCatlog = 0;
+	
+	private int mCurrentPage = 0;
+	
+	public static SubscribeCatContentFragment newInstance(int catlog,SubscribeCat subscribeCat) {
+		SubscribeCatContentFragment fragment = new SubscribeCatContentFragment();
+		Bundle args = new Bundle();
+		args.putInt(BUNDLE_KEY_CATALOG, catlog);
+		args.putSerializable(BUNDLE_KEY_SUBSCRIBECATITEM, subscribeCat);
+		fragment.setArguments(args);
+		return fragment;
+	}
+	
 	protected String getCacheKeyPrefix() {
 		// TODO Auto-generated method stub
 		return CACHE_KEY_PREFIX + mCatlog;
@@ -59,32 +60,22 @@ public class NewsFragment extends BaseListFragment<News> {
 	private String getCacheKey() {
 		return getCacheKeyPrefix() + "_" + mCurrentPage;
 	}
-
+	
 	@Override
 	protected void initBundle(Bundle bundle) {
 		// TODO Auto-generated method stub
 		mCatlog = bundle.getInt(BUNDLE_KEY_CATALOG);
-		currentChannelItem = (ChannelItem) bundle
-				.getSerializable(BUNDLE_KEY_CHANNELITEM);
-		TLog.d("called = " + currentChannelItem.getName());
+		mCurrentSubscribeCat = (SubscribeCat) bundle.getSerializable(BUNDLE_KEY_SUBSCRIBECATITEM);
 	}
-
+	
 	@Override
-	protected void onRestartInstance(Bundle bundle) {
+	public void onTabReselect() {
 		// TODO Auto-generated method stub
-		super.onRestartInstance(bundle);
-		TLog.d("url = " + currentChannelItem.getUrlapi());
-	}
 
-	@Override
-	protected void setupViews(View root) {
-		// TODO Auto-generated method stub
-		super.setupViews(root);
 	}
 
 	@Override
 	protected void initData() {
-		// TODO Auto-generated method stub
 		super.initData();
 		mHandler = new TextHttpResponseHandler() {
 			@Override
@@ -99,11 +90,11 @@ public class NewsFragment extends BaseListFragment<News> {
 					String responseString) {
 				TLog.d("called");
 				try {
-					ResultBean<NewsListBean<News>> resultBean = AppContext
+					ResultListBean<Subscribe> resultListBean = AppContext
 							.createGson().fromJson(responseString, getType());
-					if (resultBean != null
-							&& resultBean.getResult().getItems() != null) {
-						setListData(resultBean.getResult(), true);
+					if (resultListBean != null
+							&& resultListBean.getItems() != null) {
+						setListData(resultListBean,true);
 						onRequestSuccess();
 					} else {
 						onRequestError(statusCode);
@@ -117,53 +108,46 @@ public class NewsFragment extends BaseListFragment<News> {
 		};
 	}
 
-	protected void setListData(final NewsListBean<News> pageBean,
-			boolean isrefresh) {
-		// is refresh
+	protected void setListData(final ResultListBean<Subscribe> resultListBean, boolean isrefresh) {
 		if (isrefresh) {
 			mAdapter.clear();
-			mAdapter.addItem(pageBean.getItems());
+			mAdapter.addItem(resultListBean.getItems());
 			mRefreshLayout.setCanLoadMore();
 			AppOperator.runOnThread(new Runnable() {
 				@Override
 				public void run() {
-					CacheManager.saveObject(getActivity(), pageBean,
+					CacheManager.saveObject(getActivity(), resultListBean,
 							getCacheKey());
 				}
 			});
-		} else {
-			mAdapter.addItem(pageBean.getItems());
+		}else{
+			mAdapter.addItem(resultListBean.getItems());
 		}
-		if (pageBean.getItems().size() < 20) {
+		if (resultListBean.getItems().size() < 20) {
 			setFooterType(TYPE_NO_MORE);
-		}
-		if (mAdapter.getDatas().size() > 0) {
-			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-			mRefreshLayout.setVisibility(View.VISIBLE);
-		} else {
-			mErrorLayout.setErrorType(EmptyLayout.NODATA);
 		}
 	}
 
 	@Override
 	protected void onShow() {
-		// TODO Auto-generated method stub
-		TLog.d("called");
 		AppOperator.runOnThread(new Runnable() {
 			@Override
 			public void run() {
 				TLog.d("CACHE_KEY = " + getCacheKey());
-				final NewsListBean<News> bean = (NewsListBean<News>) CacheManager.readObject(getActivity(), getCacheKey());
+				final ResultListBean<Subscribe> resultListBean= (ResultListBean<Subscribe>) CacheManager.readObject(getActivity(), getCacheKey());
 				// if is the first loading
 				AppOperator.runOnMainThread(new Runnable() {
 
 					@Override
 					public void run() {
+						if(mAdapter != null && mAdapter.getCount() > 0){
+							return;
+						}
 						// TODO Auto-generated method stub
-						if (bean == null) {
+						if (resultListBean == null) {
 							onRefreshing();
 						} else {
-							setListData(bean, false);
+							setListData(resultListBean, false);
 							onRequestSuccess();
 						}
 					}
@@ -174,41 +158,27 @@ public class NewsFragment extends BaseListFragment<News> {
 
 	@Override
 	protected void onRequestData() {
-		// TODO Auto-generated method stub
-		BackChinaApi.getNewsList(currentChannelItem.getUrlapi(), mHandler);
+		BackChinaApi.getSubscribeList(mCurrentSubscribeCat.getUrlapi(), mHandler);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		News item = mAdapter.getItem(position);
-		UIHelper.enterNewsDetail(getActivity(), item);
+		TLog.d("called");
 	}
 
 	@Override
-	public void onTabReselect() {
+	protected BaseListAdapter<Subscribe> getListAdapter() {
 		// TODO Auto-generated method stub
-		// show();
-	}
-
-	@Override
-	protected BaseListAdapter<News> getListAdapter() {
-		// TODO Auto-generated method stub
-		return new NewsAdapter(this);
+		return new SubscribeAdapter(this);
 	}
 
 	@Override
 	protected Type getType() {
 		// TODO Auto-generated method stub
-		return new TypeToken<ResultBean<NewsListBean<News>>>() {
+		return new TypeToken<ResultListBean<Subscribe>>() {
 		}.getType();
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
 	}
 
 }

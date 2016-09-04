@@ -24,7 +24,10 @@ import com.android.backchina.ui.ChannelActivity;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.PagerSlidingTabStrip.OnPagerChangeLis;
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.android.backchina.base.BaseListFragment;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 新闻
@@ -32,55 +35,68 @@ import com.android.backchina.base.BaseListFragment;
 public class TabNewsFragment extends BaseViewPagerFragment implements
         OnTabReselectListener {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-    }
+	protected TextHttpResponseHandler mHandler;
     
-    
-    @Override
-    protected void setupViews(View root) {
+
+    protected Type getType() {
         // TODO Auto-generated method stub
-        super.setupViews(root);
-        mTabStrip.setOnPagerChange(new OnPagerChangeLis() {
-            @Override
-            public void onChanged(int page) {
-                // TODO Auto-generated method stub
-                refreshPage(page);
-            }
-        });
+        return new TypeToken<ChannelBean<ChannelItem>>() {}.getType();
     }
     
-    private void refreshPage(int index) {
-        try {
-           ((BaseListFragment)mTabsAdapter.getItem(index)).show();
-        } catch (Exception e) {
-            TLog.e(e.toString());
-            e.printStackTrace();
-        }
-    }
+	@Override
+	protected void initData() {
+		// TODO Auto-generated method stub
+		mHandler = new TextHttpResponseHandler() {
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				// TODO Auto-generated method stub
+				TLog.d("called");
+				onRequestError(statusCode);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					String responseString) {
+				// TODO Auto-generated method stub
+				try {
+					ChannelBean<ChannelItem> channelBean = AppContext
+							.createGson().fromJson(responseString, getType());
+					if (channelBean != null && channelBean.getItems() != null) {
+						//
+						setListData(channelBean);
+						onRequestSuccess();
+					}else{
+						onRequestError(statusCode);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					onFailure(statusCode, headers, responseString, e);
+				}
+			}
+
+		};
+	}
 
     @Override
-    protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-     // nothing
-        
-    }
-
-    @Override
-    protected void requestData() {
+    protected void onRequestData() {
         // TODO Auto-generated method stub
-        super.requestData();
         final List<ChannelItem> localChannelItems = ChannelManager.getInstance().getNewsChannelItemsFromTabLocal(getActivity());
-        if (mTabsAdapter != null && localChannelItems != null && localChannelItems.size() > 0) {
+        if (localChannelItems != null && localChannelItems.size() > 0) {
             AppOperator.runOnMainThread(new Runnable() {
                 @Override
                 public void run() {
                     // TODO Auto-generated method stub
+                	if(mTabsAdapter != null && mTabsAdapter.getCount() > 0){
+                		onRequestSuccess();
+                		return;
+                	}
                     for(ChannelItem item : localChannelItems){
                         TLog.d("tab name =" +item.getName());
                         mTabsAdapter.addTab(item.getName(), item.getName(), NewsFragment.class, getBundle(item.getId(),item));
                     }
+                    onRequestSuccess();
                     //
                     Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());
                     if (fragment != null && fragment instanceof BaseListFragment) {
@@ -93,7 +109,6 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
         }
     }
     
-    @Override
     protected void setListData(ChannelBean<ChannelItem> channelBean) {
         TLog.d("called");
         if(mTabsAdapter != null && channelBean != null){
@@ -133,18 +148,10 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
         bundle.putSerializable(NewsFragment.BUNDLE_KEY_CHANNELITEM, item);
         return bundle;
     }
-    
-    @Override
-    protected void setScreenPageLimit() {
-        mViewPager.setOffscreenPageLimit(3);
-    }
 
     @Override
     public void onTabReselect() {
-        Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());
-        if (fragment != null && fragment instanceof BaseListFragment) {
-            ((BaseListFragment) fragment).onTabReselect();
-        }
+    	
     }
 
     @Override
@@ -155,15 +162,4 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
         getActivity().startActivity(intent);
     }
 
-	@Override
-	protected int getLayoutId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-    @Override
-    protected Type getType() {
-        // TODO Auto-generated method stub
-        return new TypeToken<ChannelBean<ChannelItem>>() {}.getType();
-    }
 }

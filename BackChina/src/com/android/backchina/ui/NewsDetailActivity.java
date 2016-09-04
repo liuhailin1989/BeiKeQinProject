@@ -32,19 +32,13 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class NewsDetailActivity extends BaseActivity implements IContractDetail{
+public class NewsDetailActivity extends BaseDetailActivity{
 
-    private EmptyLayout mEmptyLayout;
-    
     private final static String BUNDLE_KEY_NEWS = "BUNDLE_KEY_NEWS";
     
     private News currentNews;
     
     private NewsDetail mDetail;
-    
-    private ImageView btnBack;
-    
-    private TextView tvCommentCount;
     
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -59,73 +53,35 @@ public class NewsDetailActivity extends BaseActivity implements IContractDetail{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        initBundle(getIntent().getExtras());
-        setContentView(R.layout.activity_detail_layout);
-        setupViews();
-        initData();
-    }
-    
-    private void initBundle(Bundle bundle){
+    protected void initBundle(Bundle bundle){
         currentNews = (News) bundle.getSerializable(BUNDLE_KEY_NEWS);
     }
     
-    private void setupViews(){
-        mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
-        btnBack = (ImageView) findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                finish();
-            }
-        });
-        tvCommentCount = (TextView) findViewById(R.id.tv_comment_count);
+    @Override
+    public int getCommentCount() {
+    	// TODO Auto-generated method stub
+    	if(currentNews != null){
+			return currentNews.getComments();
+		}
+		return 0;
     }
     
-    private void initData() {
-        if (currentNews != null) {
-            tvCommentCount.setText(String.valueOf(currentNews.getComments()));
-        } else {
-            tvCommentCount.setText("0");
-        }
-        requestData();
+    @Override
+    protected void initData() {
+    	// TODO Auto-generated method stub
+    	super.initData();
     }
     
-    public void requestData(){
-        BackChinaApi.getNewsDetail(currentNews.getUrlapi(), getRequestHandler());
-    }
-    
-    public AsyncHttpResponseHandler getRequestHandler() {
-        return new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString,
-                    Throwable throwable) {
-                throwable.printStackTrace();
-                // if (isDestroy())
-                // return;
-                // showError(EmptyLayout.NETWORK_ERROR);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                // if (isDestroy())
-                // return;
-                if (!handleData(responseString)) {
-                    showError(EmptyLayout.NODATA);
-                }
-            }
-        };
+    @Override
+    public void onRequestData(){
+        BackChinaApi.getNewsDetail(currentNews.getUrlapi(), mHandler);
     }
     
     private Type getType(){
         return new TypeToken<ResultBean<NewsDetail>>() {}.getType();
     }
     
-    private boolean handleData(String responseString) {
+    public boolean handleData(String responseString) {
         try {
         ResultBean<NewsDetail> bean = AppContext.createGson().fromJson(responseString, getType());
         mDetail = bean.getResult();
@@ -133,33 +89,10 @@ public class NewsDetailActivity extends BaseActivity implements IContractDetail{
             e.printStackTrace();
             return false;
         }
-        handleView();
         return true;
     }
     
-    private void handleView() {
-        try {
-            Fragment fragment = getDataViewFragment().newInstance();
-            FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-            trans.replace(R.id.lay_container, fragment);
-            trans.commitAllowingStateLoss();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    void showError(int type) {
-        EmptyLayout layout = mEmptyLayout;
-        if (layout != null) {
-            layout.setErrorType(type);
-        }
-    }
-    
-    Class<? extends DetailFragment> getDataViewFragment(){
+    public Class<? extends DetailFragment> getDataViewFragment(){
         return NewsDetailFragment.class;
     }
 
@@ -172,7 +105,7 @@ public class NewsDetailActivity extends BaseActivity implements IContractDetail{
     @Override
     public void hideLoading() {
         // TODO Auto-generated method stub
-        mEmptyLayout.setVisibility(View.GONE);
+        onRequestDataSuccess();
     }
 
     @Override

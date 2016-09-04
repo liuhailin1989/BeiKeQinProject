@@ -4,15 +4,19 @@ package com.android.backchina.bean;
 /**
  * 博客详情
  */
-public class BlogDetail extends Entity {
-	
-	private Blog blog;
+public class BlogDetail extends BaseBean {
 
-	public Blog getBlog() {
-		return blog;
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 745201044989421671L;
+    private String content;
 
-	public void setBlog(Blog blog) {
-		this.blog = blog;
-	}
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

@@ -1,33 +1,204 @@
 package com.android.backchina.fragment;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
+import com.android.backchina.AppContext;
+import com.android.backchina.AppOperator;
 import com.android.backchina.R;
+import com.android.backchina.adapter.BlogAdapter;
+import com.android.backchina.adapter.NewsAdapter;
+import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseFragment;
+import com.android.backchina.base.BaseListFragment;
+import com.android.backchina.base.adapter.BaseListAdapter;
+import com.android.backchina.bean.Blog;
+import com.android.backchina.bean.ChannelItem;
+import com.android.backchina.bean.News;
+import com.android.backchina.bean.base.NewsListBean;
+import com.android.backchina.bean.base.ResultBean;
+import com.android.backchina.bean.base.ResultListBean;
+import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
+import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
 
-public class BlogFragment extends BaseFragment implements OnTabReselectListener {
+import cz.msebera.android.httpclient.Header;
 
-    @Override
-    public void onTabReselect() {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        View view =  inflater.inflate(R.layout.view_error_layout, null);
-        view.setBackgroundColor(getResources().getColor(R.color.red));
-        return view;
-    }
+public class BlogFragment extends BaseListFragment<Blog> implements
+		OnTabReselectListener {
+
+	public static final String BUNDLE_KEY_CHANNELITEM = "BUNDLE_KEY_CHANNELITEM";
+	public static final String BUNDLE_KEY_CATTITLE = "BUNDLE_KEY_CATTITLE";
+
+	private static final String CACHE_KEY_PREFIX = "blog_list_";
+
+	private ChannelItem currentChannelItem;
+
+	private String catTitle = "";
+
+	private int mCurrentPage = 0;
+
+	protected TextHttpResponseHandler mHandler;
+
+	protected String getCacheKeyPrefix() {
+		// TODO Auto-generated method stub
+		return CACHE_KEY_PREFIX + catTitle;
+	}
+
+	private String getCacheKey() {
+		return getCacheKeyPrefix() + "_" + mCurrentPage;
+	}
 
 	@Override
-	protected int getLayoutId() {
+	protected void initBundle(Bundle bundle) {
 		// TODO Auto-generated method stub
-		return 0;
+		catTitle = bundle.getString(BUNDLE_KEY_CATTITLE);
+		currentChannelItem = (ChannelItem) bundle
+				.getSerializable(BUNDLE_KEY_CHANNELITEM);
+		if (currentChannelItem != null) {
+			TLog.d("called = " + currentChannelItem.getName());
+		}
 	}
+
+	@Override
+	protected void onRestartInstance(Bundle bundle) {
+		// TODO Auto-generated method stub
+		super.onRestartInstance(bundle);
+		TLog.d("url = " + currentChannelItem.getUrlapi());
+	}
+
+	@Override
+	protected void initData() {
+		// TODO Auto-generated method stub
+		super.initData();
+		mHandler = new TextHttpResponseHandler() {
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				TLog.d("called");
+				onRequestError(statusCode);
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					String responseString) {
+				TLog.d("called");
+				try {
+					ResultListBean<Blog> resultBean = AppContext.createGson()
+							.fromJson(responseString, getType());
+					if (resultBean != null && resultBean.getItems() != null) {
+						setListData(resultBean, true);
+						onRequestSuccess();
+					} else {
+						onRequestError(statusCode);
+						setFooterType(TYPE_NO_MORE);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					onFailure(statusCode, headers, responseString, e);
+				}
+			}
+		};
+	}
+
+	protected void setListData(final ResultListBean<Blog> resultBean,
+			boolean isrefresh) {
+		// is refresh
+		if (isrefresh) {
+			mAdapter.clear();
+			mAdapter.addItem(resultBean.getItems());
+			mRefreshLayout.setCanLoadMore();
+			AppOperator.runOnThread(new Runnable() {
+				@Override
+				public void run() {
+					CacheManager.saveObject(getActivity(), resultBean,
+							getCacheKey());
+				}
+			});
+		} else {
+			mAdapter.addItem(resultBean.getItems());
+		}
+		if (resultBean.getItems().size() < 20) {
+			setFooterType(TYPE_NO_MORE);
+		}
+		if (mAdapter.getDatas().size() > 0) {
+			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+			mRefreshLayout.setVisibility(View.VISIBLE);
+		} else {
+			mErrorLayout.setErrorType(EmptyLayout.NODATA);
+		}
+	}
+
+	@Override
+	protected void onRequestData() {
+		// TODO Auto-generated method stub
+		BackChinaApi.getBlogList(currentChannelItem.getUrlapi(), mHandler);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Blog item = mAdapter.getItem(position);
+		 UIHelper.enterBlogDetail(getActivity(), item);
+	}
+
+	@Override
+	protected void onShow() {
+		if (currentChannelItem != null) {
+			TLog.d("called = " + currentChannelItem.getName());
+		}
+		AppOperator.runOnThread(new Runnable() {
+			@Override
+			public void run() {
+				TLog.d("CACHE_KEY = " + getCacheKey());
+				final ResultListBean<Blog> resultBean = (ResultListBean<Blog>) CacheManager.readObject(getActivity(), getCacheKey());
+				// if is the first loading
+				AppOperator.runOnMainThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						if (resultBean == null) {
+							onRefreshing();
+						} else {
+							setListData(resultBean, false);
+							onRequestSuccess();
+						}
+					}
+				});
+			}
+		});
+	}
+
+	@Override
+	public void onTabReselect() {
+		// TODO Auto-generated method stub
+		// show();
+	}
+
+	@Override
+	protected BaseListAdapter<Blog> getListAdapter() {
+		// TODO Auto-generated method stub
+		return new BlogAdapter(this);
+	}
+
+	@Override
+	protected Type getType() {
+		// TODO Auto-generated method stub
+		return new TypeToken<ResultListBean<Blog>>() {
+		}.getType();
+	}
+
 }

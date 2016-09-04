@@ -1,5 +1,7 @@
 package com.android.backchina.adapter;
 
+import java.util.List;
+
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.Subscribe;
@@ -11,6 +13,12 @@ public class SubscribeAdapter extends BaseListAdapter<Subscribe>{
         // TODO Auto-generated constructor stub
     }
 
+    @Override
+    public void addItem(List<Subscribe> items) {
+    	// TODO Auto-generated method stub
+    	super.addItem(items);
+    }
+    
     @Override
     protected void convert(ViewHolder vh, Subscribe item, int position) {
         // TODO Auto-generated method stub

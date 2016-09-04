@@ -22,6 +22,10 @@ public abstract class BaseFragment<T> extends Fragment{
     protected Bundle mBundle;
 
     private RequestManager mImgLoader;
+    
+    private boolean isPrepared = false;
+    
+    private  boolean isVisible = true;  
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +50,37 @@ public abstract class BaseFragment<T> extends Fragment{
             setupViews(mRoot);
             initData();
         }
+        isPrepared = true;
+        show();
         return mRoot;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+    	// TODO Auto-generated method stub
+    	super.setUserVisibleHint(isVisibleToUser);
+    	 TLog.d("isPrepared =" + isPrepared +"///"+isVisibleToUser);
+    	if (getUserVisibleHint()) {
+    		isVisible = true;
+    		show();
+        } else {
+        	 isVisible = false;
+        	 hide();
+        }
+    }
+    
+	private void show() {
+		TLog.d("isPrepared =" + isPrepared +"===="+isVisible);
+		if (!isPrepared || !isVisible) {
+			return;
+		}
+		onShow();
+	}
+    
+    private void hide(){
+    	//
+    }
+    
     @Override
     public void onDestroyView() {
         // TODO Auto-generated method stub
@@ -81,6 +113,14 @@ public abstract class BaseFragment<T> extends Fragment{
 
     protected void initData() {
 
+    }
+    
+    protected void onShow(){
+    	
+    }
+    
+    protected void onHide(){
+    	
     }
 
     protected <T extends View> T findView(int viewId) {

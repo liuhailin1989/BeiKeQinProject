@@ -49,7 +49,7 @@ public class EmptyLayout extends LinearLayout implements
         tv = (TextView) view.findViewById(R.id.tv_error_layout);
         RelativeLayout mLayout = (RelativeLayout) view.findViewById(R.id.pageerrLayout);
         mLoading = (ProgressBar) view.findViewById(R.id.animProgress);
-        setBackgroundColor(-1);
+//        setBackgroundColor(-1);
         setOnClickListener(this);
         img.setOnClickListener(new View.OnClickListener() {
 
@@ -147,7 +147,6 @@ public class EmptyLayout extends LinearLayout implements
                 break;
             case NODATA:
                 mErrorState = NODATA;
-                // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
                 img.setBackgroundResource(R.drawable.page_icon_empty);
                 img.setVisibility(View.VISIBLE);
                 mLoading.setVisibility(View.GONE);

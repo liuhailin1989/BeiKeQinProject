@@ -46,10 +46,10 @@
     <color name="item_selected">#33333333</color>
     <color name="recycle_view_item_title_text_color">#2a2a2a</color>
     <color name="recycle_view_item_sub_title_text_color">#cccccc</color>
-    
+
     <!-- back_china_color -->
     <color name="back_china_color">#005500</color>
-    
+    <color name="subscribe_btn_pressed_color">#4CD964</color>
     <!-- 下拉刷新时，颜色值 -->
     <color name="swiperefresh_color1">#ff00ddff</color>
     <color name="swiperefresh_color2">#ffffbb33</color>
@@ -83,7 +83,9 @@
     <color name="list_item_background_pressed">#FCFCFC</color>
     <color name="news_item_title_color">#000000</color>
     <color name="news_item_subtitle_color">#808080</color>
-
+    <!-- blog item -->
+    <color name="blog_item_title_color">#000000</color>
+    <color name="blog_item_subtitle_color">#808080</color>
     <!--  -->
     <color name="border_red">#FF0000</color>
     <color name="border_black">#4D4D4D</color>

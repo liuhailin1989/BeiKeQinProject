@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="list_item_title_text">
+        <item name="android:textSize">@dimen/news_item_title_text_size</item>
+        <item name="android:textColor">@color/news_item_subtitle_color</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+</resources>

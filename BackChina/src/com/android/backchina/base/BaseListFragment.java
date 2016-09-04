@@ -1,10 +1,8 @@
 package com.android.backchina.base;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Date;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,20 +11,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.backchina.AppOperator;
 import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
-import com.android.backchina.bean.base.NewsListBean;
-import com.android.backchina.bean.base.ResultBean;
-import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.SuperRefreshLayout;
-import com.loopj.android.http.TextHttpResponseHandler;
-
-import cz.msebera.android.httpclient.Header;
 
 public abstract class BaseListFragment<T> extends BaseFragment<T> implements SuperRefreshLayout.SuperRefreshLayoutListener, 
              OnItemClickListener, BaseListAdapter.Callback, View.OnClickListener,OnTabReselectListener {
@@ -46,37 +37,12 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     
     protected BaseListAdapter<T> mAdapter;
     
-    protected boolean mIsRefresh;
+    private View mFooterView; //加载更多
     
-    protected TextHttpResponseHandler mHandler;
+    private ProgressBar mFooterProgressBar;//加载更多
     
-//    protected PageBean<T> mBean;
+    private TextView mFooterText;//加载更多
     
-    private String mTime;
-    
-    private View mFooterView;
-    
-    private ProgressBar mFooterProgressBar;
-    
-    private TextView mFooterText;
-    
-    protected int mCurrentPage = 0;
-    
-    
-    
-    @Override
-    protected void initBundle(Bundle bundle) { 
-        // TODO Auto-generated method stub
-        super.initBundle(bundle);
-    }
-    
-    protected String getCacheKeyPrefix() {
-        return null;
-    }
-    
-    private String getCacheKey() {
-        return getCacheKeyPrefix() + "_" + mCurrentPage;
-    }
     
     @Override
     protected int getLayoutId() {
@@ -114,85 +80,11 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
         TLog.d("called");
         mAdapter = getListAdapter();
         mListView.setAdapter(mAdapter);
-
-        mHandler = new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            	TLog.d("called");
-                onRequestError(statusCode);
-                onRequestFinish();
-            } 
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                TLog.d("called");
-                try {
-                    ResultBean<NewsListBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
-                    if (resultBean != null  && resultBean.getResult().getItems() != null) {
-                        onRequestSuccess(1);
-                        setListData(resultBean.getResult());
-                    } else {
-                        setFooterType(TYPE_NO_MORE);
-                    }
-                    onRequestFinish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
-                }
-            }
-        };
-
-//        AppOperator.runOnThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
-//                //if is the first loading
-//                if (mBean == null) {
-//                    mBean = new PageBean<T>();
-//                    mBean.setItems(new ArrayList<T>());
-//                    onRefreshing();
-//                } else {
-//                    if (mRoot != null) {
-//                        mRoot.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mAdapter.addItem(mBean.getItems());
-//                                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-//                                mRefreshLayout.setVisibility(View.VISIBLE);
-//                                onRefreshing();
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        });
     }
 
-    public void show(){
-        AppOperator.runOnThread(new Runnable() {
-            @Override
-            public void run() {
-                TLog.d("CACHE_KEY = " + getCacheKey());
-                final NewsListBean<T> bean = (NewsListBean<T>) CacheManager.readObject(getActivity(), getCacheKey());
-                //if is the first loading
-                if (bean == null) {
-                    onRefreshing();
-                } else {
-                    mRoot.post(new Runnable() {
-                        @Override 
-                        public void run() {
-                            setListData(bean);
-                        }
-                    }); 
-                }
-            }
-        });    
-    }
-    
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
-        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         onRefreshing();
     }
 
@@ -200,7 +92,6 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     public void onRefreshing() {
         // TODO Auto-generated method stub
     	TLog.d("called");
-        mIsRefresh = true;
         requestData();
     }
 
@@ -214,24 +105,39 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
     /**
      * request network data
      */
-    protected void requestData() {
+    private void requestData() {
     	TLog.d("called");
-        onRequestStart();
+    	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+    	onRequestData();
         setFooterType(TYPE_LOADING);
+    }
+    
+    @Override
+    protected void onHide() {
+    	// TODO Auto-generated method stub
+		if (mErrorLayout != null) {
+			mErrorLayout.dismiss();
+		}
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // TODO Auto-generated method stub
-        
+    	TLog.d("called");
     }
     
-    protected void onRequestStart() {
+    protected void onRequestData() {
 
     }
     
-    protected void onRequestSuccess(int code) {
-
+	protected void onRequestError(int code) {
+		setFooterType(TYPE_NET_ERROR);
+		mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+	}
+    
+    protected void onRequestSuccess() {
+    	mRefreshLayout.onLoadComplete();
+    	mErrorLayout.dismiss();
     }
     
     /**
@@ -262,69 +168,11 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
         }
     }
     
-    protected void onRequestError(int code) {
-        setFooterType(TYPE_NET_ERROR);
-        if (mAdapter.getDatas().size() == 0)
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-    }
-    
-    protected void onRequestFinish() {
-        onComplete();
-    }
-    
-    protected void onComplete() {
-        mRefreshLayout.onLoadComplete();
-        mIsRefresh = false;
-    }
-    
-    protected void setListData(final NewsListBean<T> pageBean) {
-        //is refresh
-        if (mIsRefresh) {
-            mAdapter.clear();
-            mAdapter.addItem(pageBean.getItems());
-            mRefreshLayout.setCanLoadMore();
-            AppOperator.runOnThread(new Runnable() {
-                @Override
-                public void run() {
-                    CacheManager.saveObject(getActivity(), pageBean, getCacheKey());
-                }
-            });
-        } else {
-            mAdapter.addItem(pageBean.getItems());
-        }
-        if (pageBean.getItems().size() < 20) {
-            setFooterType(TYPE_NO_MORE);
-            //mRefreshLayout.setNoMoreData();
-        }
-        if (mAdapter.getDatas().size() > 0) {
-            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            mRefreshLayout.setVisibility(View.VISIBLE);
-        } else {
-            mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        }
-    }
-    
-    @Override
-    public void onDestroy() {
-        // TODO Auto-generated method stub
-        super.onDestroy();
-    }
-    
-    @Override
-    public void onDestroyView() {
-        // TODO Auto-generated method stub
-        super.onDestroyView();
-    }
-    
     @Override
     public Date getSystemTime() {
         return new Date();
     }
     
-    protected abstract BaseListAdapter<T> getListAdapter();
-
-    protected abstract Type getType();
-
     protected boolean isNeedFooter() {
         return true;
     }
@@ -350,4 +198,8 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements Sup
                 break;
         }
     }
+    
+    protected abstract BaseListAdapter<T> getListAdapter();
+
+    protected abstract Type getType();
 }

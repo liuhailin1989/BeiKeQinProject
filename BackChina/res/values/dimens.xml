@@ -71,12 +71,19 @@
     
     <dimen name="tabhost_height">40dp</dimen>
     <dimen name="app_title_bar_layout_height">58dp</dimen>
-    
+    <!-- news -->
     <dimen name="news_item_height">120dp</dimen>
     <dimen name="news_item_thumb_width">120dp</dimen>
     <dimen name="news_item_thumb_height">90dp</dimen>
     <dimen name="news_item_title_text_size">16dp</dimen>
     <dimen name="news_item_subtitle_text_size">12dp</dimen>
+    
+    <!-- blog -->
+    <dimen name="blog_item_height">120dp</dimen>
+    <dimen name="blog_item_thumb_width">120dp</dimen>
+    <dimen name="blog_item_thumb_height">90dp</dimen>
+    <dimen name="blog_item_title_text_size">16dp</dimen>
+    <dimen name="blog_item_subtitle_text_size">12dp</dimen>
     
     <dimen name="dialog_margin">7.0dip</dimen>
     <dimen name="global_padding">8.0dip</dimen>

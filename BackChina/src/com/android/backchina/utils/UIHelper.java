@@ -4,11 +4,15 @@ package com.android.backchina.utils;
 import com.android.backchina.AppContext;
 import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.News;
+import com.android.backchina.bean.Subscribe;
+import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.ui.AboutUsActivity;
 import com.android.backchina.ui.BlogDetailActivity;
 import com.android.backchina.ui.LoginActivity;
 import com.android.backchina.ui.NewsDetailActivity;
+import com.android.backchina.ui.SpecialNewsDetailActivity;
 import com.android.backchina.ui.SubscribeActivity;
+import com.android.backchina.ui.SubscribeDetailActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,6 +49,12 @@ public class UIHelper {
     
     public static void enterSubscribeActivity(Context context){
         SubscribeActivity.show(context);
+    }
+    public static void enterSubscribeDetailActivity(Context context,Subscribe subscribe){
+        SubscribeDetailActivity.show(context,subscribe);
+    }
+    public static void enterSpecialNewsDetailActivity(Context context,SubscribeDetail subscribeDetail){
+        SpecialNewsDetailActivity.show(context,subscribeDetail);
     }
     
     /**

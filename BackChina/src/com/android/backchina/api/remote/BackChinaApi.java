@@ -48,6 +48,11 @@ public class BackChinaApi {
 
     }
     
+    public static void getHttp(String url,AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        ApiHttpClient.get(url, params, handler);
+    }
+    
     /**
      * 请求资讯列表
      *
@@ -139,5 +144,10 @@ public class BackChinaApi {
         params.put("catlist", "1");
         params.put("json", "1");
         ApiHttpClient.get("api/appxml/subscription.php?", params, handler);
+    }
+    
+    public static void getSubscribeDetail(String url, AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        ApiHttpClient.get(url, params, handler);
     }
 }

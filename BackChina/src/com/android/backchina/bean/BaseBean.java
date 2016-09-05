@@ -56,11 +56,6 @@ public abstract class BaseBean extends Entity {
     private String summary;
 
     /**
-     * 发布日期
-     */
-    private long dateline;
-
-    /**
      * 分类名称
      */
     private String catname;
@@ -88,7 +83,7 @@ public abstract class BaseBean extends Entity {
     /**
      * 点击数量
      */
-    private int views;
+    private String views;
 
     /**
      * 评论网址
@@ -210,14 +205,6 @@ public abstract class BaseBean extends Entity {
         this.summary = summary;
     }
 
-    public long getDateline() {
-        return dateline;
-    }
-
-    public void setDateline(long dateline) {
-        this.dateline = dateline;
-    }
-
     public String getCatname() {
         return catname;
     }
@@ -258,11 +245,11 @@ public abstract class BaseBean extends Entity {
         this.comments = comments;
     }
 
-    public int getViews() {
+    public String getViews() {
         return views;
     }
 
-    public void setViews(int views) {
+    public void setViews(String views) {
         this.views = views;
     }
 

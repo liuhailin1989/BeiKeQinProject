@@ -109,21 +109,18 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
     }
     private void handleView() {
         try {
-            Fragment fragment = getDataViewFragment().newInstance();
+        	Fragment fragment = getDataViewFragment();
             FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
             trans.replace(R.id.lay_container, fragment);
             trans.commitAllowingStateLoss();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    public Class<? extends DetailFragment> getDataViewFragment(){
+    public Fragment getDataViewFragment(){
         return null;
     }
+    
     public abstract void onRequestData();
 }

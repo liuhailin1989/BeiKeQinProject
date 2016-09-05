@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.api.remote.BackChinaApi;
@@ -73,8 +74,8 @@ public class BlogDetailActivity extends BaseDetailActivity {
     }
     
 	@Override
-    public Class<? extends DetailFragment> getDataViewFragment(){
-        return BlogDetailFragment.class;
+    public Fragment getDataViewFragment(){
+        return BlogDetailFragment.newInstance();
     }
 
 	@Override

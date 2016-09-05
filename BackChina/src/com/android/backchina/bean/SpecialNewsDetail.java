@@ -1,15 +1,13 @@
 package com.android.backchina.bean;
 
-/** 
- * 资讯详情
- */
-public class NewsDetail extends BaseBean {
-	
+public class SpecialNewsDetail extends BaseBean{
+
 	/**
-     * 
-     */
-    private static final long serialVersionUID = 3315333109780307014L;
-    
+	 * 
+	 */
+	private static final long serialVersionUID = -1891136134207596340L;
+	
+	
     private String content;
     
     /**

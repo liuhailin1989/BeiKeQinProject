@@ -16,12 +16,14 @@ import com.android.backchina.bean.ChannelItem;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeCat;
+import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -160,7 +162,8 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		TLog.d("called");
+		Subscribe subscribe = (Subscribe) parent.getAdapter().getItem(position);
+		UIHelper.enterSubscribeDetailActivity(getActivity(), subscribe);
 	}
 
 	@Override

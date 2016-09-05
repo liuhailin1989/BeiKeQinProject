@@ -171,7 +171,7 @@ public class NewsFragment extends BaseListFragment<News> {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		News item = mAdapter.getItem(position);
+		News item = (News) parent.getAdapter().getItem(position);
 		UIHelper.enterNewsDetail(getActivity(), item);
 	}
 

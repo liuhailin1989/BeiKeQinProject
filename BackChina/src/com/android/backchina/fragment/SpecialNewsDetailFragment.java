@@ -1,7 +1,6 @@
 package com.android.backchina.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,14 +14,13 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.android.backchina.R;
 import com.android.backchina.bean.Comment;
-import com.android.backchina.bean.NewsDetail;
-import com.android.backchina.bean.SubscribeCat;
+import com.android.backchina.bean.SpecialNewsDetail;
 import com.android.backchina.ui.comment.CommentsView;
 import com.android.backchina.ui.comment.OnCommentClickListener;
 import com.android.backchina.utils.StringUtils;
 
-public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentClickListener{
-
+public class SpecialNewsDetailFragment extends DetailFragment<Object> implements OnCommentClickListener{
+	
     private TextView mTitle;
     private TextView mPubTime;
     private TextView mFrom;
@@ -39,18 +37,17 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private Button mBtnSend;
     
-	public static NewsDetailFragment newInstance() {
-		NewsDetailFragment fragment = new NewsDetailFragment();
+	public static SpecialNewsDetailFragment newInstance() {
+		SpecialNewsDetailFragment fragment = new SpecialNewsDetailFragment();
 		return fragment;
 	}
+
+	@Override
+	protected int getLayoutId() {
+		// TODO Auto-generated method stub
+		return R.layout.fragment_special_news_detail_layout;
+	}
 	
-    
-    @Override
-    protected int getLayoutId() {
-        // TODO Auto-generated method stub
-        return R.layout.fragment_news_detail_layout;
-    }
-    
     @Override
     protected void setupViews(View root) {
         // TODO Auto-generated method stub
@@ -113,7 +110,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 			}
 		});
     }
-    
+
     public void showSoftInput(View input) {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -132,25 +129,25 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     protected void initData() {
         // TODO Auto-generated method stub
         super.initData();
-        NewsDetail newsDetail = (NewsDetail) iDetail.getData();
-        if(newsDetail == null){
+        SpecialNewsDetail specialNewsDetail = (SpecialNewsDetail) iDetail.getData();
+        if(specialNewsDetail == null){
             return;
         }
-        setWebViewContent(newsDetail.getContent());
-        mTitle.setText(newsDetail.getTitle());
-        mPubTime.setText(StringUtils.friendlyTime(newsDetail.getDateline()));
-        mFrom.setText(newsDetail.getFrom());
+        setWebViewContent(specialNewsDetail.getContent());
+        mTitle.setText(specialNewsDetail.getTitle());
+        mPubTime.setText(StringUtils.friendlyTime(specialNewsDetail.getDateline()));
+        mFrom.setText(specialNewsDetail.getFrom());
         
         mComments.setTitle("最新评论");
-        mComments.init(newsDetail.getCommurlapi(), 0, newsDetail.getComments(), null, this);
-    }
-
-    @Override
-    public void onClick(View view, Comment comment) {
-        // TODO Auto-generated method stub
-        
+        mComments.init(specialNewsDetail.getCommurlapi(), 0, specialNewsDetail.getComments(), null, this);
     }
     
+	@Override
+	public void onClick(View view, Comment comment) {
+		// TODO Auto-generated method stub
+		
+	}
+	
     private void handleSendComment() {
         iDetail.toSendComment(mCommentEditView.getText().toString());
     }

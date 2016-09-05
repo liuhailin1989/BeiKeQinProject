@@ -92,8 +92,9 @@ public class NewsDetailActivity extends BaseDetailActivity{
         return true;
     }
     
-    public Class<? extends DetailFragment> getDataViewFragment(){
-        return NewsDetailFragment.class;
+    @Override
+    public Fragment getDataViewFragment(){
+        return NewsDetailFragment.newInstance();
     }
 
     @Override

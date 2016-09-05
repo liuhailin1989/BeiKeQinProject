@@ -1,7 +1,6 @@
 package com.android.backchina.ui;
 
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -20,27 +19,17 @@ import com.android.backchina.R;
 import com.android.backchina.adapter.SubscribeCatAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseActivity;
-import com.android.backchina.base.adapter.BaseListAdapter;
-import com.android.backchina.bean.ChannelItem;
-import com.android.backchina.bean.News;
 import com.android.backchina.bean.SubscribeCat;
-import com.android.backchina.bean.base.ChannelBean;
-import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
-import com.android.backchina.fragment.DetailFragment;
 import com.android.backchina.fragment.SubscribeCatContentFragment;
 import com.android.backchina.ui.empty.EmptyLayout;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SubscribeActivity extends BaseActivity implements BaseListAdapter.Callback,OnItemClickListener{
-    
-    private RequestManager mImgLoader;
+public class SubscribeActivity extends BaseActivity implements OnItemClickListener{
     
 	private ListView mListView;
 	
@@ -185,28 +174,8 @@ public class SubscribeActivity extends BaseActivity implements BaseListAdapter.C
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		// TODO Auto-generated method stub
-		SubscribeCat subscribeCat = mSubscribeCatAdapter.getItem(position);
+		SubscribeCat subscribeCat = (SubscribeCat) parent.getAdapter().getItem(position);
 		handleView(subscribeCat);
 	}
-
-	@Override
-	public RequestManager getImgLoader() {
-		// TODO Auto-generated method stub
-		if (mImgLoader == null) {
-			mImgLoader = Glide.with(this);
-		}
-		return mImgLoader;
-	}
-
-	@Override
-	public Context getContext() {
-		// TODO Auto-generated method stub
-		return this;
-	}
-
-	@Override
-	public Date getSystemTime() {
-		// TODO Auto-generated method stub
-		return new Date();
-	}
+	
 }

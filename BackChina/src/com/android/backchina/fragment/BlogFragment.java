@@ -139,7 +139,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		Blog item = mAdapter.getItem(position);
+		Blog item = (Blog) parent.getAdapter().getItem(position);
 		 UIHelper.enterBlogDetail(getActivity(), item);
 	}
 

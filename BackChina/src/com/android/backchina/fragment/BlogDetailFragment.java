@@ -1,6 +1,7 @@
 package com.android.backchina.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import com.android.backchina.R;
 import com.android.backchina.bean.BlogDetail;
 import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.NewsDetail;
+import com.android.backchina.bean.SubscribeCat;
 import com.android.backchina.ui.comment.CommentsView;
 import com.android.backchina.ui.comment.OnCommentClickListener;
 import com.android.backchina.utils.StringUtils;
@@ -37,6 +39,11 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
     private EditText mCommentEditView;
     
     private Button mBtnSend;
+    
+	public static BlogDetailFragment newInstance() {
+		BlogDetailFragment fragment = new BlogDetailFragment();
+		return fragment;
+	}
     
     @Override
     protected int getLayoutId() {

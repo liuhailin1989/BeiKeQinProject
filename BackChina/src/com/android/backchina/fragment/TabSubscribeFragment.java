@@ -6,6 +6,8 @@ import java.util.Date;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -27,7 +29,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnTabReselectListener,Callback{
+public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnTabReselectListener,Callback,OnItemClickListener{
 
     private ListView mListView;
     
@@ -92,6 +94,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
                 UIHelper.enterSubscribeActivity(getActivity());
             }
         });
+        mListView.setOnItemClickListener(this);
         mListView.addHeaderView(mHeadView);
         mListView.addFooterView(mFooterView);
     }
@@ -131,5 +134,13 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
     public void onTabReselect() {
         // TODO Auto-generated method stub
     }
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Subscribe currentSubscribe = (Subscribe) parent.getAdapter().getItem(position);//减去header view count
+		UIHelper.enterSubscribeDetailActivity(getActivity(), currentSubscribe);
+	}
     
 }

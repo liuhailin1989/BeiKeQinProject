@@ -3,9 +3,9 @@ package com.android.backchina.ui;
 import com.android.backchina.R;
 import com.android.backchina.fragment.TabMeFragment;
 import com.android.backchina.fragment.TabSubscribeFragment;
-import com.android.backchina.fragment.TabVideoFragment;
 import com.android.backchina.viewpagerfragment.TabBlogFragment;
 import com.android.backchina.viewpagerfragment.TabNewsFragment;
+import com.android.backchina.viewpagerfragment.TabVideoFragment;
 
 
 public enum MainTab {

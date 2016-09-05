@@ -91,6 +91,23 @@ public class ChannelManager {
         return getChannelItemsFromDb(context,DataProvider.CHANNEL_BLOG_ALL_URI);
     }
     
+    //
+    public void saveVideoChannelItemToTabLocal(Context context, List<ChannelItem> channelItems) {
+        saveChannelItemToDb(context,DataProvider.CHANNEL_VIDEO_LOCAL_URI,channelItems);
+    }
+    
+    public void saveVideoChannelItemToTabAll(Context context,List<ChannelItem> channelItems){
+        saveChannelItemToDb(context,DataProvider.CHANNEL_VIDEO_ALL_URI,channelItems);
+    }
+    
+    public List<ChannelItem> getVideoChannelItemsFromTabLocal(Context context){
+        return getChannelItemsFromDb(context,DataProvider.CHANNEL_VIDEO_LOCAL_URI);
+    }
+    
+    public List<ChannelItem> getVideoChannelItemsFromTabAll(Context context){
+        return getChannelItemsFromDb(context,DataProvider.CHANNEL_VIDEO_ALL_URI);
+    }
+    
     private List<ChannelItem> getChannelItemsFromDb(Context context,Uri uri){
         List<ChannelItem> localChannelItems = null;
         ContentResolver contentResolver = context.getContentResolver();

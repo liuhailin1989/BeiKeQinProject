@@ -32,15 +32,25 @@ public class DataProvider extends ContentProvider{
     public static final String TAB_CHANNEL_NEWS_ALL = "channel_news_all";
     public static final Uri CHANNEL_NEWS_ALL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_CHANNEL_NEWS_ALL);
     
-    //channel_news_all
+    //channel_blog_all
     public static final int CODE_CHANNEL_BLOG_LOCAL = 3;
     public static final String TAB_CHANNEL_BLOG_LOCAL = "channel_blog_local";
     public static final Uri CHANNEL_BLOG_LOCAL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_CHANNEL_BLOG_LOCAL);
     
-    //channel_news_all
+    //channel_blog_all
     public static final int CODE_CHANNEL_BLOG_ALL = 4;
     public static final String TAB_CHANNEL_BLOG_ALL = "channel_blog_all";
     public static final Uri CHANNEL_BLOG_ALL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_CHANNEL_BLOG_ALL);
+    
+    //channel_video_all
+    public static final int CODE_CHANNEL_VIDEO_LOCAL = 5;
+    public static final String TAB_CHANNEL_VIDEO_LOCAL = "channel_video_local";
+    public static final Uri CHANNEL_VIDEO_LOCAL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_CHANNEL_VIDEO_LOCAL);
+    
+    //channel_video_all
+    public static final int CODE_CHANNEL_VIDEO_ALL = 6;
+    public static final String TAB_CHANNEL_VIDEO_ALL = "channel_video_all";
+    public static final Uri CHANNEL_VIDEO_ALL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_CHANNEL_VIDEO_ALL);
     
     public static final String CHANNEL_ID = "id";
     public static final String CHANNEL_TYPEID = "typeid";
@@ -56,6 +66,8 @@ public class DataProvider extends ContentProvider{
         uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_NEWS_ALL, CODE_CHANNEL_NEWS_ALL);
         uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_BLOG_LOCAL, CODE_CHANNEL_BLOG_LOCAL);
         uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_BLOG_ALL, CODE_CHANNEL_BLOG_ALL);
+        uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_VIDEO_LOCAL, CODE_CHANNEL_VIDEO_LOCAL);
+        uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_VIDEO_ALL, CODE_CHANNEL_VIDEO_ALL);
     }
     
     @Override
@@ -87,6 +99,12 @@ public class DataProvider extends ContentProvider{
                 break;
             case CODE_CHANNEL_BLOG_ALL:
                 c = db.query(TAB_CHANNEL_BLOG_ALL, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CODE_CHANNEL_VIDEO_LOCAL:
+                c = db.query(TAB_CHANNEL_VIDEO_LOCAL, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CODE_CHANNEL_VIDEO_ALL:
+                c = db.query(TAB_CHANNEL_VIDEO_ALL, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -120,6 +138,12 @@ public class DataProvider extends ContentProvider{
             case CODE_CHANNEL_BLOG_ALL:
                 id = db.insert(TAB_CHANNEL_BLOG_ALL, "", values);
                 break;
+            case CODE_CHANNEL_VIDEO_LOCAL:
+                id = db.insert(TAB_CHANNEL_VIDEO_LOCAL, "", values);
+                break;
+            case CODE_CHANNEL_VIDEO_ALL:
+                id = db.insert(TAB_CHANNEL_VIDEO_ALL, "", values);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -147,6 +171,12 @@ public class DataProvider extends ContentProvider{
             case CODE_CHANNEL_BLOG_ALL:
                 result = db.delete(TAB_CHANNEL_BLOG_ALL, selection, selectionArgs);
                 break;
+            case CODE_CHANNEL_VIDEO_LOCAL:
+                result = db.delete(TAB_CHANNEL_VIDEO_LOCAL, selection, selectionArgs);
+                break;
+            case CODE_CHANNEL_VIDEO_ALL:
+                result = db.delete(TAB_CHANNEL_VIDEO_ALL, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -172,6 +202,12 @@ public class DataProvider extends ContentProvider{
                 break;
             case CODE_CHANNEL_BLOG_ALL:
                 result = db.update(TAB_CHANNEL_BLOG_ALL, values, selection, selectionArgs);
+                break;
+            case CODE_CHANNEL_VIDEO_LOCAL:
+                result = db.update(TAB_CHANNEL_VIDEO_LOCAL, values, selection, selectionArgs);
+                break;
+            case CODE_CHANNEL_VIDEO_ALL:
+                result = db.update(TAB_CHANNEL_VIDEO_ALL, values, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -203,6 +239,8 @@ public class DataProvider extends ContentProvider{
             createChannelNewsAllTab(db);
             createChannelBlogLocalTab(db);
             createChannelBlogAllTab(db);
+            createChannelVideoLocalTab(db);
+            createChannelVideoAllTab(db);
         }
         
         private void createChannelNewsLocalTab(SQLiteDatabase db){
@@ -253,6 +291,37 @@ public class DataProvider extends ContentProvider{
         private void createChannelBlogAllTab(SQLiteDatabase db){
             try{
                 db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_CHANNEL_BLOG_ALL + "(" +
+                        _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                        CHANNEL_ID +" INTEGER default -1," + 
+                        CHANNEL_TYPEID + " INTEGER default -1," +
+                        CHANNEL_NAME + " VARCHAR," +
+                        CHANNEL_URL + " VARCHAR," +
+                        CHANNEL_URLAPI + " VARCHAR" +
+                        ")"
+                        );
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        //
+        private void createChannelVideoLocalTab(SQLiteDatabase db){
+            try{
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_CHANNEL_VIDEO_LOCAL + "(" +
+                        _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                        CHANNEL_ID +" INTEGER default -1," + 
+                        CHANNEL_TYPEID + " INTEGER default -1," +
+                        CHANNEL_NAME + " VARCHAR," +
+                        CHANNEL_URL + " VARCHAR," +
+                        CHANNEL_URLAPI + " VARCHAR" +
+                        ")"
+                        );
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        private void createChannelVideoAllTab(SQLiteDatabase db){
+            try{
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_CHANNEL_VIDEO_ALL + "(" +
                         _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
                         CHANNEL_ID +" INTEGER default -1," + 
                         CHANNEL_TYPEID + " INTEGER default -1," +

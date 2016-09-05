@@ -17,6 +17,7 @@
     <string name="header_hint_refresh_time">Time：</string>
     <string name="footer_hint_load_normal">Load more</string>
     <string name="footer_hint_load_ready">Release to load more</string>
+    <string name="footer_hint_load_no_more">没有更多数据</string>
 
     <!-- error -->
     <string name="error_view_loading">Loading…</string>

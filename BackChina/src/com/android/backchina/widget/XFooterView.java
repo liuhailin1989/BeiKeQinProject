@@ -22,6 +22,7 @@ public class XFooterView extends LinearLayout {
     public final static int STATE_NORMAL = 0;
     public final static int STATE_READY = 1;
     public final static int STATE_LOADING = 2;
+    public final static int STATE_NODATA = 3;
 
     private final int ROTATE_ANIM_DURATION = 180;
 
@@ -113,6 +114,9 @@ public class XFooterView extends LinearLayout {
 
             case STATE_LOADING:
                 break;
+            case STATE_NODATA:
+            	mHintView.setText(R.string.footer_hint_load_no_more);
+            	break;
         }
 
         mState = state;

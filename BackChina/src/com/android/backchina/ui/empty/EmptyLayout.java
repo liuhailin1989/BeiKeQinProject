@@ -21,6 +21,7 @@ public class EmptyLayout extends LinearLayout implements
     public static final int NODATA = 3;
     public static final int NODATA_ENABLE_CLICK = 5;
     public static final int NO_LOGIN = 6;
+    public static final int NETWORK_ERROR_CLICK = 7;
 
     private ProgressBar mLoading;
     private boolean clickEnable = true;
@@ -126,6 +127,19 @@ public class EmptyLayout extends LinearLayout implements
         setVisibility(View.VISIBLE);
         switch (i) {
             case NETWORK_ERROR:
+                mErrorState = NETWORK_ERROR;
+                if (NetworkUtils.isConnected(getContext())) {
+                    tv.setText(R.string.error_view_load_error_click_to_refresh);
+                    img.setBackgroundResource(R.drawable.pagefailed_bg);
+                } else {
+                    tv.setText(R.string.error_view_network_error_click_to_refresh);
+                    img.setBackgroundResource(R.drawable.page_icon_network);
+                }
+                img.setVisibility(View.VISIBLE);
+                mLoading.setVisibility(View.GONE);
+                clickEnable = false;
+                break;
+            case NETWORK_ERROR_CLICK:
                 mErrorState = NETWORK_ERROR;
                 if (NetworkUtils.isConnected(getContext())) {
                     tv.setText(R.string.error_view_load_error_click_to_refresh);

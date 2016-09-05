@@ -9,6 +9,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 import com.android.backchina.AppContext;
+import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.interf.OnTabReselectListener;
@@ -19,12 +20,6 @@ import com.android.backchina.widget.XListView;
 public abstract class BaseListFragment<T> extends BaseFragment<T> implements XListView.IXListViewListener,
              OnItemClickListener, BaseListAdapter.Callback, View.OnClickListener,OnTabReselectListener {
 
-    public static final int TYPE_NORMAL = 0;
-    public static final int TYPE_LOADING = 1;
-    public static final int TYPE_NO_MORE = 2;
-    public static final int TYPE_ERROR = 3;
-    public static final int TYPE_NET_ERROR = 4;
-    
     //
     protected XListView mListView;
     
@@ -44,6 +39,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
         super.setupViews(root);
         mListView = (XListView) root.findViewById(R.id.pull_and_load_listview);
         mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
+        mListView.setAutoLoadEnable(true);
         mListView.setXListViewListener(this);
         mListView.setOnItemClickListener(this);
         mErrorLayout.setOnLayoutClickListener(this);
@@ -77,11 +73,15 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
     @Override
     public void onLoadMore() {
     	// TODO Auto-generated method stub
-    	
+    	TLog.d("called");
     }
     
     public void loadMoreComplete(){
-    	mListView.stopLoadMore();
+    	mListView.completeLoadMore();
+    }
+    
+    public void autoRefresh(){
+    	mListView.autoRefresh();
     }
     /**
      * request network data
@@ -117,6 +117,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
     
 	protected void onRequestError(int code) {
 		refreshComplete();
+		setEmptyLayoutStatus(EmptyLayout.NETWORK_ERROR);
 	}
     
     protected void onRequestSuccess() {

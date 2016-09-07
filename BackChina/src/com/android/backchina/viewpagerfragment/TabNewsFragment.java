@@ -19,6 +19,7 @@ import com.android.backchina.base.BaseViewPagerFragment;
 import com.android.backchina.bean.ChannelItem;
 import com.android.backchina.bean.base.ChannelBean;
 import com.android.backchina.fragment.NewsFragment;
+import com.android.backchina.fragment.NewsLocalFragment;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.manager.ChannelManager;
 import com.android.backchina.ui.BaseChannelActivity;
@@ -81,6 +82,19 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
 
 		};
 	}
+	
+	/**
+	 * 判断是否为"本地"
+	 * @param item
+	 * @return
+	 */
+	private boolean isLocal(ChannelItem item){
+		if(item != null && item.getUrl().endsWith("http://www.backchina.com/special/local/")){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
     @Override
     protected void onRequestData() {
@@ -98,7 +112,11 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
                 	}
                     for(ChannelItem item : localChannelItems){
                         TLog.d("tab name =" +item.getName());
-                        mTabsAdapter.addTab(item.getName(), item.getName(), NewsFragment.class, getBundle(item.getId(),item));
+                        if(isLocal(item)){
+                        	mTabsAdapter.addTab(item.getName(), item.getName(), NewsLocalFragment.class, getBundle(item.getId(),item));
+                        }else{
+                            mTabsAdapter.addTab(item.getName(), item.getName(), NewsFragment.class, getBundle(item.getId(),item));
+                        }
                     }
                     onRequestSuccess();
                     //
@@ -109,7 +127,7 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
                 }
             });
         } else { 
-            BackChinaApi.getChannelList(mHandler);
+            BackChinaApi.getNewsChannelList(mHandler);
         }
     }
     
@@ -162,7 +180,7 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	// TODO Auto-generated method stub
-    	if(resultCode == Activity.RESULT_OK){
+    	if(resultCode == BaseChannelActivity.RESULT_CODE_OK){
     		Bundle bundle = data.getExtras();
     		boolean isDataChanged = bundle.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
     		if(isDataChanged){

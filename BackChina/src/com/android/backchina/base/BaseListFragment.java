@@ -115,9 +115,9 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
 
     }
     
-	protected void onRequestError(int code) {
+	protected void onRequestError(int type) {
 		refreshComplete();
-		setEmptyLayoutStatus(EmptyLayout.NETWORK_ERROR);
+		setEmptyLayoutStatus(type);
 	}
     
     protected void onRequestSuccess() {

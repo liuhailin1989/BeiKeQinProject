@@ -30,6 +30,9 @@ import com.android.backchina.widget.UnsignedRecyclerView;
 public abstract class BaseChannelActivity extends BaseActivity {
 	
 	public final static String BUNDLE_KEY_DATA_CHANGED = "BUNDLE_KEY_DATA_CHANGED";
+	
+	public final static int RESULT_CODE_OK = 1000;
+	
     public static String TAG = "ChannelActivity";
     
     private ImageView mBtnClose;
@@ -233,7 +236,7 @@ public abstract class BaseChannelActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putBoolean(BUNDLE_KEY_DATA_CHANGED, isDataChanged);
         intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
+        setResult(RESULT_CODE_OK, intent);
         finish();
     }
     

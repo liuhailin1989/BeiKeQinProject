@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lay_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tv_current_city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="当前城市:"
+            android:textColor="@color/local_header_text_color"
+            android:textSize="@dimen/local_header_current_city_text_size"/>
+
+        <TextView
+            android:id="@+id/tv_city_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="北京"
+            android:textColor="@color/local_header_text_color"
+            android:textSize="@dimen/local_header_cicy_name_text_size"/>
+
+        <Button
+            android:id="@+id/btn_select_city"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:text="切换城市"
+            android:textColor="@color/local_button_text_color"
+            android:textSize="@dimen/local_header_button_text_size" />
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"/>
+</LinearLayout>

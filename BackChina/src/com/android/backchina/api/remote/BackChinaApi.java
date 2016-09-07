@@ -86,7 +86,7 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
-    public static void getChannelList(AsyncHttpResponseHandler handler){
+    public static void getNewsChannelList(AsyncHttpResponseHandler handler){
     	RequestParams params = new RequestParams();
         ApiHttpClient.get("api/appxml/topchannel.php", params, handler);
     }

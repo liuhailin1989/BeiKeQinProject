@@ -91,6 +91,9 @@
     <dimen name="news_item_thumb_height">90dp</dimen>
     <dimen name="news_item_title_text_size">16dp</dimen>
     <dimen name="news_item_subtitle_text_size">12dp</dimen>
+    <dimen name="local_header_cicy_name_text_size">12dp</dimen>
+    <dimen name="local_header_current_city_text_size">12dp</dimen>
+    <dimen name="local_header_button_text_size">12dp</dimen>
 
     <!-- 评论 -->
     <dimen name="comments_hint_text_size">14dp</dimen>

@@ -140,7 +140,7 @@ public class TabBlogFragment extends BaseViewPagerFragment implements
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-    	if(resultCode == Activity.RESULT_OK){
+    	if(resultCode == BaseChannelActivity.RESULT_CODE_OK){
     		Bundle bundle = data.getExtras();
     		boolean isDataChanged = bundle.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
     		if(isDataChanged){

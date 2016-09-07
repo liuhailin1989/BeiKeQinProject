@@ -78,6 +78,8 @@
     <color name="list_item_background_pressed">#FCFCFC</color>
     <color name="news_item_title_color">#000000</color>
     <color name="news_item_subtitle_color">#808080</color>
+    <color name="local_header_text_color">#111111</color>
+    <color name="local_button_text_color">#111111</color>
 
     <!-- blog item -->
     <color name="blog_item_title_color">#000000</color>

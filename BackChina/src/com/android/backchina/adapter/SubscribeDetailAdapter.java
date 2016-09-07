@@ -3,8 +3,9 @@ package com.android.backchina.adapter;
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.SubscribeDetail;
+import com.android.backchina.utils.StringUtils;
 
-public class SubscribeDetailAdapter extends BaseListAdapter<SubscribeDetail>{
+public class SubscribeDetailAdapter extends BaseListAdapter<SubscribeDetail> {
 
 	public SubscribeDetailAdapter(Callback callback) {
 		super(callback);
@@ -14,10 +15,18 @@ public class SubscribeDetailAdapter extends BaseListAdapter<SubscribeDetail>{
 	@Override
 	protected void convert(ViewHolder vh, SubscribeDetail item, int position) {
 		// TODO Auto-generated method stub
-		String viewString  = mCallback.getContext().getResources().getString(R.string.subscribe_views);
+		String viewString = mCallback.getContext().getResources()
+				.getString(R.string.subscribe_views);
 		vh.setText(R.id.tv_title, item.getTitle());
-		vh.setText(R.id.tv_count, String.format(viewString, item.getComments(),item.getViews()));
+		vh.setText(R.id.tv_count,
+				String.format(viewString, item.getComments(), item.getViews()));
 		vh.setText(R.id.tv_from, item.getFrom());
+		if (StringUtils.isEmpty(item.getPic())) {
+			vh.setGone(R.id.iv_thumb);
+		} else {
+			vh.setVisibility(R.id.iv_thumb);
+			vh.setImageForNet(R.id.iv_thumb, item.getPic());
+		}
 		vh.setText(R.id.tv_summary, item.getSummary());
 	}
 

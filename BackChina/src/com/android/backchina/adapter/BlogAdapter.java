@@ -16,9 +16,17 @@ public class BlogAdapter extends BaseListAdapter<Blog>{
 	protected void convert(ViewHolder vh, Blog item, int position) {
 		// TODO Auto-generated method stub
 		vh.setText(R.id.tv_title, item.getTitle());
-		vh.setImageForNet(R.id.iv_thumb, item.getAvatar());
-		vh.setText(R.id.tv_time,StringUtils.friendly_time(item.getDateline()));
-		vh.setText(R.id.tv_origin,item.getUsername());
+		vh.setText(R.id.tv_user_name, item.getUsername());
+		if (StringUtils.isEmpty(item.getPic())) {
+			vh.setGone(R.id.iv_thumb);
+		}else{
+			vh.setVisibility(R.id.iv_thumb);
+			vh.setImageForNet(R.id.iv_thumb, item.getPic());
+		}
+		vh.setText(R.id.tv_summary, item.getSummary());
+		String viewsString = mCallback.getContext().getResources().getString(R.string.blog_item_views);
+		String result = String.format(viewsString, item.getComments(),item.getViews());
+		vh.setText(R.id.tv_views,result);
 	}
 
 	@Override

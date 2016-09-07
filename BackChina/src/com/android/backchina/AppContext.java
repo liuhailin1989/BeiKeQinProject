@@ -3,6 +3,7 @@ package com.android.backchina;
 import java.util.Properties;
 import java.util.UUID;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Handler;
@@ -142,6 +143,27 @@ public class AppContext extends BaseApplication {
                 setProperty("user.views", String.valueOf(user.getViews()));
             }
         });
+    }
+    
+    /**
+     * 用户注销
+     */
+    public void Logout() {
+        cleanLoginInfo();
+        ApiHttpClient.cleanCookie();
+        this.cleanCookie();
+        this.login = false;
+        this.loginUid = 0;
+
+        Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
+        sendBroadcast(intent);
+    }
+    
+    /**
+     * 清除保存的缓存
+     */
+    public void cleanCookie() {
+        removeProperty(AppConfig.CONF_COOKIE);
     }
     
     public void cleanLoginInfo() {

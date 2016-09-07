@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/waiting_pb"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:textColor="@color/gray" />
 
 </RelativeLayout>

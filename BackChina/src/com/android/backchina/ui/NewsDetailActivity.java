@@ -58,12 +58,11 @@ public class NewsDetailActivity extends BaseDetailActivity{
     }
     
     @Override
-    public int getCommentCount() {
+    protected void setupViews() {
     	// TODO Auto-generated method stub
-    	if(currentNews != null){
-			return currentNews.getComments();
-		}
-		return 0;
+    	super.setupViews();
+    	setTitle("新闻资讯");
+    	setCommentCount(currentNews.getComments());
     }
     
     @Override

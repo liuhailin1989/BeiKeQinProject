@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:background="@color/background_color"
     android:orientation="horizontal" >
-<!-- 
-    <EditText
-        android:id="@+id/et_put"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:imeOptions="actionSend"
-        android:inputType="text"
-        android:hint="发表评论" />
-     -->
+    
     <TextView 
         android:id="@+id/tv_put"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/ql_textfield_default_emui_new"
-        android:hint="发表评论"/>
+        android:text="@string/comments_hint_text"
+        android:textColor="@color/comments_hint_text_color"
+        android:textSize="@dimen/comments_hint_text_size"/>
 
     <TextView
         android:id="@+id/tv_commit_count"
@@ -30,8 +24,8 @@
         android:background="@drawable/ic_comment_count_bg"
         android:layout_marginLeft="20dp"
         android:gravity="center"
-        android:text="2"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        tools:text="评论数量" />
 
     <ImageView
         android:id="@+id/iv_set_font_size"

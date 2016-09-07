@@ -25,6 +25,8 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
     
     private ImageView btnBack;
     
+    private TextView tvTitle;
+    
     private TextView tvCommentCount;
     
     protected TextHttpResponseHandler mHandler;
@@ -54,9 +56,20 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
                 finish();
             }
         });
+        tvTitle = (TextView) findViewById(R.id.tv_title);
         tvCommentCount = (TextView) findViewById(R.id.tv_comment_count);
-        int commentCount = getCommentCount();
-        tvCommentCount.setText(String.valueOf(commentCount));
+	}
+	
+	protected void setTitle(String title) {
+		if (tvTitle != null) {
+			tvTitle.setText(title);
+		}
+	}
+	
+	protected void setCommentCount(int count){
+		if (tvCommentCount != null) {
+			tvCommentCount.setText(String.valueOf(count));
+		}
 	}
 	
 	protected void initData() {
@@ -98,10 +111,6 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
         if (mEmptyLayout != null) {
         	mEmptyLayout.setErrorType(type);
         }
-    }
-    
-    public int getCommentCount(){
-    	return 0;
     }
     
     public boolean handleData(String responseString){

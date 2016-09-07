@@ -18,7 +18,7 @@ import com.android.backchina.bean.base.ChannelBean;
 import com.android.backchina.fragment.VideoFragment;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.manager.ChannelManager;
-import com.android.backchina.ui.ChannelActivity;
+import com.android.backchina.ui.ChannelNewsActivity;
 import com.android.backchina.utils.TLog;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -150,7 +150,7 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
     protected void enterChannelManagerActivity() {
         // TODO Auto-generated method stub
         Intent intent = new Intent();
-        intent.setClass(getActivity(), ChannelActivity.class);
+        intent.setClass(getActivity(), ChannelNewsActivity.class);
         getActivity().startActivity(intent);
     }
 

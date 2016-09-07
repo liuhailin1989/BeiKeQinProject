@@ -37,6 +37,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private EditText mCommentEditView;
     
+    private TextView mCommentsCount;
+    
     private Button mBtnSend;
     
 	public static NewsDetailFragment newInstance() {
@@ -64,6 +66,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         
         layCommit = (LinearLayout) root.findViewById(R.id.lay_commit_edit);
         layCommit.setVisibility(View.VISIBLE);
+        mCommentsCount = (TextView) root.findViewById(R.id.tv_commit_count);
         
         layRealComentEdit = (RelativeLayout) root.findViewById(R.id.lay_real_comment_edit);
         layRealComentEdit.setOnClickListener(new OnClickListener() {
@@ -143,6 +146,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         
         mComments.setTitle("最新评论");
         mComments.init(newsDetail.getCommurlapi(), 0, newsDetail.getComments(), null, this);
+        
+        mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
     }
 
     @Override

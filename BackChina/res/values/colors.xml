@@ -38,20 +38,65 @@
     <color name="list_divider_color">#DADADA</color>
     <color name="ui_dialog_divider">@color/list_divider_color</color>
     <color name="bg_touch">@color/lightest_gray</color>
-    <color name="background_color">#F1F1F1</color>
     <color name="intro_color">#585858</color>
     <color name="group_color">#898989</color>
-    <color name="title_bar_bg_color">#FFFFFF</color>
-    <color name="title_bar_text_color">#282828</color>
+
     <color name="item_selected">#33333333</color>
     <color name="recycle_view_item_title_text_color">#2a2a2a</color>
     <color name="recycle_view_item_sub_title_text_color">#cccccc</color>
 
+    <!-- back_china_color APP主色 -->
+    <color name="back_china_color">#40AC16</color>
+    <!-- 主背景色 -->
+    <color name="background_color">#F1F1F1</color>
+
+    <!-- 通用 -->
+    <color name="title_bar_bg_color">#40AC16</color>
+    <color name="title_bar_title_text_color">#FFFFFF</color>
+    <color name="title_bar_subtitle_text_color">#FFFFFF</color>
+    <color name="common_detail_title_text_color">#111111</color>
+    <color name="common_detail_subtitle_text_color">#6a6a6a</color>
+    
+    <!-- 顶部导航 -->
+    <color name="top_channel_text_color_normal">#222222</color>
+    <color name="top_channel_text_color_selected">#FFFFFF</color>
+
+    <!-- 频道管理 -->
+    <color name="channel_manager_item_text_color">#111111</color>
+    
+    <!-- 评论 -->
+    <color name="comments_hint_text_color">#808080</color>
+    <color name="comments_text_color">#000000</color>
+    <color name="comments_group_title_text_color">#111111</color>
+    <color name="comments_user_name_text_color">#111111</color>
+    <color name="comments_pub_date_text_color">#6a6a6a</color>
+    <color name="comments_content_text_color">#111111</color>
+    <color name="comments_see_more_text_color">#24cf5f</color>
+
+    <!-- news item -->
+    <color name="line_color">#e7e7e7</color>
+    <color name="list_item_background_pressed">#FCFCFC</color>
+    <color name="news_item_title_color">#000000</color>
+    <color name="news_item_subtitle_color">#808080</color>
+
+    <!-- blog item -->
+    <color name="blog_item_title_color">#000000</color>
+    <color name="blog_item_subtitle_color">#808080</color>
+    <color name="blog_item_author_text_color">#111111</color>
+    <color name="blog_item_summary_text_color">#808080</color>
+    <color name="blog_item_views_text_color">#FFA500</color>
+    <color name="blog_detail_card_subscribe_text_color">#FFFFFF</color>
+    <color name="blog_detail_card_author_text_color">#000000</color>
+    <color name="blog_detail_card_floor_flag_text_color">#000000</color>
+    
+    <!-- 我的 -->
+    <color name="mine_longin_text_color">#FFFFFF</color>
+    <color name="longin_edit_text_color">#000000</color>
+    <color name="longin_btn_text_color">#FFFFFF</color>
+    <color name="longin_no_acount_text_color">#000000</color>
+    
     <!--  -->
     <color name="title_color">#333333</color>
-
-    <!-- back_china_color -->
-    <color name="back_china_color">#005500</color>
     <color name="subscribe_btn_pressed_color">#4CD964</color>
     <!-- 下拉刷新时，颜色值 -->
     <color name="swiperefresh_color1">#ff00ddff</color>
@@ -81,14 +126,6 @@
     <color name="subscribe_item_text_color_pressed">#ffb9b9b9</color>
     <color name="count_text_color_light">#9d9d9d</color>
 
-    <!-- news item -->
-    <color name="line_color">#e7e7e7</color>
-    <color name="list_item_background_pressed">#FCFCFC</color>
-    <color name="news_item_title_color">#000000</color>
-    <color name="news_item_subtitle_color">#808080</color>
-    <!-- blog item -->
-    <color name="blog_item_title_color">#000000</color>
-    <color name="blog_item_subtitle_color">#808080</color>
     <!--  -->
     <color name="border_red">#FF0000</color>
     <color name="border_black">#4D4D4D</color>

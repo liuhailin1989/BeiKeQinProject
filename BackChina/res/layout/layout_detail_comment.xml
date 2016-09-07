@@ -6,24 +6,21 @@
 
     <TextView
         android:id="@+id/tv_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:text="最新评论"
-        android:textColor="#6a6a6a"
-        android:textSize="12sp" />
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/background_color"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/comments_group_title_text"
+        android:textColor="@color/comments_group_title_text_color"
+        android:textSize="@dimen/comments_group_title_text_size" />
 
     <LinearLayout
         android:id="@+id/lay_comment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp" />
+        android:orientation="vertical"/>
 
     <TextView
         android:id="@+id/tv_more_comment"
@@ -33,7 +30,7 @@
         android:gravity="center_horizontal"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
-        android:text="查看更多"
-        android:textColor="#24cf5f"
-        android:textSize="14sp" />
+        android:text="@string/comments_see_more_text"
+        android:textColor="@color/comments_see_more_text_color"
+        android:textSize="@dimen/comments_see_more_text_size" />
 </merge>

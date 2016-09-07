@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/title_bar_bg_color"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -24,11 +25,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="资讯详情"
-            android:textColor="@color/black" />
+            android:textColor="@color/title_bar_title_text_color"
+            android:textSize="@dimen/common_detail_titlebar_title_text_size"
+            tools:text="资讯详情" />
 
         <TextView
             android:id="@+id/tv_comment_count"
@@ -36,8 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
-            android:text="10"
-            android:textColor="@color/black" />
+            android:textColor="@color/title_bar_subtitle_text_color"
+            android:textSize="@dimen/common_detail_titlebar_subtitle_text_size"
+            tools:text="跟帖 0" />
     </LinearLayout>
     
     <View 

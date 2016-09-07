@@ -14,9 +14,11 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/ic_comment_box_bg"
         android:gravity="top"
-        android:hint="发表评论"
+        android:hint="@string/comments_hint_text"
         android:imeOptions="actionSend"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@color/comments_text_color"
+        android:textSize="@dimen/comments_text_size" />
 
     <Button
         android:id="@+id/btn_send"
@@ -24,6 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginRight="10dp"
-        android:text="发送" />
+        android:text="@string/comments_send_text" />
 
 </LinearLayout>

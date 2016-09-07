@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,7 +51,9 @@ public class TabMeFragment extends BaseFragment {
     
     private ImageView mAvatar;
     
-    private TextView mUserName;
+    private Button mUserName;
+    
+    private Button mBtnLogout;
     
     private LinearLayout mBlogContainer;
     private LinearLayout mCacheContainer;
@@ -107,7 +110,12 @@ public class TabMeFragment extends BaseFragment {
             String action = intent.getAction();
             if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
                 requestData(true);
-            }
+            } else if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
+				mIsWatingLogin = true;
+				mUserInfo = AppContext.getInstance().getLoginUser();
+				setupUser();
+				refreshUserInfoUI();
+			}
         }
     };
 
@@ -154,14 +162,25 @@ public class TabMeFragment extends BaseFragment {
         mCacheContainer = (LinearLayout) root.findViewById(R.id.ll_cache_container);;
         mAboutContainer = (LinearLayout) root.findViewById(R.id.ll_about_container);;
         
-        mUserName = (TextView) root.findViewById(R.id.tv_username);
         mAvatar = (ImageView) root.findViewById(R.id.iv_avatar);
-        mUserName = (TextView) root.findViewById(R.id.tv_user_name);
+        mBtnLogout =(Button) root.findViewById(R.id.btn_logout);
+        mBtnLogout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AppContext.getInstance().Logout();
+			}
+		});
+        mUserName = (Button) root.findViewById(R.id.tv_user_name);
         mUserName.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 // TODO Auto-generated method stub
+            	if(AppContext.getInstance().isLogin()){
+            		return;
+            	}
                 UIHelper.enterLoginActivity(getActivity());
             }
         });
@@ -242,11 +261,15 @@ public class TabMeFragment extends BaseFragment {
     }
     
     private void refreshUserInfoUI(){
-        if (mUserInfo == null){
+        if (mUserInfo == null || mUserInfo.getUid() <=0 ){
+        	mUserName.setText("点击登录");
+        	mAvatar.setImageResource(R.drawable.default_avatar);
+        	mBtnLogout.setVisibility(View.GONE);
             return;
         }
         mUserName.setText(mUserInfo.getUsername());
-        setImageFromNet(mAvatar, mUserInfo.getAvatar());
+        setImageFromNet(mAvatar, mUserInfo.getAvatar(),R.drawable.default_avatar);
+        mBtnLogout.setVisibility(View.VISIBLE);
         mFriends.setText(mUserInfo.getFriends() + " 好友");
         mViews.setText(mUserInfo.getViews() + " 访客");
         mDoings.setText(mUserInfo.getDoings() + " 记录");

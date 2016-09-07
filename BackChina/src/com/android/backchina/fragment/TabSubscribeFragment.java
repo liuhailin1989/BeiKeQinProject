@@ -21,6 +21,7 @@ import com.android.backchina.base.adapter.BaseListAdapter.Callback;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
+import com.android.backchina.interf.ISubscribeListener;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
@@ -29,7 +30,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnTabReselectListener,Callback,OnItemClickListener{
+public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnTabReselectListener,Callback,OnItemClickListener,ISubscribeListener{
 
     private ListView mListView;
     
@@ -104,6 +105,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         // TODO Auto-generated method stub
         super.initData();
         mAdapter = new SubscribeAdapter(this);
+        mAdapter.setSubscribeListener(this);
         mListView.setAdapter(mAdapter);
         requestData();
     }
@@ -141,6 +143,12 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 		// TODO Auto-generated method stub
 		Subscribe currentSubscribe = (Subscribe) parent.getAdapter().getItem(position);//减去header view count
 		UIHelper.enterSubscribeDetailActivity(getActivity(), currentSubscribe);
+	}
+
+	@Override
+	public void onSubscribe(Subscribe subscribe) {
+		// TODO Auto-generated method stub
+		
 	}
     
 }

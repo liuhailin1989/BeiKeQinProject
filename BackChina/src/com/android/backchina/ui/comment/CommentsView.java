@@ -1,8 +1,9 @@
 package com.android.backchina.ui.comment;
 
-import android.annotation.SuppressLint;
+import java.lang.reflect.Type;
+import java.util.List;
+
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,7 @@ import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import java.lang.reflect.Type;
-import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.util.TextUtils;
 
 
 public class CommentsView extends LinearLayout implements View.OnClickListener {
@@ -82,7 +79,6 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-//                    Type type = new TypeToken<CommentBean<List<Comment>>>() {
                         Type type = new TypeToken<CommentBean<List<Comment>>>() {
                     }.getType();
 
@@ -140,11 +136,16 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 //        imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
 //                .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
-        if(StringUtils.isEmpty(comment.getUsername())){
-         ((TextView) lay.findViewById(R.id.tv_username)).setText("游客");
-        }else{
-        ((TextView) lay.findViewById(R.id.tv_username)).setText(comment.getUsername());
-        }
+		if (StringUtils.isEmpty(comment.getUsername())) {
+			((TextView) lay.findViewById(R.id.tv_username)).setText("游客");
+		} else {
+			((TextView) lay.findViewById(R.id.tv_username)).setText(comment
+					.getUsername());
+		}
+		
+		TextView floor = (TextView) lay.findViewById(R.id.tv_floor);
+		String floorText = String.format(getContext().getResources().getString(R.string.comments_floor_count),comment.getPosition() - 1);
+		floor.setText(floorText);
 
         TextView content = ((TextView) lay.findViewById(R.id.tv_message));
         
@@ -157,8 +158,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 //            lay.addView(view, lay.indexOfChild(content));
 //        }
 
-        ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                StringUtils.friendly_time(comment.getDateline()));
+        ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(StringUtils.friendly_time(comment.getDateline()));
 
         lay.findViewById(R.id.tv_message).setOnClickListener(new OnClickListener() {
             @Override
@@ -167,11 +167,12 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
             }
         });
 
-        if (first)
+        if (first){
             mLayComments.addView(lay, 0);
-        else
+        }
+        else{
             mLayComments.addView(lay);
-
+        }
         return lay;
     }
 

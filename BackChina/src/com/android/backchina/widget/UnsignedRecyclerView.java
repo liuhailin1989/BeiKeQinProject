@@ -4,6 +4,7 @@ import com.android.backchina.base.BaseRecyclerView;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View.MeasureSpec;
 
 public class UnsignedRecyclerView extends BaseRecyclerView {
 

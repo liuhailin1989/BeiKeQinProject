@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,7 +27,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
 
     private TextView mTitle;
     private TextView mPubTime;
-    private TextView mFrom;
+    private TextView mAuthor;
     
     private TextView mInput;
     
@@ -38,7 +39,15 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private EditText mCommentEditView;
     
+    private TextView mCommentsCount;
+    
     private Button mBtnSend;
+    
+    private ImageView mBlogerCardAvatar;
+    
+    private TextView mBlogerCardAuthor;
+    
+    private TextView mBlogerCardSubscribe;
     
 	public static BlogDetailFragment newInstance() {
 		BlogDetailFragment fragment = new BlogDetailFragment();
@@ -48,7 +57,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
     @Override
     protected int getLayoutId() {
         // TODO Auto-generated method stub
-        return R.layout.fragment_news_detail_layout;
+        return R.layout.fragment_blog_detail_layout;
     }
     
     @Override
@@ -58,12 +67,13 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
         
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
-        mFrom = (TextView) root.findViewById(R.id.tv_from);
+        mAuthor = (TextView) root.findViewById(R.id.tv_author);
         
         mComments = (CommentsView) root.findViewById(R.id.lay_comment_view);
         
         layCommit = (LinearLayout) root.findViewById(R.id.lay_commit_edit);
         layCommit.setVisibility(View.VISIBLE);
+        mCommentsCount = (TextView) root.findViewById(R.id.tv_commit_count);
         
         layRealComentEdit = (RelativeLayout) root.findViewById(R.id.lay_real_comment_edit);
         layRealComentEdit.setOnClickListener(new OnClickListener() {
@@ -86,6 +96,9 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
             }
         });
         
+        //
+        mBlogerCardAvatar = (ImageView) root.findViewById(R.id.iv_card_avatar);
+        mBlogerCardAuthor = (TextView) root.findViewById(R.id.tv_card_author);
         mInput = (TextView) root.findViewById(R.id.tv_put);
         
         mInput.setOnClickListener(new OnClickListener() {
@@ -139,10 +152,12 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
         setWebViewContent(blogDetail.getContent());
         mTitle.setText(blogDetail.getTitle());
         mPubTime.setText(StringUtils.friendlyTime(blogDetail.getDateline()));
-        mFrom.setText(blogDetail.getFrom());
-        
+        mAuthor.setText(blogDetail.getUsername());
         mComments.setTitle("最新评论");
         mComments.init(blogDetail.getCommurlapi(), 0, blogDetail.getComments(), null, this);
+        mCommentsCount.setText(String.valueOf(blogDetail.getComments()));
+        setImageFromNet(mBlogerCardAvatar, blogDetail.getAvatar(),R.drawable.default_avatar);
+        mBlogerCardAuthor.setText(blogDetail.getUsername());
     }
 
     @Override

@@ -78,7 +78,7 @@ public abstract class BaseBean extends Entity {
     /**
      * 评论或者回帖数
      */
-    private int comments = 0;
+    private int comments;
 
     /**
      * 点击数量

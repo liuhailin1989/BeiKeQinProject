@@ -6,22 +6,24 @@
     <FrameLayout
         android:background="@android:color/transparent"
         android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="@dimen/channel_item_width"
+        android:layout_height="@dimen/channel_item_height">
         
         <LinearLayout 
             android:id="@+id/ll_channel_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:background="@drawable/border_normal"
             android:orientation="vertical">
             
             <TextView 
                 android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="滚动"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/channel_item_text_size"
+                android:textColor="@color/channel_manager_item_text_color"/>
             
         </LinearLayout>
         

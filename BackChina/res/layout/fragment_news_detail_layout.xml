@@ -5,16 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/white" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="match_parent" >
 
         <ScrollView
             android:id="@+id/sv_detail_scrollview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:scrollbars="vertical" >
 
             <LinearLayout
@@ -23,52 +21,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <LinearLayout
+                <include 
                     android:id="@+id/ll_detail_title_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:textColor="#111111"
-                        android:textSize="20dp"
-                        tools:text="新闻标题" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal" >
-
-                        <TextView
-                            android:id="@+id/tv_pub_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#6a6a6a"
-                            android:textSize="14dp"
-                            tools:text="副标题,发表时间" />
-
-                        <TextView
-                            android:id="@+id/tv_from"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:textColor="#6a6a6a"
-                            android:textSize="14dp"
-                            tools:text="新闻来源" />
-                    </LinearLayout>
-                </LinearLayout>
+                    layout="@layout/layout_detail_news_title_container"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:background="@color/list_divider_color" />
 
                 <FrameLayout
@@ -97,8 +57,9 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             layout="@layout/layout_commit_eidt_layout"
+            android:layout_alignParentBottom="true"
             android:visibility="visible" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/lay_real_comment_edit"

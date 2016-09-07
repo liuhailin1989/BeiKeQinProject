@@ -44,13 +44,13 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
     }
     
     @Override
-    public int getCommentCount() {
+    protected void setupViews() {
     	// TODO Auto-generated method stub
-    	if(mCurrentSubscribeDetail != null){
-			return mCurrentSubscribeDetail.getComments();
-		}
-		return 0;
+    	super.setupViews();
+    	setTitle("专题详情");
+    	setCommentCount(mCurrentSubscribeDetail.getComments());
     }
+    
     
     @Override
     public void onRequestData(){

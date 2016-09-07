@@ -3,12 +3,18 @@ package com.android.backchina.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.android.backchina.R;
 import com.android.backchina.base.BaseActivity;
 
 public class AboutUsActivity extends BaseActivity{
-    
+	
+	private TextView mTitle;
+	
+    private WebView mWebView;
+	
     public static void show(Context context) {
         Intent intent = new Intent(context, AboutUsActivity.class);
         context.startActivity(intent);
@@ -25,10 +31,12 @@ public class AboutUsActivity extends BaseActivity{
     
     
     private void setupViews(){
-        
+    	mTitle = (TextView) findViewById(R.id.tv_title);
+    	mWebView = (WebView) findViewById(R.id.web_view);
     }
     
     private void initData(){
-        
+    	mTitle.setText("关于我们");
+    	mWebView.loadUrl("http://www.backchina.com/api/appxml/aboutus.php");
     }
 }

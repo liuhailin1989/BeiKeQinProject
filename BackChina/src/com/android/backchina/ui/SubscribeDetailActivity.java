@@ -56,7 +56,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	public static void show(Context context, Subscribe subscribe) {
 		Intent intent = new Intent(context, SubscribeDetailActivity.class);
 		intent.putExtra(BUNDLE_KEY_SUBSCRIBE, subscribe);
-		context.startActivity(intent);
+		context.startActivity(intent); 
 	}
 
 	@Override

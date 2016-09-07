@@ -25,8 +25,11 @@ import com.android.backchina.base.BaseActivity;
 import com.android.backchina.bean.Login;
 import com.android.backchina.bean.UserInfo;
 import com.android.backchina.bean.base.ActivitiesBean;
+import com.android.backchina.ui.dialog.DialogHelper;
+import com.android.backchina.ui.dialog.WaitDialog;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -50,10 +53,16 @@ public class LoginActivity extends BaseActivity {
     private Button btnLogin;
 
     private TextView tvRegisterAcount;
+    
+    private TextView tvErrorInfo;
 
     private String mUserName;
 
     private String mPassword;
+    
+    private WaitDialog mWaitDialog;
+    
+    private Context mContext;
     
     public static void show(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -65,11 +74,13 @@ public class LoginActivity extends BaseActivity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_layout);
+        mContext = this;
         setupViews();
         initData();
     }
 
     private void setupViews() {
+    	mTitle = (TextView) findViewById(R.id.tv_title);
         etUserName = (EditText) findViewById(R.id.et_user_name);
         etUserName.setOnEditorActionListener(new OnEditorActionListener() {
 
@@ -97,10 +108,23 @@ public class LoginActivity extends BaseActivity {
                 handleLogin();
             }
         });
+        
+        tvRegisterAcount = (TextView) findViewById(R.id.tv_register_acount);
+        tvRegisterAcount.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				UIHelper.enterRegisterActivity(mContext);
+			}
+		});
+        tvErrorInfo = (TextView) findViewById(R.id.tv_error_info);
     }
 
     private void initData() {
-
+    	mTitle.setText("登录页面");
+    	mWaitDialog = DialogHelper.getWaitDialog(this, "登录中...");
+    	tvErrorInfo.setText("");
     }
 
    //登录
@@ -110,6 +134,8 @@ public class LoginActivity extends BaseActivity {
         public void onFailure(int code, Header[] headers, String responseString, Throwable throwable) {
             // TODO Auto-generated method stub
             TLog.d("called");
+            mWaitDialog.hide();
+            tvErrorInfo.setText("登录失败,请重试");
         }
 
         @Override
@@ -117,6 +143,7 @@ public class LoginActivity extends BaseActivity {
             // TODO Auto-generated method stub
             TLog.d("called");
             handleLoginResponse(headers,responseString);
+            mWaitDialog.hide();
         }
 
     };
@@ -127,6 +154,7 @@ public class LoginActivity extends BaseActivity {
         mUserName = "liuhailin1989";
         mPassword = "Launcher20130829";
         //
+        mWaitDialog.show();
         BackChinaApi.login(mUserName, mPassword, mLoginHandler);
     }
 
@@ -138,14 +166,20 @@ public class LoginActivity extends BaseActivity {
         Login login = activitiesBean.getActivities();
         if (login.getStatus() == -1) {
             TLog.d("账号不存在");
+            tvErrorInfo.setText("账号不存在");
+            mWaitDialog.hide();
         } else if (login.getStatus() == -2) {
             TLog.d("密码错误");
+            tvErrorInfo.setText("密码错误");
+            mWaitDialog.hide();
         } else if (login.getUid() > 0) {
             TLog.d("登录成功");
             handleCookie(headers);
             handleUserInfo();
         } else {
             TLog.d("登录失败");
+            tvErrorInfo.setText("登录失败,请重试");
+            mWaitDialog.hide();
         }
     }
     
@@ -213,6 +247,7 @@ public class LoginActivity extends BaseActivity {
         public void onFailure(int code, Header[] headers, String responseString, Throwable throwable) {
             // TODO Auto-generated method stub
             TLog.d("called");
+            tvErrorInfo.setText("用户信息获取失败,请重试");
         }
 
         @Override

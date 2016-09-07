@@ -21,50 +21,60 @@
             android:layout_width="@dimen/login_edittext_width"
             android:layout_height="@dimen/login_edittext_height"
             android:layout_marginTop="10dp"
-            android:hint="user name"
             android:background="@drawable/selector_edittext_bg"
-            android:textSize="@dimen/login_edittext_text_size"
-            android:textColor="@color/longin_edit_text_color"/>
+            android:hint="user name"
+            android:textColor="@color/longin_edit_text_color"
+            android:textSize="@dimen/login_edittext_text_size" />
 
         <EditText
             android:id="@+id/et_user_password"
             android:layout_width="@dimen/login_edittext_width"
             android:layout_height="@dimen/login_edittext_height"
             android:layout_marginTop="10dp"
+            android:background="@drawable/selector_edittext_bg"
             android:hint="password"
             android:password="true"
+            android:textColor="@color/longin_edit_text_color"
+            android:textSize="@dimen/login_edittext_text_size" />
+
+        <EditText
+            android:id="@+id/et_user_email"
+            android:layout_width="@dimen/login_edittext_width"
+            android:layout_height="@dimen/login_edittext_height"
+            android:layout_marginTop="10dp"
             android:background="@drawable/selector_edittext_bg"
-            android:textSize="@dimen/login_edittext_text_size"
-            android:textColor="@color/longin_edit_text_color" />
+            android:hint="email"
+            android:textColor="@color/longin_edit_text_color"
+            android:textSize="@dimen/login_edittext_text_size" />
 
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_register"
             android:layout_width="@dimen/login_edittext_width"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/login_btn_text"
+            android:background="@drawable/selector_btn_login"
+            android:text="@string/register_btn_text"
             android:textColor="@color/longin_btn_text_color"
-            android:textSize="@dimen/login_btn_text_size"
-            android:background="@drawable/selector_btn_login" />
+            android:textSize="@dimen/login_btn_text_size" />
 
         <TextView
-            android:id="@+id/tv_register_acount"
+            android:id="@+id/tv_login_acount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:padding="10dp"
-            android:text="@string/login_no_acount_text"
-            android:textSize="@dimen/login_no_acount_text_size"
-            android:textColor="@color/longin_no_acount_text_color" />
-        
+            android:text="@string/login_has_acount_text"
+            android:textColor="@color/longin_no_acount_text_color"
+            android:textSize="@dimen/login_no_acount_text_size" />
+
         <TextView
             android:id="@+id/tv_error_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:padding="10dp"
-            android:textSize="@dimen/login_no_acount_text_size"
-            android:textColor="@color/red" />
+            android:textColor="@color/red"
+            android:textSize="@dimen/login_no_acount_text_size" />
     </LinearLayout>
 
 </LinearLayout>

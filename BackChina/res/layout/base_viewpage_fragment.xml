@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/lay_title_tab_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/space_35"
+        android:layout_height="@dimen/top_channel_height"
         android:background="@color/back_china_color"
         android:orientation="horizontal" >
 

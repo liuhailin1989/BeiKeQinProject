@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="资讯详情"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
         
     </LinearLayout>
     

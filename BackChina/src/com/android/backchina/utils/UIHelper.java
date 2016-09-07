@@ -8,8 +8,11 @@ import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.ui.AboutUsActivity;
 import com.android.backchina.ui.BlogDetailActivity;
+import com.android.backchina.ui.ChannelBlogActivity;
+import com.android.backchina.ui.ChannelNewsActivity;
 import com.android.backchina.ui.LoginActivity;
 import com.android.backchina.ui.NewsDetailActivity;
+import com.android.backchina.ui.RegisterActivity;
 import com.android.backchina.ui.SpecialNewsDetailActivity;
 import com.android.backchina.ui.SubscribeActivity;
 import com.android.backchina.ui.SubscribeDetailActivity;
@@ -18,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 public class UIHelper {
@@ -25,6 +29,14 @@ public class UIHelper {
     
     public static void showUrlRedirect(Context context, String url) {
 //        showUrlRedirect(context, 0, url);
+    }
+    
+    public static void enterChannelNewsActivity(Context context,Fragment fragment) {
+    	ChannelNewsActivity.show(context,fragment);
+    }
+    
+    public static void enterChannelBlogActivity(Context context,Fragment fragment) {
+    	ChannelBlogActivity.show(context,fragment);
     }
     
     public static void enterNewsDetail(Context context, long newsId, int commentCount) {
@@ -55,6 +67,9 @@ public class UIHelper {
     }
     public static void enterSpecialNewsDetailActivity(Context context,SubscribeDetail subscribeDetail){
         SpecialNewsDetailActivity.show(context,subscribeDetail);
+    }
+    public static void enterRegisterActivity(Context context){
+        RegisterActivity.show(context);
     }
     
     /**

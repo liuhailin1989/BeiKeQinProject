@@ -7,6 +7,18 @@ import com.loopj.android.http.RequestParams;
 
 public class BackChinaApi {
 
+	public static void register(String username, String password,String email, AsyncHttpResponseHandler handler){
+		//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&
+		//func=register&username=admin&password=admin&email=xx&questionid=xxx&answer=fdxx
+        RequestParams params = new RequestParams();
+        params.put("func", "register");
+        params.put("username", username);
+        params.put("password", password);
+        params.put("email", email);
+        String loginurl = "plugin.php?id=bkc_app_iphone:user";
+        ApiHttpClient.post(loginurl, params, handler);
+	}
+	
     /**
      * 登陆
      *

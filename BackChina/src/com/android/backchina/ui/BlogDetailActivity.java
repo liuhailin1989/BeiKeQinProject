@@ -37,12 +37,11 @@ public class BlogDetailActivity extends BaseDetailActivity {
 	}
 	
 	@Override
-	public int getCommentCount() {
+	protected void setupViews() {
 		// TODO Auto-generated method stub
-		if(mCurrentBlog != null){
-			return mCurrentBlog.getComments();
-		}
-		return 0;
+		super.setupViews();
+		setTitle("博文详情");
+		setCommentCount(mCurrentBlog.getComments());
 	}
 	
 	@Override

@@ -11,6 +11,24 @@
     <string name="tab_name_me">Me</string>
 
     <!--  -->
+    <string name="comments_hint_text">发表评论</string>
+    <string name="comments_send_text">发送</string>
+    <string name="comments_group_title_text">最新评论</string>
+    <string name="comments_floor_count">%1$d 楼</string>
+    <string name="comments_see_more_text">查看更多</string>
+    
+    <!-- blog -->
+    <string name="blog_item_views">%1$d 评 / %2$s 阅</string>
+    
+    <!-- 我的 -->
+    <string name="mine_login_text">点击登录</string>
+    <string name="mine_logout_text">退出登录</string>
+    <string name="login_btn_text">登录</string>
+    <string name="login_no_acount_text">没有账号？点击这里</string>
+    <string name="register_btn_text">提交注册</string>
+    <string name="login_has_acount_text">已有账号,点击这里</string>
+   
+    <!--  -->
     <string name="header_hint_refresh_normal">Pull to refresh</string>
     <string name="header_hint_refresh_ready">Release to refresh</string>
     <string name="header_hint_refresh_loading">Refreshing&#8230;</string>

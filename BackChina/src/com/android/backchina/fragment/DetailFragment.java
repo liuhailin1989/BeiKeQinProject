@@ -49,7 +49,6 @@ public abstract class DetailFragment<T> extends BaseFragment<Object>{
     public void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
-        
         if (mWebView != null) {
             mWebView.onPause();
         }

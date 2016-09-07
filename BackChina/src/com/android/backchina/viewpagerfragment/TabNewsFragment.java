@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
@@ -20,8 +21,10 @@ import com.android.backchina.bean.base.ChannelBean;
 import com.android.backchina.fragment.NewsFragment;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.manager.ChannelManager;
-import com.android.backchina.ui.ChannelActivity;
+import com.android.backchina.ui.BaseChannelActivity;
+import com.android.backchina.ui.ChannelNewsActivity;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.PagerSlidingTabStrip.OnPagerChangeLis;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -89,8 +92,9 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
                 public void run() {
                     // TODO Auto-generated method stub
                 	if(mTabsAdapter != null && mTabsAdapter.getCount() > 0){
-                		onRequestSuccess();
-                		return;
+//                		onRequestSuccess();
+//                		return;
+                		mTabsAdapter.removeAll();
                 	}
                     for(ChannelItem item : localChannelItems){
                         TLog.d("tab name =" +item.getName());
@@ -154,12 +158,25 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
     	
     }
 
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	// TODO Auto-generated method stub
+    	if(resultCode == Activity.RESULT_OK){
+    		Bundle bundle = data.getExtras();
+    		boolean isDataChanged = bundle.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
+    		if(isDataChanged){
+    		requestData();
+    		}else{
+    			TLog.d("isDataChanged = " +isDataChanged);
+    		}
+    	}
+    }
+    
     @Override
     protected void enterChannelManagerActivity() {
         // TODO Auto-generated method stub
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), ChannelActivity.class);
-        getActivity().startActivity(intent);
+        UIHelper.enterChannelNewsActivity(getActivity(),this);
     }
 
 }

@@ -40,6 +40,8 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
         OnTabReselectListener {
 
 	protected TextHttpResponseHandler mHandler;
+	
+	private boolean isChannelDataChanged = false;
     
 
     protected Type getType() {
@@ -50,6 +52,7 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
 	@Override
 	protected void initData() {
 		// TODO Auto-generated method stub
+		isChannelDataChanged = false;
 		mHandler = new TextHttpResponseHandler() {
 
 			@Override
@@ -106,9 +109,12 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
                 public void run() {
                     // TODO Auto-generated method stub
                 	if(mTabsAdapter != null && mTabsAdapter.getCount() > 0){
-//                		onRequestSuccess();
-//                		return;
-                		mTabsAdapter.removeAll();
+                		if(isChannelDataChanged){
+                			mTabsAdapter.removeAll();
+						} else {
+							onRequestSuccess();
+							return;
+						}
                 	}
                     for(ChannelItem item : localChannelItems){
                         TLog.d("tab name =" +item.getName());
@@ -182,11 +188,11 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
     	// TODO Auto-generated method stub
     	if(resultCode == BaseChannelActivity.RESULT_CODE_OK){
     		Bundle bundle = data.getExtras();
-    		boolean isDataChanged = bundle.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
-    		if(isDataChanged){
+    		isChannelDataChanged = bundle.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
+    		if(isChannelDataChanged){
     		requestData();
     		}else{
-    			TLog.d("isDataChanged = " +isDataChanged);
+    			TLog.d("isDataChanged = " +isChannelDataChanged);
     		}
     	}
     }

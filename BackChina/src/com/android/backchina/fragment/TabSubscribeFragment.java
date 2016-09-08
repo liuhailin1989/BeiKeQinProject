@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
@@ -18,7 +19,9 @@ import com.android.backchina.adapter.SubscribeAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseFragment;
 import com.android.backchina.base.adapter.BaseListAdapter.Callback;
+import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
+import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.ISubscribeListener;
@@ -112,7 +115,8 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 
     
     private void requestData(){
-        BackChinaApi.getHotSubscribeList(mHandler);
+    	BackChinaApi.getMySubscribeList(mHandler);
+//        BackChinaApi.getHotSubscribeList(mHandler);
     }
     
     private void setDataList(final ResultListBean<Subscribe> resultListBean){
@@ -148,7 +152,36 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 	@Override
 	public void onSubscribe(Subscribe subscribe) {
 		// TODO Auto-generated method stub
-		
+		BackChinaApi.Subscribe(subscribe.getUrlapi(),subscribe.getTitle(), new TextHttpResponseHandler() {
+			
+			@Override
+			public void onSuccess(int code, Header[] headers, String responseString) {
+				// TODO Auto-generated method stub
+				handleSubscribeResponse(headers,responseString);
+			}
+			
+			@Override
+			public void onFailure(int code, Header[] headers, String responseString, Throwable arg3) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
+	
+    private void handleSubscribeResponse(Header[] headers,String response) {
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        if (statusBean.getStatus() == 1) {
+        	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus() == -1) {
+        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus() == -2) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }
+    }
     
 }

@@ -1,5 +1,6 @@
 package com.android.backchina.ui;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.backchina.AppContext;
+import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.adapter.CityListAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
@@ -26,7 +28,9 @@ import com.android.backchina.base.BaseActivity;
 import com.android.backchina.bean.City;
 import com.android.backchina.bean.ZoneListBean;
 import com.android.backchina.bean.base.ResultBean;
+import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.bean.base.StateBean;
+import com.android.backchina.cache.CacheManager;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.LetterListView;
 import com.google.gson.JsonArray;
@@ -38,61 +42,67 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class CityListActivity extends BaseActivity implements OnItemClickListener{
+public class CityListActivity extends BaseActivity implements
+		OnItemClickListener {
 
-	
 	public final static String BUNDLE_KEY_SELECT_CITY = "BUNDLE_KEY_SELECT_CITY";
 	private EditText etCityName;
-	
+
 	private ListView mListView;
-	
+
 	private ListView mSearchListView;
-	
+
 	private TextView mSearchError;
-	
+
 	private LetterListView mLetterList;
-	
-	
+
 	protected TextHttpResponseHandler mHandler;
+
+	private ResultListBean<City> mAllCityData;
 	
-	private List<City> mAllCityListData = new ArrayList<City>();
-	
-	private List<City> mBigCityListData = new ArrayList<City>();
-	
+	private ResultListBean<City> mHistoryCityData;
+
 	private CityListAdapter mCityListAdapter;
-	
-    public static void show(Context context,Fragment fragment) {
-        Intent intent = new Intent(context, CityListActivity.class);
-        fragment.startActivityForResult(intent, Activity.RESULT_FIRST_USER);
-    }
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-    	// TODO Auto-generated method stub
-    	super.onCreate(savedInstanceState);
-    	setContentView(R.layout.activity_city_main);
-    	setupViews();
-    	initData();
-    }
-    
-    private void setupViews(){
-    	etCityName = (EditText) findViewById(R.id.et_city_name);
-    	mListView = (ListView) findViewById(R.id.list_view);
-    	mSearchListView = (ListView) findViewById(R.id.search_result);
-    	mSearchError = (TextView) findViewById(R.id.tv_noresult);
-    	mLetterList = (LetterListView) findViewById(R.id.letter_listView);
-    }
-    
-	protected Type getType() {
+
+	private Context mContext;
+
+	public static void show(Context context, Fragment fragment) {
+		Intent intent = new Intent(context, CityListActivity.class);
+		fragment.startActivityForResult(intent, Activity.RESULT_FIRST_USER);
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		return new TypeToken<ResultBean<StateBean<ZoneListBean<City>>>>() {
-		}.getType();
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_city_main);
+		mContext = this;
+		setupViews();
+		initData();
+	}
+
+	private void setupViews() {
+		etCityName = (EditText) findViewById(R.id.et_city_name);
+		mListView = (ListView) findViewById(R.id.list_view);
+		mSearchListView = (ListView) findViewById(R.id.search_result);
+		mSearchError = (TextView) findViewById(R.id.tv_noresult);
+		mLetterList = (LetterListView) findViewById(R.id.letter_listView);
+	}
+
+	private String getCacheKey() {
+		return "city_list_all";
 	}
 	
-    private void initData(){
-    	mCityListAdapter = new CityListAdapter(this);
-    	mListView.setAdapter(mCityListAdapter);
-    	mListView.setOnItemClickListener(this);
+	private String getHistoryCacheKey() {
+		return "city_history_list";
+	}
+
+	private void initData() {
+		mAllCityData = new ResultListBean<City>();
+		mHistoryCityData = new ResultListBean<City>();
+		mCityListAdapter = new CityListAdapter(this);
+		mListView.setAdapter(mCityListAdapter);
+		mListView.setOnItemClickListener(this);
 		mHandler = new TextHttpResponseHandler() {
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
@@ -103,28 +113,68 @@ public class CityListActivity extends BaseActivity implements OnItemClickListene
 			@Override
 			public void onSuccess(int statusCode, Header[] headers,
 					String responseString) {
-                  if(handleResponse(responseString)){
-                	  mCityListAdapter.setData(mAllCityListData);
-                	  mCityListAdapter.notifyDataSetChanged();
-                  }else{
-                	  
-                  }
+				if (handleResponse(responseString)) {
+					// mCityListAdapter.setData(mAllCityListData);
+					mCityListAdapter.setData(mHistoryCityData.getItems(),mAllCityData.getItems());
+					mCityListAdapter.notifyDataSetChanged();
+					saveCache(mAllCityData,getCacheKey());
+				} else {
+
+				}
 			}
 		};
 		requestData();
-    }
-    
-    private void requestData(){
-    	String url = "http://www.21uscity.com/forum.php?mod=local&action=showmap&appxml=1&json=1";
-    	BackChinaApi.getHttp(url,mHandler);
-    }
-    
+	}
+
+	private void saveCache(final Serializable ser, final String cachekey){
+		AppOperator.runOnThread(new Runnable() {
+			@Override
+			public void run() {
+				CacheManager.saveObject(mContext, ser,cachekey);
+			}
+		});
+	}
+	
+	private Serializable getCache(final String cachekey){
+		return CacheManager.readObject(mContext,cachekey);
+	}
+	
+	private void requestData() {
+		ResultListBean<City> allCityBean = (ResultListBean<City>)getCache(getCacheKey());
+		ResultListBean<City> historyCityBean = (ResultListBean<City>) getCache(getHistoryCacheKey());
+		if (allCityBean != null) {
+			mAllCityData = allCityBean;
+			if (historyCityBean != null) {
+				mHistoryCityData = historyCityBean;
+			}
+			mCityListAdapter.setData(mHistoryCityData.getItems(),mAllCityData.getItems());
+			mCityListAdapter.notifyDataSetChanged();
+		} else {
+			String url = "http://www.21uscity.com/forum.php?mod=local&action=showmap&appxml=1&json=1";
+			BackChinaApi.getHttp(url, mHandler);
+		}
+	}
+
 	private boolean handleResponse(String response) {
 		try {
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(response);
 			JsonObject asJsonObject = element.getAsJsonObject();
 			JsonObject resultObject = asJsonObject.getAsJsonObject("result");
+			//
+			JsonArray bigcityArray = resultObject.getAsJsonArray("bigcity");
+			Type bigcityType = new TypeToken<List<City>>() {
+			}.getType();
+			List<City> bigcityListBean = AppContext.createGson().fromJson(
+					bigcityArray, bigcityType);
+			City hotCity = new City();
+			hotCity.setTitle("热门城市");
+			hotCity.setListItemType(CityListAdapter.TYPE_CITY_CAT);
+			mAllCityData.getItems().add(hotCity);
+			for (City temp : bigcityListBean) {
+				temp.setListItemType(CityListAdapter.TYPE_NORMAL);
+				mAllCityData.getItems().add(temp);
+			}
 			//
 			JsonObject stateObject = resultObject.getAsJsonObject("state");
 			Set<Entry<String, JsonElement>> entrySet = stateObject.entrySet();
@@ -142,19 +192,12 @@ public class CityListActivity extends BaseActivity implements OnItemClickListene
 				city.setTitle(zoneListBean.getTitle());
 				city.setUrl(zoneListBean.getUrl());
 				city.setUrlapi(zoneListBean.getUrlapi());
-				mAllCityListData.add(city);
-				for(City temp : zoneListBean.getCity()){
+				mAllCityData.getItems().add(city);
+				for (City temp : zoneListBean.getCity()) {
 					temp.setListItemType(CityListAdapter.TYPE_NORMAL);
-					mAllCityListData.add(temp);
+					mAllCityData.getItems().add(temp);
 				}
 			}
-			//
-			JsonArray bigcityArray = resultObject.getAsJsonArray("bigcity");
-			Type bigcityType = new TypeToken<List<City>>() {
-			}.getType();
-			List<City> bigcityListBean = AppContext.createGson().fromJson(
-					bigcityArray, bigcityType);
-			mBigCityListData.addAll(bigcityListBean);
 			TLog.d("called");
 			return true;
 
@@ -169,14 +212,31 @@ public class CityListActivity extends BaseActivity implements OnItemClickListene
 			long id) {
 		// TODO Auto-generated method stub
 		City city = (City) parent.getAdapter().getItem(position);
-		TLog.d("city name = " +city.getTitle());
-		if(city.getListItemType() == CityListAdapter.TYPE_NORMAL){
-		    Intent intent=new Intent();
-	        Bundle bundle = new Bundle();
-	        bundle.putSerializable(BUNDLE_KEY_SELECT_CITY, city);
-	        intent.putExtras(bundle);
-	        setResult(RESULT_OK, intent);
-	        finish();
+		TLog.d("city name = " + city.getTitle());
+		if (city.getListItemType() == CityListAdapter.TYPE_NORMAL) {
+			Intent intent = new Intent();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(BUNDLE_KEY_SELECT_CITY, city);
+			intent.putExtras(bundle);
+			setResult(RESULT_OK, intent);
+			//
+			if (!isInHistory(city)) {
+				mHistoryCityData.getItems().add(city);
+				saveCache(mHistoryCityData, getHistoryCacheKey());
+			}
+			//
+			finish();
 		}
+	}
+	
+	private boolean isInHistory(City city){
+		if (mHistoryCityData != null) {
+			for (City temp : mHistoryCityData.getItems()) {
+              if(temp.getTitle().equals(city.getTitle())){
+            	  return true;
+              }
+			}
+		}
+		return false;
 	}
 }

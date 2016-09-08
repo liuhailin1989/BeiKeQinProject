@@ -76,13 +76,19 @@ public class BackChinaApi {
         ApiHttpClient.get("http://www.backchina.com/news/?page=1&appxml=1&json=1", params, handler);
     }
     
-    public static void getNewsList(String url, AsyncHttpResponseHandler handler) {
+    public static void getNewsList(String url, int page, AsyncHttpResponseHandler handler) {
+    	url = url.replace("&page=1", "");
+    	url = url.replace("page=1", "");
         RequestParams params = new RequestParams();
+        params.put("page", page);
         ApiHttpClient.get(url, params, handler);
     }
     
-    public static void getBlogList(String url, AsyncHttpResponseHandler handler) {
+    public static void getBlogList(String url, int page,AsyncHttpResponseHandler handler) {
+    	url = url.replace("&page=1", "");
+    	url = url.replace("page=1", "");
         RequestParams params = new RequestParams();
+        params.put("page", page);
         ApiHttpClient.get(url, params, handler);
     }
     
@@ -128,6 +134,16 @@ public class BackChinaApi {
         ApiHttpClient.post(url, params, handler);
     }
     
+    public static void sendBlogComment(int aid,String message,AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("func", "reply");
+        params.put("blogid", aid);
+        params.put("subject", "test");
+        params.put("message", message);
+        String url = "plugin.php?id=bkc_app_iphone:user";
+        ApiHttpClient.post(url, params, handler);
+    }
+    
     public static void getHotSubscribeList(AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
         params.put("hot", "1");
@@ -146,8 +162,11 @@ public class BackChinaApi {
         ApiHttpClient.get("api/appxml/subscription.php?json=1", params, handler);
     }
     
-    public static void getSubscribeList(String url, AsyncHttpResponseHandler handler){
+    public static void getSubscribeList(String url,int page, AsyncHttpResponseHandler handler){
+    	url = url.replace("&page=1", "");
+    	url = url.replace("page=1", "");
         RequestParams params = new RequestParams();
+        params.put("page", page);
         ApiHttpClient.get(url, params, handler);
     }
     
@@ -158,8 +177,32 @@ public class BackChinaApi {
         ApiHttpClient.get("api/appxml/subscription.php?", params, handler);
     }
     
-    public static void getSubscribeDetail(String url, AsyncHttpResponseHandler handler){
+    public static void getSubscribeDetail(String url,int page, AsyncHttpResponseHandler handler){
+    	url = url.replace("&page=1", "");
+    	url = url.replace("page=1", "");
         RequestParams params = new RequestParams();
+        params.put("page", page);
         ApiHttpClient.get(url, params, handler);
+    }
+    
+    public static void Subscribe(String url,String title, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=sharelink&type=app
+    	//&link=http://www.backchina.com/news/&general=A+good+website&title=%E5%80%8D%E5%8F%AF%E4%BA%B2
+        RequestParams params = new RequestParams();
+        params.put("func", "sharelink");
+        params.put("type", "app");
+        params.put("link", url);
+        params.put("general", "A+good+website");
+        params.put("title", title);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void getMySubscribeList(AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=sharelink&type=app&action=list
+    	 RequestParams params = new RequestParams();
+         params.put("func", "sharelink");
+         params.put("type", "app");
+         params.put("action", "list");
+         ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
     }
 }

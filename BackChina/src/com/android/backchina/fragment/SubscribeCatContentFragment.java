@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
@@ -12,15 +13,13 @@ import com.android.backchina.adapter.SubscribeAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseListFragment;
 import com.android.backchina.base.adapter.BaseListAdapter;
-import com.android.backchina.bean.ChannelItem;
-import com.android.backchina.bean.News;
+import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeCat;
-import com.android.backchina.bean.SubscribeDetail;
-import com.android.backchina.bean.base.NewsListBean;
-import com.android.backchina.bean.base.ResultBean;
+import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
+import com.android.backchina.interf.ISubscribeListener;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
@@ -29,7 +28,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
+public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> implements ISubscribeListener{
 
 	private static final String CACHE_KEY_PREFIX = "subscribe_list_";
 	
@@ -43,7 +42,9 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 	
 	private int mCatlog = 0;
 	
-	private int mCurrentPage = 0;
+	private int mCurrentPage = 1;
+	
+	private boolean isLoadMoreAction = false;
 	
 	public static SubscribeCatContentFragment newInstance(int catlog,SubscribeCat subscribeCat) {
 		SubscribeCatContentFragment fragment = new SubscribeCatContentFragment();
@@ -60,7 +61,7 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 	}
 
 	private String getCacheKey() {
-		return getCacheKeyPrefix() + "_" + mCurrentPage;
+		return getCacheKeyPrefix() + "_" + 1;//1表示page=1
 	}
 	
 	@Override
@@ -79,12 +80,20 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 	@Override
 	protected void initData() {
 		super.initData();
+		mCurrentPage = 1;
+		isLoadMoreAction = false;
+		((SubscribeAdapter)mAdapter).setSubscribeListener(this);
 		mHandler = new TextHttpResponseHandler() {
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				TLog.d("called");
-				onRequestError(statusCode);
+				if (isLoadMoreAction) {
+					loadMoreNodata();
+				} else {
+					onRequestError(EmptyLayout.NODATA);
+				}
+				isLoadMoreAction = false;
 			}
 
 			@Override
@@ -96,11 +105,21 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 							.createGson().fromJson(responseString, getType());
 					if (resultListBean != null
 							&& resultListBean.getItems() != null) {
-						setListData(resultListBean,true);
+						if (mCurrentPage == 1) {
+							setListData(resultListBean, true);
+						}else{
+							setListData(resultListBean, false);
+						}
 						onRequestSuccess();
+						stopLoadMore();
 					} else {
-						onRequestError(statusCode);
+						if(isLoadMoreAction){
+							loadMoreNodata();
+						}else{
+						onRequestError(EmptyLayout.NODATA);
+						}
 					}
+					isLoadMoreAction = false;
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(statusCode, headers, responseString, e);
@@ -155,9 +174,19 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 
 	@Override
 	protected void onRequestData() {
-		BackChinaApi.getSubscribeList(mCurrentSubscribeCat.getUrlapi(), mHandler);
+		mCurrentPage = 1;
+		BackChinaApi.getSubscribeList(mCurrentSubscribeCat.getUrlapi(),mCurrentPage, mHandler);
 	}
 
+	@Override
+	public void onLoadMore() {
+		// TODO Auto-generated method stub
+//		super.onLoadMore();
+		mCurrentPage = mCurrentPage+1;
+		isLoadMoreAction = true;
+		BackChinaApi.getSubscribeList(mCurrentSubscribeCat.getUrlapi(),mCurrentPage, mHandler);
+	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -179,4 +208,37 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> {
 		}.getType();
 	}
 
+	@Override
+	public void onSubscribe(Subscribe subscribe) {
+		// TODO Auto-generated method stub
+		BackChinaApi.Subscribe(subscribe.getUrlapi(),subscribe.getTitle(), new TextHttpResponseHandler() {
+			
+			@Override
+			public void onSuccess(int code, Header[] headers, String responseString) {
+				// TODO Auto-generated method stub
+				handleSubscribeResponse(headers,responseString);
+			}
+			
+			@Override
+			public void onFailure(int code, Header[] headers, String responseString, Throwable arg3) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+    private void handleSubscribeResponse(Header[] headers,String response) {
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        if (statusBean.getStatus() == 1) {
+        	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus() == -1) {
+        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus() == -2) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

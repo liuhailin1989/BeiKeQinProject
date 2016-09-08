@@ -1,11 +1,12 @@
 package com.android.backchina.bean.base;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResultListBean <T> implements Serializable {
     
-    private List<T> result;
+    private List<T> result = new ArrayList<T>();
     
     private int page;
     

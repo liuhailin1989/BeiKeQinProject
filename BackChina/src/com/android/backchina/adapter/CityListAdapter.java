@@ -19,21 +19,24 @@ public class CityListAdapter extends BaseAdapter {
 	public static final int TYPE_NORMAL = 0;
 
 	public static final int TYPE_CITY_GROUP = 1;
+	
+	public static final int TYPE_CITY_CAT = 1;
 
 	private Context mContext;
 
 	private LayoutInflater inflater;
 
 	private List<City> mListData = new ArrayList<City>();
-
+	
 	public CityListAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		mContext = context;
 		inflater = LayoutInflater.from(context);
 	}
 
-	public void setData(List<City> list) {
-		mListData = list;
+	public void setData(List<City> history,List<City> list) {
+		mListData.addAll(0, history);
+		mListData.addAll(list);
 	}
 
 	@Override

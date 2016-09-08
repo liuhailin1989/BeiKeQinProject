@@ -48,7 +48,7 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 
 	private int mCatlog = 0;
 
-	private int mCurrentPage = 0;
+	private int mCurrentPage = 1;
 
 	private Handler handler = new Handler();
 
@@ -58,9 +58,11 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 	
 	private Button mBtnSelectCity;
 	
-	private TextView mTvCurrentCity;
+	private TextView mTvCityName;
 	
 	private City mCurrentCity;
+	
+	private boolean isLoadMoreAction = false;
 
 	protected String getCacheKeyPrefix() {
 		// TODO Auto-generated method stub
@@ -68,8 +70,13 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 	}
 
 	private String getCacheKey() {
-		return getCacheKeyPrefix() + "_" + mCurrentPage;
+		return getCacheKeyPrefix() + "_" + 1;//1表示page=1,只缓存一页数据
 	}
+	
+	private String getCurrentCityCacheKey() {
+		return getCacheKeyPrefix() + "_current_city";
+	}
+
 
 	@Override
 	protected void initBundle(Bundle bundle) {
@@ -101,7 +108,7 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 			UIHelper.enterCityListActivity(getActivity(),getParentFragment());
 			}
 		});
-		mTvCurrentCity = (TextView) headerView.findViewById(R.id.tv_current_city);
+		mTvCityName = (TextView) headerView.findViewById(R.id.tv_city_name);
 		mListView.addHeaderView(headerView);
 	}
 
@@ -109,17 +116,25 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 	protected void initData() {
 		// TODO Auto-generated method stub
 		super.initData();
+		mCurrentPage = 1;
+		isLoadMoreAction = false;
+		mCurrentCity =  (City) CacheManager.readObject(getActivity(), getCurrentCityCacheKey());
 		if(mCurrentCity != null){
-			mTvCurrentCity.setText(mCurrentCity.getTitle());
+			mTvCityName.setText(mCurrentCity.getTitle());
 		}else{
-			mTvCurrentCity.setText("无");
+			mTvCityName.setText("无");
 		}
 		mHandler = new TextHttpResponseHandler() {
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				TLog.d("called");
-				onRequestError(EmptyLayout.NODATA);
+				if (isLoadMoreAction) {
+					loadMoreNodata();
+				} else {
+					onRequestError(EmptyLayout.NODATA);
+				}
+				isLoadMoreAction = false;
 			}
 
 			@Override
@@ -131,11 +146,21 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 							.createGson().fromJson(responseString, getType());
 					if (resultBean != null
 							&& resultBean.getResult().getItems() != null) {
-						setListData(resultBean.getResult(), true);
+						if (mCurrentPage == 1) {
+							setListData(resultBean.getResult(), true);
+						}else{
+							setListData(resultBean.getResult(), false);
+						}
 						onRequestSuccess();
+						stopLoadMore();
 					} else {
-						onRequestError(statusCode);
+						if(isLoadMoreAction){
+							loadMoreNodata();
+						}else{
+						onRequestError(EmptyLayout.NODATA);
+						}
 					}
+					isLoadMoreAction = false;
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(statusCode, headers, responseString, e);
@@ -177,7 +202,7 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						if (bean == null) {
+						if (bean == null || mCurrentCity == null) {
 							onRequestError(EmptyLayout.NODATA);
 						} else {
 							setListData(bean, false);
@@ -191,12 +216,22 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 
 	@Override
 	protected void onRequestData() {
+		mCurrentPage = 1;
 		// TODO Auto-generated method stub
 		//http://www.21uscity.com/zone/160/?appxml=1&json=1
-		BackChinaApi.getNewsList(mCurrentCity.getUrlapi(), mHandler);
+		BackChinaApi.getNewsList(mCurrentCity.getUrlapi(),1, mHandler);
 //		BackChinaApi.getNewsList("http://www.21uscity.com/zone/160/?appxml=1&json=1", mHandler);
 	}
 
+	@Override
+	public void onLoadMore() {
+		// TODO Auto-generated method stub
+//		super.onLoadMore();
+		mCurrentPage = mCurrentPage+1;
+		isLoadMoreAction = true;
+		BackChinaApi.getNewsList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
+	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -238,7 +273,17 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 			City city = (City) bundle.getSerializable(CityListActivity.BUNDLE_KEY_SELECT_CITY);
 			if(city != null){
 				mCurrentCity = city;
+				if (mTvCityName != null) {
+					mTvCityName.setText(mCurrentCity.getTitle());
+				}
 				mAdapter.clear();
+				AppOperator.runOnThread(new Runnable() {
+					@Override
+					public void run() {
+						CacheManager.saveObject(getActivity(), mCurrentCity,
+								getCurrentCityCacheKey());
+					}
+				});
 				onRefresh();
 			}
 		}

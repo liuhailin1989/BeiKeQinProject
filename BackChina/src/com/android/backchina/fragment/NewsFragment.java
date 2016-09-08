@@ -43,13 +43,15 @@ public class NewsFragment extends BaseListFragment<News> {
 
 	private int mCatlog = 0;
 
-	private int mCurrentPage = 0;
+	private int mCurrentPage = 1;
 
 	private Handler handler = new Handler();
 
 	private ChannelItem currentChannelItem;
 
 	protected TextHttpResponseHandler mHandler;
+	
+	private boolean isLoadMoreAction = false;
 
 	protected String getCacheKeyPrefix() {
 		// TODO Auto-generated method stub
@@ -57,7 +59,7 @@ public class NewsFragment extends BaseListFragment<News> {
 	}
 
 	private String getCacheKey() {
-		return getCacheKeyPrefix() + "_" + mCurrentPage;
+		return getCacheKeyPrefix() + "_" + 1;//1表示page=1
 	}
 
 	@Override
@@ -86,12 +88,19 @@ public class NewsFragment extends BaseListFragment<News> {
 	protected void initData() {
 		// TODO Auto-generated method stub
 		super.initData();
+		mCurrentPage = 1;
+		isLoadMoreAction = false;
 		mHandler = new TextHttpResponseHandler() {
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				TLog.d("called");
-				onRequestError(statusCode);
+				if (isLoadMoreAction) {
+					loadMoreNodata();
+				} else {
+					onRequestError(EmptyLayout.NODATA);
+				}
+				isLoadMoreAction = false;
 			}
 
 			@Override
@@ -103,11 +112,21 @@ public class NewsFragment extends BaseListFragment<News> {
 							.createGson().fromJson(responseString, getType());
 					if (resultBean != null
 							&& resultBean.getResult().getItems() != null) {
-						setListData(resultBean.getResult(), true);
+						if (mCurrentPage == 1) {
+							setListData(resultBean.getResult(), true);
+						}else{
+							setListData(resultBean.getResult(), false);
+						}
 						onRequestSuccess();
+						stopLoadMore();
 					} else {
-						onRequestError(statusCode);
+						if(isLoadMoreAction){
+							loadMoreNodata();
+						}else{
+						onRequestError(EmptyLayout.NODATA);
+						}
 					}
+					isLoadMoreAction = false;
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(statusCode, headers, responseString, e);
@@ -164,7 +183,17 @@ public class NewsFragment extends BaseListFragment<News> {
 	@Override
 	protected void onRequestData() {
 		// TODO Auto-generated method stub
-		BackChinaApi.getNewsList(currentChannelItem.getUrlapi(), mHandler);
+		mCurrentPage = 1;
+		BackChinaApi.getNewsList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
+	}
+	
+	@Override
+	public void onLoadMore() {
+		// TODO Auto-generated method stub
+//		super.onLoadMore();
+		mCurrentPage = mCurrentPage+1;
+		isLoadMoreAction = true;
+		BackChinaApi.getNewsList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
 	}
 
 	@Override

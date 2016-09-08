@@ -76,7 +76,11 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
     	TLog.d("called");
     }
     
-    public void loadMoreComplete(){
+    public void stopLoadMore(){
+    	mListView.stopLoadMore();
+    }
+    
+    public void loadMoreNodata(){
     	mListView.completeLoadMore();
     }
     

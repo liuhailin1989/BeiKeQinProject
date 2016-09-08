@@ -47,7 +47,8 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 
 	private String catTitle = "";
 
-	private int mCurrentPage = 0;
+	private int mCurrentPage = 1;
+	private boolean isLoadMoreAction = false;
 
 	protected TextHttpResponseHandler mHandler;
 
@@ -57,7 +58,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 	}
 
 	private String getCacheKey() {
-		return getCacheKeyPrefix() + "_" + mCurrentPage;
+		return getCacheKeyPrefix() + "_" + 1;//1表示page=1
 	}
 
 	@Override
@@ -82,12 +83,19 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 	protected void initData() {
 		// TODO Auto-generated method stub
 		super.initData();
+		mCurrentPage = 1;
+		isLoadMoreAction = false;
 		mHandler = new TextHttpResponseHandler() {
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					String responseString, Throwable throwable) {
 				TLog.d("called");
-				onRequestError(statusCode);
+				if (isLoadMoreAction) {
+					loadMoreNodata();
+				} else {
+					onRequestError(EmptyLayout.NODATA);
+				}
+				isLoadMoreAction = false;
 			}
 
 			@Override
@@ -98,11 +106,21 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 					ResultListBean<Blog> resultBean = AppContext.createGson()
 							.fromJson(responseString, getType());
 					if (resultBean != null && resultBean.getItems() != null) {
-						setListData(resultBean, true);
+						if (mCurrentPage == 1) {
+							setListData(resultBean, true);
+						}else{
+							setListData(resultBean, false);
+						}
 						onRequestSuccess();
+						stopLoadMore();
 					} else {
-						onRequestError(statusCode);
+						if(isLoadMoreAction){
+							loadMoreNodata();
+						}else{
+						onRequestError(EmptyLayout.NODATA);
+						}
 					}
+					isLoadMoreAction = false;
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(statusCode, headers, responseString, e);
@@ -132,7 +150,17 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 	@Override
 	protected void onRequestData() {
 		// TODO Auto-generated method stub
-		BackChinaApi.getBlogList(currentChannelItem.getUrlapi(), mHandler);
+		mCurrentPage = 1;
+		BackChinaApi.getBlogList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
+	}
+	
+	@Override
+	public void onLoadMore() {
+		// TODO Auto-generated method stub
+//		super.onLoadMore();
+		mCurrentPage = mCurrentPage+1;
+		isLoadMoreAction = true;
+		BackChinaApi.getBlogList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
 	}
 
 	@Override

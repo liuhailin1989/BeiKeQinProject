@@ -3,6 +3,7 @@ package com.android.backchina.base;
 import java.util.Date;
 
 import com.android.backchina.base.adapter.BaseListAdapter.Callback;
+import com.android.backchina.ui.dialog.WaitDialog;
 import com.android.backchina.utils.ImageLoader;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;

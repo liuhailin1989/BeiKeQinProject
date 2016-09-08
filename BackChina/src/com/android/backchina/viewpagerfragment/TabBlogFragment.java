@@ -31,15 +31,18 @@ public class TabBlogFragment extends BaseViewPagerFragment implements
 
 	protected TextHttpResponseHandler mHandler;
 
+	private boolean isChannelDataChanged = false;
+
 	protected Type getType() {
 		// TODO Auto-generated method stub
 		return new TypeToken<ChannelBean<ChannelItem>>() {
 		}.getType();
 	}
-	
+
 	@Override
 	protected void initData() {
 		// TODO Auto-generated method stub
+		isChannelDataChanged = false;
 		mHandler = new TextHttpResponseHandler() {
 
 			@Override
@@ -60,7 +63,7 @@ public class TabBlogFragment extends BaseViewPagerFragment implements
 						//
 						setListData(channelBean);
 						onRequestSuccess();
-					}else{
+					} else {
 						onRequestError(statusCode);
 					}
 				} catch (Exception e) {
@@ -81,11 +84,15 @@ public class TabBlogFragment extends BaseViewPagerFragment implements
 			AppOperator.runOnMainThread(new Runnable() {
 				@Override
 				public void run() {
-		        	if(mTabsAdapter != null && mTabsAdapter.getCount() > 0){
-//		        		onRequestSuccess();
-//		        		return;
-		        		mTabsAdapter.removeAll();
-		        	}
+					if (mTabsAdapter != null && mTabsAdapter.getCount() > 0) {
+						if (isChannelDataChanged) {
+							mTabsAdapter.removeAll();
+						} else {
+							onRequestSuccess();
+							return;
+						}
+
+					}
 					// TODO Auto-generated method stub
 					for (ChannelItem item : localChannelItems) {
 						mTabsAdapter.addTab(item.getName(), item.getName(),
@@ -134,21 +141,22 @@ public class TabBlogFragment extends BaseViewPagerFragment implements
 
 	@Override
 	public void onTabReselect() {
-		
+
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-    	if(resultCode == BaseChannelActivity.RESULT_CODE_OK){
-    		Bundle bundle = data.getExtras();
-    		boolean isDataChanged = bundle.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
-    		if(isDataChanged){
-    		requestData();
-    		}else{
-    			TLog.d("isDataChanged = " +isDataChanged);
-    		}
-    	}
+		if (resultCode == BaseChannelActivity.RESULT_CODE_OK) {
+			Bundle bundle = data.getExtras();
+			isChannelDataChanged = bundle
+					.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
+			if (isChannelDataChanged) {
+				requestData();
+			} else {
+				TLog.d("isChannelDataChanged = " + isChannelDataChanged);
+			}
+		}
 	}
 
 	@Override

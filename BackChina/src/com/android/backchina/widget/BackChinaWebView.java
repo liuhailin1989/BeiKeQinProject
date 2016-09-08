@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
@@ -23,9 +25,11 @@ import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.interf.OnWebViewImageListener;
+import com.android.backchina.ui.AboutUsActivity;
 import com.android.backchina.utils.NetworkUtils;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TDevice;
+import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 
 public class BackChinaWebView extends WebView {
@@ -261,8 +265,13 @@ public class BackChinaWebView extends WebView {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            UIHelper.showUrlRedirect(view.getContext(), url);
-            return true;
+        	TLog.d("called");
+//            UIHelper.showUrlRedirect(view.getContext(), url);
+//            return true;
+        	Uri uri = Uri.parse(url);
+        	Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+        	view.getContext().startActivity(intent);
+        	return true;
         }
 
         @Override

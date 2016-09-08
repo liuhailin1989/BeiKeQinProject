@@ -45,7 +45,32 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
     
     private SubscribeAdapter mAdapter;
     
-    protected TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+    protected TextHttpResponseHandler mMySubscribeHandler = new TextHttpResponseHandler() {
+        
+        @Override
+        public void onSuccess(int code, Header[] headers, String responseString) {
+            // TODO Auto-generated method stub
+        	if(handleMySubscribeResponse(headers, responseString)){
+        		requestHotSubscribeData();
+			} else {
+				Type type = new TypeToken<ResultListBean<Subscribe>>() {
+				}.getType();
+				ResultListBean<Subscribe> resultListBean = AppContext
+						.createGson().fromJson(responseString, type);
+				if (resultListBean != null && resultListBean.getItems() != null) {
+					setDataList(resultListBean);
+				}
+			}
+        }
+        
+        @Override
+        public void onFailure(int code, Header[] headers, String responseString, Throwable throwable) {
+            // TODO Auto-generated method stub
+            TLog.d("called");
+        }
+    };
+    
+    protected TextHttpResponseHandler mHotSubscribeHandler = new TextHttpResponseHandler() {
         
         @Override
         public void onSuccess(int code, Header[] headers, String responseString) {
@@ -115,8 +140,12 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 
     
     private void requestData(){
-    	BackChinaApi.getMySubscribeList(mHandler);
+    	BackChinaApi.getMySubscribeList(mMySubscribeHandler);
 //        BackChinaApi.getHotSubscribeList(mHandler);
+    }
+    
+    private void requestHotSubscribeData(){
+    	BackChinaApi.getHotSubscribeList(mHotSubscribeHandler);
     }
     
     private void setDataList(final ResultListBean<Subscribe> resultListBean){
@@ -181,6 +210,18 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
         }else{
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    private boolean handleMySubscribeResponse(Header[] headers,String response) {
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        if(statusBean != null && statusBean.getStatus() == 0){
+        	return false;
+        }else{
+        	return true;
         }
     }
     

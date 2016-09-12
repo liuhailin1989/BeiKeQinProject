@@ -94,6 +94,40 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
             }
         });
     }
+    
+    public void refreshComments(String url,int type,final int commentTotal,final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener){
+        this.mType = type;
+        mLayComments.removeAllViews();
+        mSeeMore.setVisibility(View.GONE);
+        setVisibility(GONE);
+        if(url == null){
+        	return;
+        }
+        BackChinaApi.getComments(url, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                if (throwable != null)
+                    throwable.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                        Type type = new TypeToken<CommentBean<List<Comment>>>() {
+                    }.getType();
+
+                    CommentBean<List<Comment>> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean != null) {
+                        addComment(resultBean.getNewscomms().get(0), commentTotal, imageLoader, onCommentClickListener);
+                        return;
+                    }
+                    onFailure(statusCode, headers, responseString, null);
+                } catch (Exception e) {
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+        });
+    }
 
     private void addComment(List<Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         if (comments != null && comments.size() > 0) {

@@ -14,6 +14,7 @@ import com.android.backchina.base.BaseActivity;
 import com.android.backchina.fragment.DetailFragment;
 import com.android.backchina.fragment.NewsDetailFragment;
 import com.android.backchina.interf.IContractDetail;
+import com.android.backchina.interf.OperatorCallBack;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -31,6 +32,8 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
     
     protected TextHttpResponseHandler mHandler;
     
+    protected OperatorCallBack operatorCallBack = null;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -39,6 +42,12 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
         setContentView(R.layout.activity_detail_layout);
         setupViews();
         initData();
+	}
+	
+	@Override
+	public void setOperatorCallBack(OperatorCallBack callback) {
+		// TODO Auto-generated method stub
+		operatorCallBack = callback;
 	}
 	
 	protected void initBundle(Bundle bundle){

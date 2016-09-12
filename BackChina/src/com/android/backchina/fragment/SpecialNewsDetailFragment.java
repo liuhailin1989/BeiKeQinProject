@@ -166,4 +166,22 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     private void handleSendComment() {
         iDetail.toSendComment(mCommentEditView.getText().toString());
     }
+
+	@Override
+	public void toFavoriteSucess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toShareSucess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toSendCommentSucess() {
+		// TODO Auto-generated method stub
+		
+	}
 }

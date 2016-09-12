@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,6 +33,7 @@ import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.bean.base.StateBean;
 import com.android.backchina.cache.CacheManager;
+import com.android.backchina.utils.PingYinUtil;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.LetterListView;
 import com.google.gson.JsonArray;
@@ -61,8 +64,12 @@ public class CityListActivity extends BaseActivity implements
 	private ResultListBean<City> mAllCityData;
 	
 	private ResultListBean<City> mHistoryCityData;
+	
+	private List<City> mSearchCityData = new ArrayList<City>();
 
 	private CityListAdapter mCityListAdapter;
+	
+	private CityListAdapter mSearchCityListAdapter;
 
 	private Context mContext;
 
@@ -87,6 +94,67 @@ public class CityListActivity extends BaseActivity implements
 		mSearchListView = (ListView) findViewById(R.id.search_result);
 		mSearchError = (TextView) findViewById(R.id.tv_noresult);
 		mLetterList = (LetterListView) findViewById(R.id.letter_listView);
+		
+		//
+		etCityName.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				if (s.toString() == null || "".equals(s.toString())) {
+					mLetterList.setVisibility(View.VISIBLE);
+					mListView.setVisibility(View.VISIBLE);
+					mSearchListView.setVisibility(View.GONE);
+					mSearchError.setVisibility(View.GONE);
+				}else{
+					mSearchCityData.clear();
+					mLetterList.setVisibility(View.GONE);
+					mListView.setVisibility(View.GONE);
+					getSearchCityList(s.toString());
+					if (mSearchCityData.size() <= 0) {
+						mSearchError.setVisibility(View.VISIBLE);
+						mSearchListView.setVisibility(View.GONE);
+					}else{
+						mSearchError.setVisibility(View.GONE);
+						mSearchListView.setVisibility(View.VISIBLE);
+						if(mSearchCityListAdapter != null){
+							mSearchCityListAdapter.notifyDataSetChanged();
+						}
+					}
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+	
+	private void getSearchCityList(String keyword){
+		List<City> allList = mAllCityData.getItems();
+		for(City city : allList){
+			if(city.getListItemType() == CityListAdapter.TYPE_NORMAL){
+//				String pingyinFirst = PingYinUtil.converterToFirstSpell(city.getTitle());
+//				String pingyinAll = PingYinUtil.converterToFirstSpell(city.getTitle());
+//				TLog.d(city.getTitle()+":"+"pingyinFirst =" +pingyinFirst +"//"+"pingyinAll" + pingyinAll);
+				if(city.getTitle().toLowerCase().contains(keyword.toLowerCase())){
+					mSearchCityData.add(city);
+					TLog.d(city.getTitle() + "add into search = " +keyword);
+				}
+			}
+		}
+		if (mSearchCityData != null && mSearchCityData.size() > 0) {
+			mSearchCityListAdapter.setData(null, mSearchCityData);
+		}
 	}
 
 	private String getCacheKey() {
@@ -103,6 +171,11 @@ public class CityListActivity extends BaseActivity implements
 		mCityListAdapter = new CityListAdapter(this);
 		mListView.setAdapter(mCityListAdapter);
 		mListView.setOnItemClickListener(this);
+		//
+		mSearchCityListAdapter = new CityListAdapter(this);
+		mSearchListView.setAdapter(mSearchCityListAdapter);
+		mSearchListView.setOnItemClickListener(this);
+		//
 		mHandler = new TextHttpResponseHandler() {
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
@@ -172,7 +245,7 @@ public class CityListActivity extends BaseActivity implements
 			hotCity.setListItemType(CityListAdapter.TYPE_CITY_CAT);
 			mAllCityData.getItems().add(hotCity);
 			for (City temp : bigcityListBean) {
-				temp.setListItemType(CityListAdapter.TYPE_NORMAL);
+				temp.setListItemType(CityListAdapter.TYPE_HOT);
 				mAllCityData.getItems().add(temp);
 			}
 			//
@@ -213,7 +286,7 @@ public class CityListActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		City city = (City) parent.getAdapter().getItem(position);
 		TLog.d("city name = " + city.getTitle());
-		if (city.getListItemType() == CityListAdapter.TYPE_NORMAL) {
+		if (city.getListItemType() == CityListAdapter.TYPE_NORMAL ||city.getListItemType() == CityListAdapter.TYPE_HOT) {
 			Intent intent = new Intent();
 			Bundle bundle = new Bundle();
 			bundle.putSerializable(BUNDLE_KEY_SELECT_CITY, city);

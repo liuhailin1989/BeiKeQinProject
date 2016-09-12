@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 import com.android.backchina.R;
 import com.android.backchina.base.BaseFragment;
 import com.android.backchina.interf.IContractDetail;
+import com.android.backchina.interf.OperatorCallBack;
 import com.android.backchina.widget.BackChinaWebView;
 
-public abstract class DetailFragment<T> extends BaseFragment<Object>{
+public abstract class DetailFragment<T> extends BaseFragment<Object> implements OperatorCallBack{
     
     IContractDetail iDetail;
     
@@ -19,6 +20,8 @@ public abstract class DetailFragment<T> extends BaseFragment<Object>{
     public void onAttach(Context context) {
         // TODO Auto-generated method stub
         iDetail = (IContractDetail) context;
+        
+        iDetail.setOperatorCallBack(this);
         
         super.onAttach(context);
     }

@@ -151,8 +151,8 @@ public class LoginActivity extends BaseActivity {
     private void handleLogin() {
         mUserName = etUserName.getText().toString();
         mPassword = etPassword.getText().toString();
-        mUserName = "liuhailin1989";
-        mPassword = "Launcher20130829";
+//        mUserName = "liuhailin1989";
+//        mPassword = "Launcher20130829";
         //
         mWaitDialog.show();
         BackChinaApi.login(mUserName, mPassword, mLoginHandler);

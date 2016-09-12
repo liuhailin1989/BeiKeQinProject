@@ -14,13 +14,15 @@ import android.widget.TextView;
 
 public class CityListAdapter extends BaseAdapter {
 
-	final int VIEW_TYPE = 2;
+	final int VIEW_TYPE = 4;
 
 	public static final int TYPE_NORMAL = 0;
-
-	public static final int TYPE_CITY_GROUP = 1;
 	
-	public static final int TYPE_CITY_CAT = 1;
+	public static final int TYPE_HOT = 1;
+
+	public static final int TYPE_CITY_GROUP = 2;
+	
+	public static final int TYPE_CITY_CAT = 3;
 
 	private Context mContext;
 
@@ -35,7 +37,10 @@ public class CityListAdapter extends BaseAdapter {
 	}
 
 	public void setData(List<City> history,List<City> list) {
-		mListData.addAll(0, history);
+		mListData.clear();
+		if (history != null) {
+			mListData.addAll(0, history);
+		}
 		mListData.addAll(list);
 	}
 
@@ -77,7 +82,9 @@ public class CityListAdapter extends BaseAdapter {
 		int viewType = getItemViewType(position);
 		
 		switch (viewType) {
-		case TYPE_NORMAL:{
+		case TYPE_NORMAL:
+		case TYPE_HOT:
+		{
 			ViewHolder holder = null;
 			if (convertView == null) {
 				 holder = new ViewHolder();
@@ -90,7 +97,9 @@ public class CityListAdapter extends BaseAdapter {
 			holder.itemName.setText(mListData.get(position).getTitle());
 			break;
 		}
-		case TYPE_CITY_GROUP:{
+		case TYPE_CITY_GROUP:
+		case TYPE_CITY_CAT:
+		{
 			GroupViewHolder holder = null;
 			if (convertView == null) {
 				holder = new GroupViewHolder();

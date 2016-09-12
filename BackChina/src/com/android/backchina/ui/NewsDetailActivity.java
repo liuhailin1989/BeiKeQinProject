@@ -28,6 +28,7 @@ import com.android.backchina.bean.base.StateBean;
 import com.android.backchina.fragment.DetailFragment;
 import com.android.backchina.fragment.NewsDetailFragment;
 import com.android.backchina.interf.IContractDetail;
+import com.android.backchina.interf.OperatorCallBack;
 import com.android.backchina.ui.dialog.DialogHelper;
 import com.android.backchina.ui.dialog.WaitDialog;
 import com.android.backchina.ui.empty.EmptyLayout;
@@ -131,7 +132,7 @@ public class NewsDetailActivity extends BaseDetailActivity{
     }
 
     @Override
-    public void toSendComment(String comment) {
+    public void toSendComment(final String comment) {
         // TODO Auto-generated method stub
         if (StringUtils.isEmpty(comment)) {
 //            AppContext.showToastShort("评论不能为空");
@@ -166,6 +167,9 @@ public class NewsDetailActivity extends BaseDetailActivity{
         StatusBean statusBean = activitiesBean.getActivities();
         if (statusBean.getStatus() == 1) {
         	Toast.makeText(getContext(), "评论成功", Toast.LENGTH_SHORT).show();
+			if (operatorCallBack != null) {
+				operatorCallBack.toSendCommentSucess();
+			}
         }else if (statusBean.getStatus() == -1) {
         	Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
         }else if (statusBean.getStatus() == -2) {

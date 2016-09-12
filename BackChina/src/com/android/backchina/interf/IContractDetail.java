@@ -2,6 +2,8 @@ package com.android.backchina.interf;
 
 public interface IContractDetail {
     
+	void setOperatorCallBack(OperatorCallBack callback);
+	
    Object getData();
    
    void hideLoading();

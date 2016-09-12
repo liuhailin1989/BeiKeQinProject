@@ -154,7 +154,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
         mPubTime.setText(StringUtils.friendlyTime(blogDetail.getDateline()));
         mAuthor.setText(blogDetail.getUsername());
         mComments.setTitle("最新评论");
-        mComments.init(blogDetail.getCommurlapi(), 0, blogDetail.getComments(), null, this);
+        mComments.init(blogDetail.getCommurlapi(), 0, blogDetail.getComments(), getImgLoader(), this);
         mCommentsCount.setText(String.valueOf(blogDetail.getComments()));
         setImageFromNet(mBlogerCardAvatar, blogDetail.getAvatar(),R.drawable.default_avatar);
         mBlogerCardAuthor.setText(blogDetail.getUsername());
@@ -169,4 +169,23 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnC
     private void handleSendComment() {
         iDetail.toSendComment(mCommentEditView.getText().toString());
     }
+
+	@Override
+	public void toFavoriteSucess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toShareSucess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toSendCommentSucess() {
+		// TODO Auto-generated method stub
+		BlogDetail blogDetail = (BlogDetail) iDetail.getData();
+		mComments.refreshComments(blogDetail.getCommurlapi(), 0, blogDetail.getComments(), getImgLoader(), this);
+	}
 }

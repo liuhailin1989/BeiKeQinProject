@@ -153,7 +153,11 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
             //
             for(ChannelItem item : defaultLocalChannelItems){
                 TLog.d("tab name =" +item.getName());
-                mTabsAdapter.addTab(item.getName(), item.getName(), NewsFragment.class, getBundle(item.getId(),item));
+                if(isLocal(item)){
+                	mTabsAdapter.addTab(item.getName(), item.getName(), NewsLocalFragment.class, getBundle(item.getId(),item));
+                }else{
+                    mTabsAdapter.addTab(item.getName(), item.getName(), NewsFragment.class, getBundle(item.getId(),item));
+                }
             }
             //
             Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());

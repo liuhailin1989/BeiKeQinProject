@@ -95,6 +95,12 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 	}
 
 	@Override
+	protected int getLayoutId() {
+		// TODO Auto-generated method stub
+		return R.layout.fragment_news_local_list;
+	}
+	
+	@Override
 	protected void setupViews(View root) {
 		// TODO Auto-generated method stub
 		super.setupViews(root);
@@ -219,7 +225,11 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 		mCurrentPage = 1;
 		// TODO Auto-generated method stub
 		//http://www.21uscity.com/zone/160/?appxml=1&json=1
-		BackChinaApi.getNewsList(mCurrentCity.getUrlapi(),1, mHandler);
+		if (mCurrentCity != null) {
+			BackChinaApi.getNewsList(mCurrentCity.getUrlapi(), 1, mHandler);
+		}else{
+			onRequestError(EmptyLayout.NODATA);
+		}
 //		BackChinaApi.getNewsList("http://www.21uscity.com/zone/160/?appxml=1&json=1", mHandler);
 	}
 

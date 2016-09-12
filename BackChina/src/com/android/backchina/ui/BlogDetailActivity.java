@@ -150,6 +150,9 @@ public class BlogDetailActivity extends BaseDetailActivity {
         StatusBean statusBean = activitiesBean.getActivities();
         if (statusBean.getStatus() == 1) {
         	Toast.makeText(getContext(), "评论成功", Toast.LENGTH_SHORT).show();
+			if (operatorCallBack != null) {
+				operatorCallBack.toSendCommentSucess();
+			}
         }else if (statusBean.getStatus() == -1) {
         	Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
         }else if (statusBean.getStatus() == -2) {

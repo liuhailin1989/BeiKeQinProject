@@ -145,7 +145,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mFrom.setText(newsDetail.getFrom());
         
         mComments.setTitle("最新评论");
-        mComments.init(newsDetail.getCommurlapi(), 0, newsDetail.getComments(), null, this);
+        mComments.init(newsDetail.getCommurlapi(), 0, newsDetail.getComments(), getImgLoader(), this);
         
         mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
     }
@@ -159,4 +159,26 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     private void handleSendComment() {
         iDetail.toSendComment(mCommentEditView.getText().toString());
     }
+
+
+	@Override
+	public void toFavoriteSucess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void toShareSucess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void toSendCommentSucess() {
+		// TODO Auto-generated method stub
+		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
+		mComments.refreshComments(newsDetail.getCommurlapi(), 0, newsDetail.getComments(), getImgLoader(), this);
+	}
 }

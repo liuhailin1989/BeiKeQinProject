@@ -1,7 +1,7 @@
 package com.android.backchina.interf;
 
 import com.android.backchina.base.adapter.BaseDragAdapter;
-import com.android.backchina.base.adapter.BaseRecyclerAdapter.BaseViewHolder;
+import com.android.backchina.base.adapter.BaseChannelRecyclerAdapter.BaseViewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;

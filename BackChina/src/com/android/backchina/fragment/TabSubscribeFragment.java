@@ -175,7 +175,9 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 			long id) {
 		// TODO Auto-generated method stub
 		Subscribe currentSubscribe = (Subscribe) parent.getAdapter().getItem(position);//减去header view count
-		UIHelper.enterSubscribeDetailActivity(getActivity(), currentSubscribe);
+		if (currentSubscribe != null) {
+			UIHelper.enterSubscribeDetailActivity(getActivity(),currentSubscribe);
+		}
 	}
 
 	@Override

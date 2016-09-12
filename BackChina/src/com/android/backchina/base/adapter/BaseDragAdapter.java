@@ -10,7 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-public abstract class BaseDragAdapter<T> extends BaseRecyclerAdapter<T> implements OnItemChangeListener<T>,IDragItem{
+public abstract class BaseDragAdapter<T> extends BaseChannelRecyclerAdapter<T> implements OnItemChangeListener<T>,IDragItem{
 
     public static final int KEEP = Integer.MIN_VALUE;
 

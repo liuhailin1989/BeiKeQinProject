@@ -6,7 +6,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerAdapter.BaseViewHolder> {
+public abstract class BaseChannelRecyclerAdapter<T> extends RecyclerView.Adapter<BaseChannelRecyclerAdapter.BaseViewHolder> {
 
     protected List<T> mDatas = new ArrayList<T>();
 

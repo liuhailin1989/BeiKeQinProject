@@ -2,6 +2,7 @@
 package com.android.backchina.utils;
 
 import com.android.backchina.AppContext;
+import com.android.backchina.BackChinaMode;
 import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.Subscribe;
@@ -20,6 +21,7 @@ import com.android.backchina.ui.SubscribeDetailActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,12 @@ import android.widget.Toast;
 public class UIHelper {
 
     
+	public static void notifySubscribeDataChanged(Context context){
+		Intent intent = new Intent();
+		intent.setAction(BackChinaMode.ACTION_SUBSCRIBE_DATA_CHANGED);
+		context.sendBroadcast(intent);
+	}
+	
     public static void showUrlRedirect(Context context, String url) {
 //        showUrlRedirect(context, 0, url);
     }

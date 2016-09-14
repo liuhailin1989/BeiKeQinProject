@@ -1,6 +1,8 @@
 package com.android.backchina.bean;
 
-public class SpecialNewsDetail extends BaseBean{
+import java.util.List;
+
+public class SpecialNewsDetail<T> extends BaseBean{
 
 	/**
 	 * 
@@ -14,6 +16,8 @@ public class SpecialNewsDetail extends BaseBean{
      * 发布日期
      */
     private long dateline;
+    
+    private List<T> blogcomments;
     
     public String getContent() {
         return content;
@@ -30,4 +34,13 @@ public class SpecialNewsDetail extends BaseBean{
     public void setDateline(long dateline) {
         this.dateline = dateline;
     }
+    
+
+	public List<T> getBlogcomments() {
+		return blogcomments;
+	}
+
+	public void setBlogcomments(List<T> blogcomments) {
+		this.blogcomments = blogcomments;
+	}
 }

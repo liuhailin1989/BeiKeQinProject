@@ -9,6 +9,14 @@
         android:layout_height="@dimen/blog_detail_card_thumb_height"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp" />
+    
+    <ImageView
+        android:id="@+id/iv_card_avatar_top"
+        android:layout_width="@dimen/blog_detail_card_thumb_width"
+        android:layout_height="@dimen/blog_detail_card_thumb_height"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/default_avatar_top_white" />
 
     <TextView
         android:id="@+id/tv_card_author"

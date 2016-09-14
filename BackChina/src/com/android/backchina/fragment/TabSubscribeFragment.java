@@ -2,6 +2,7 @@ package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
 
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.ISubscribeListener;
 import com.android.backchina.interf.OnTabReselectListener;
+import com.android.backchina.interf.SubscribeCallback;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
@@ -33,7 +35,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnTabReselectListener,Callback,OnItemClickListener,ISubscribeListener{
+public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnTabReselectListener,Callback,OnItemClickListener,ISubscribeListener,SubscribeCallback{
 
     private ListView mListView;
     
@@ -50,7 +52,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         @Override
         public void onSuccess(int code, Header[] headers, String responseString) {
             // TODO Auto-generated method stub
-        	if(handleMySubscribeResponse(headers, responseString)){
+        	if(!handleMySubscribeResponse(headers, responseString)){
         		requestHotSubscribeData();
 			} else {
 				Type type = new TypeToken<ResultListBean<Subscribe>>() {
@@ -106,6 +108,13 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
     }
     
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+    	// TODO Auto-generated method stub
+    	super.onCreate(savedInstanceState);
+    	AppContext.getInstance().getBackChinaMode().setSubscribeCallBack(this);
+    }
+    
+    @Override
     protected void setupViews(View root) {
         // TODO Auto-generated method stub
         super.setupViews(root);
@@ -148,7 +157,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
     	BackChinaApi.getHotSubscribeList(mHotSubscribeHandler);
     }
     
-    private void setDataList(final ResultListBean<Subscribe> resultListBean){
+    private void setDataList( final ResultListBean<Subscribe> resultListBean){
         mAdapter.clear();
         mAdapter.addItem(resultListBean.getItems());
         AppOperator.runOnThread(new Runnable() {
@@ -183,20 +192,44 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 	@Override
 	public void onSubscribe(Subscribe subscribe) {
 		// TODO Auto-generated method stub
-		BackChinaApi.Subscribe(subscribe.getUrlapi(),subscribe.getTitle(), new TextHttpResponseHandler() {
-			
-			@Override
-			public void onSuccess(int code, Header[] headers, String responseString) {
-				// TODO Auto-generated method stub
-				handleSubscribeResponse(headers,responseString);
-			}
-			
-			@Override
-			public void onFailure(int code, Header[] headers, String responseString, Throwable arg3) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
-			}
-		});
+		if(subscribe.getFavid() != 0){
+			BackChinaApi.cancelSubscribe(subscribe.getFavid(), new TextHttpResponseHandler() {
+
+				@Override
+				public void onSuccess(int code, Header[] headers,
+						String responseString) {
+					// TODO Auto-generated method stub
+					handleCancelSubscribeResponse(headers, responseString);
+				}
+
+				@Override
+				public void onFailure(int code, Header[] headers,
+						String responseString, Throwable arg3) {
+					// TODO Auto-generated method stub
+					Toast.makeText(getContext(), "取消成功",
+							Toast.LENGTH_SHORT).show();
+				}
+			});
+		} else {
+			BackChinaApi.subscribe(subscribe.getId(),
+					new TextHttpResponseHandler() {
+
+						@Override
+						public void onSuccess(int code, Header[] headers,
+								String responseString) {
+							// TODO Auto-generated method stub
+							handleSubscribeResponse(headers, responseString);
+						}
+
+						@Override
+						public void onFailure(int code, Header[] headers,
+								String responseString, Throwable arg3) {
+							// TODO Auto-generated method stub
+							Toast.makeText(getContext(), "订阅失败",
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+		}
 	}
 	
     private void handleSubscribeResponse(Header[] headers,String response) {
@@ -206,12 +239,30 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         StatusBean statusBean = activitiesBean.getActivities();
         if (statusBean.getStatus() == 1) {
         	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+        	UIHelper.notifySubscribeDataChanged(getActivity());
         }else if (statusBean.getStatus() == -1) {
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
         }else if (statusBean.getStatus() == -2) {
         	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
         }else{
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    private void handleCancelSubscribeResponse(Header[] headers,String response) {
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        if (statusBean.getStatus() == 1) {
+        	Toast.makeText(getContext(), "取消成功", Toast.LENGTH_SHORT).show();
+        	UIHelper.notifySubscribeDataChanged(getActivity());
+        }else if (statusBean.getStatus() == -1) {
+        	Toast.makeText(getContext(), "取消失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus() == -2) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "取消败", Toast.LENGTH_SHORT).show();
         }
     }
     
@@ -226,5 +277,11 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         	return true;
         }
     }
+
+	@Override
+	public void OnSubscribeDataChanged() {
+		// TODO Auto-generated method stub
+    	requestData();
+	}
     
 }

@@ -1,10 +1,13 @@
 package com.android.backchina.bean;
 
+import java.util.List;
+
 
 /**
  * 博客详情
+ * @param <T>
  */
-public class BlogDetail extends BaseBean {
+public class BlogDetail<T> extends BaseBean {
 
 	/**
 	 * 
@@ -17,6 +20,9 @@ public class BlogDetail extends BaseBean {
      * 发布日期
      */
     private long dateline;
+    
+    
+    private List<T> blogcomments;
     
     public String getContent() {
         return content;
@@ -33,4 +39,12 @@ public class BlogDetail extends BaseBean {
     public void setDateline(long dateline) {
         this.dateline = dateline;
     }
+
+	public List<T> getBlogcomments() {
+		return blogcomments;
+	}
+
+	public void setBlogcomments(List<T> blogcomments) {
+		this.blogcomments = blogcomments;
+	}
 }

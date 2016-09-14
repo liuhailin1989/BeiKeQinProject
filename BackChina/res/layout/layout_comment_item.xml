@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,18 +48,37 @@
             tools:text="1楼" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_message"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="8dp"
-        android:paddingRight="16dp"
+        android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:textColor="@color/comments_content_text_color"
-        android:textSize="@dimen/comments_content_text_size"
-        tools:text="这是一条评论" />
+        android:paddingRight="16dp" >
+        
+        <TextView
+            android:id="@+id/tv_refer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/comments_content_text_color"
+            android:textSize="@dimen/comments_content_text_size"
+            android:background="@color/background_color"
+            tools:text="这是一条回复" />
+        
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/comments_content_text_color"
+            android:textSize="@dimen/comments_content_text_size"
+            tools:text="这是一条评论" />
+    </LinearLayout>
 
-    <View 
-        style="@style/h_line"/>
+    <View style="@style/h_line" />
+
 </LinearLayout>

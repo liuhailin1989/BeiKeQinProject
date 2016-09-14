@@ -1,17 +1,19 @@
 package com.android.backchina.ui.comment;
 
-import com.android.backchina.bean.Comment;
+import java.io.InputStream;
+import java.net.URL;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
+import org.w3c.dom.Text;
+
+import com.android.backchina.AppOperator;
+import com.android.backchina.base.BaseApplication;
+import com.android.backchina.emoji.InputHelper;
+
 import android.content.res.Resources;
-import android.graphics.RectF;
-import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spanned;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 
@@ -39,20 +41,94 @@ public final class CommentsUtil {
 //
 //        return lay;
 //    }
-//
-//    public static void formatHtml(Resources resources, TextView textView, String str) {
+	
+	public static String getReferComments(String str){
+		String[] commentsArray = str.split("</div>");
+		if(commentsArray.length > 1){
+			String refer = commentsArray[0]+"</div>";
+			Spanned span = Html.fromHtml(refer);
+			return span.toString().replaceFirst(":","\n\n");
+		}
+		return null;
+	}
+	
+	public static void getReferCommentsSpan(final String str,final TextView textView){
+		AppOperator.runOnThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				String[] commentsArray = str.split("</div>");
+				if(commentsArray.length > 1){
+					String refer = commentsArray[0]+"</div>";
+					final Spanned span = Html.fromHtml(refer,new Html.ImageGetter() {
+
+						@Override
+						public Drawable getDrawable(String source) {
+							// TODO Auto-generated method stub
+							InputStream is = null;
+							try {
+								is = (InputStream) new URL("http://www.backchina.com/"+source).getContent();  
+								Drawable d = Drawable.createFromStream(is, "src");
+								d.setBounds(0, 0, d.getIntrinsicWidth(),
+										d.getIntrinsicHeight());
+								is.close();
+								return d;
+							} catch (Exception e) {
+								return null;
+							}
+						}  
+						
+					},null);
+					AppOperator.runOnMainThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							textView.setVisibility(View.VISIBLE);
+							textView.setText(span);
+						}
+					});
+				} else {
+					AppOperator.runOnMainThread(new Runnable() {
+
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							textView.setVisibility(View.GONE);
+						}
+					});
+				}
+			}
+		});
+	}
+	
+	public static String getCommentsMessages(String str){
+		String[] commentsArray = str.split("</div>");
+		if(commentsArray.length > 1){
+			String message = commentsArray[1];
+			Spanned span = Html.fromHtml(message);
+			return span.toString();
+		}else{
+			String message = commentsArray[0];
+			Spanned span = Html.fromHtml(message);
+			return span.toString();
+		}
+	}
+
+    public static void formatHtml(Resources resources, TextView textView, String str) {
 //        textView.setMovementMethod(MyLinkMovementMethod.a());
-//        textView.setFocusable(false);
-//        textView.setLongClickable(false);
-//
+        textView.setFocusable(false);
+        textView.setLongClickable(false);
+
 //        if (textView instanceof TweetTextView) {
 //            ((TweetTextView) textView).setDispatchToParent(true);
 //        }
-//
+
 //        str = TweetTextView.modifyPath(str);
-//        Spanned span = Html.fromHtml(str);
+        Spanned span = Html.fromHtml(str);
 //        span = InputHelper.displayEmoji(resources, span.toString());
-//        textView.setText(span);
+        textView.setText(span.toString());
 //        MyURLSpan.parseLinkText(textView, span);
-//    }
+    }
 }

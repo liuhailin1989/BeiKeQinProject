@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.backchina.AppContext;
@@ -39,6 +41,8 @@ public class SubscribeActivity extends BaseActivity implements OnItemClickListen
 	
 	private SubscribeCatAdapter mSubscribeCatAdapter;
 	
+	private ImageView btnBack;
+	
 	private Context mContext;
 	
     public static void show(Context context) {
@@ -57,6 +61,15 @@ public class SubscribeActivity extends BaseActivity implements OnItemClickListen
     }
     
     private void setupViews(){
+    	btnBack = (ImageView) findViewById(R.id.btn_back);
+    	btnBack.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
     	mListView = (ListView) findViewById(R.id.lv_subscribe_cat);
     	mEmptyLayout = (EmptyLayout) findViewById(R.id.error_layout);
     }

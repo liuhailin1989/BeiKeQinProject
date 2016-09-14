@@ -15,6 +15,7 @@ import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.Comment;
+import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.bean.base.CommentBean;
 import com.android.backchina.utils.StringUtils;
 import com.bumptech.glide.RequestManager;
@@ -128,7 +129,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
             }
         });
     }
-
+    
     private void addComment(List<Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         if (comments != null && comments.size() > 0) {
             if (comments.size() < commentTotal) {
@@ -139,17 +140,11 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
             if (getVisibility() != VISIBLE) {
                 setVisibility(VISIBLE);
             }
-
-//            int clearLine = comments.size() - 1;
             for (final Comment comment : comments) {
-                if (comment == null || comment.getId() == 0)
+                if (comment == null || comment.getId() == 0){
                     continue;
+                }
                 ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
-//                if (clearLine <= 0) {
-//                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
-//                } else {
-//                    clearLine--;
-//                }
             }
         } else {
             setVisibility(View.GONE);
@@ -160,7 +155,6 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
-
         return addComment(true, comment, imageLoader, onCommentClickListener);
     }
 
@@ -181,9 +175,20 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 		String floorText = String.format(getContext().getResources().getString(R.string.comments_floor_count),comment.getPosition() - 1);
 		floor.setText(floorText);
 
-        TextView content = ((TextView) lay.findViewById(R.id.tv_message));
-        
-        content.setText(comment.getMessage());
+		TextView refer = (TextView) lay.findViewById(R.id.tv_refer);
+		String msg = comment.getMessage();
+		
+		String referMsg = CommentsUtil.getReferComments(msg);
+		if(referMsg != null){
+			refer.setVisibility(View.VISIBLE);
+			refer.setText(referMsg);
+		}else{
+			refer.setVisibility(View.GONE);
+		}
+		
+		TextView content = ((TextView) lay.findViewById(R.id.tv_message));
+		String commentsMsg = CommentsUtil.getCommentsMessages(msg);
+        content.setText(commentsMsg);
 //        CommentsUtil.formatHtml(getResources(), content, comment.getMessage());
 
 //        if (comment.getRefer() != null) {

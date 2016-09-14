@@ -1,6 +1,7 @@
 package com.android.backchina.ui.comment;
 
 import com.android.backchina.bean.Comment;
+import com.android.backchina.bean.base.BlogCommentBean;
 
 import android.view.View;
 

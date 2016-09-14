@@ -17,30 +17,38 @@
             android:scaleType="fitXY"
             android:src="@drawable/default_avatar" />
 
+        <ImageView
+            android:id="@+id/iv_avatar_top"
+            android:layout_width="@dimen/mine_avatar_width"
+            android:layout_height="@dimen/mine_avatar_height"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_avatar_top_green" />
+
         <Button
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/iv_avatar"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@color/transparent"
             android:gravity="center"
+            android:padding="10dp"
             android:text="@string/mine_login_text"
             android:textColor="@color/mine_longin_text_color"
             android:textSize="@dimen/mine_login_text_size" />
-        
+
         <Button
             android:id="@+id/btn_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
             android:background="@color/transparent"
             android:gravity="center"
+            android:padding="10dp"
             android:text="@string/mine_logout_text"
             android:textColor="@color/mine_longin_text_color"
             android:textSize="@dimen/mine_login_text_size"

@@ -704,4 +704,26 @@ public class FileUtil {
             }
         }
     }
+    
+	public static void saveStringToFile(String text) {
+		String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() +File.separator +"json_test.txt";
+		try {
+			File saveFile = new File(filePath);
+			if(saveFile.exists()){
+				saveFile.delete();
+			}
+			if (!saveFile.exists()) {
+				File dir = new File(saveFile.getParent());
+				dir.mkdirs();
+				saveFile.createNewFile();
+			}
+
+			FileOutputStream outputStream = new FileOutputStream(saveFile);
+			outputStream.write(text.getBytes());
+			outputStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

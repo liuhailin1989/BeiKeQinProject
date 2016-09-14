@@ -9,6 +9,7 @@ import com.android.backchina.bean.News;
 import com.android.backchina.bean.NewsDetail;
 import com.android.backchina.bean.SpecialNewsDetail;
 import com.android.backchina.bean.SubscribeDetail;
+import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.fragment.DetailFragment;
 import com.android.backchina.fragment.NewsDetailFragment;
@@ -30,7 +31,7 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
     
 	private SubscribeDetail mCurrentSubscribeDetail;
 	
-	private SpecialNewsDetail mSpecialNewsDetail;
+	private SpecialNewsDetail<BlogCommentBean> mSpecialNewsDetail;
 	
     public static void show(Context context, SubscribeDetail subscribeDetail) {
         Intent intent = new Intent(context, SpecialNewsDetailActivity.class);
@@ -58,12 +59,12 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
     }
     
     private Type getType(){
-        return new TypeToken<ResultBean<List<SpecialNewsDetail>>>() {}.getType();
+        return new TypeToken<ResultBean<List<SpecialNewsDetail<BlogCommentBean>>>>() {}.getType();
     }
     
     public boolean handleData(String responseString) {
         try {
-        ResultBean<List<SpecialNewsDetail>> bean = AppContext.createGson().fromJson(responseString, getType());
+        ResultBean<List<SpecialNewsDetail<BlogCommentBean>>> bean = AppContext.createGson().fromJson(responseString, getType());
         mSpecialNewsDetail = bean.getResult().get(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +111,7 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
           return;
       }
       int id = mSpecialNewsDetail.getId();
-      BackChinaApi.sendNewsComment(id,comment,new TextHttpResponseHandler() {
+      BackChinaApi.sendNewsComment(id,comment,"专题",new TextHttpResponseHandler() {
 
           @Override
           public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

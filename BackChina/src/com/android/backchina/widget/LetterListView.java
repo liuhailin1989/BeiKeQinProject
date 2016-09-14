@@ -11,7 +11,7 @@ import android.view.View;
 public class LetterListView extends View {
 
 	OnTouchingLetterChangedListener onTouchingLetterChangedListener;
-	String[] b = {"定位", "定位", "定位", "定位", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
+	String[] b = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
 			"L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
 			"Y", "Z" };
 	int choose = -1;

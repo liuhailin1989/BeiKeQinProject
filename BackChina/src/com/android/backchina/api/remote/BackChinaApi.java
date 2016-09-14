@@ -124,11 +124,11 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
-    public static void sendNewsComment(int aid,String message,AsyncHttpResponseHandler handler){
+    public static void sendNewsComment(int aid, String title, String message,AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
         params.put("func", "reply");
         params.put("aid", aid);
-        params.put("subject", "test");
+        params.put("subject", title);
         params.put("message", message);
         String url = "plugin.php?id=bkc_app_iphone:user";
         ApiHttpClient.post(url, params, handler);
@@ -185,23 +185,28 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
-    public static void Subscribe(String url,String title, AsyncHttpResponseHandler handler){
-    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=sharelink&type=app
-    	//&link=http://www.backchina.com/news/&general=A+good+website&title=%E5%80%8D%E5%8F%AF%E4%BA%B2
+    public static void subscribe(int id, AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
-        params.put("func", "sharelink");
-        params.put("type", "app");
-        params.put("link", url);
-        params.put("general", "A+good+website");
-        params.put("title", title);
+        params.put("func", "myfavorite");
+        params.put("type", "infolist");
+        params.put("action", "add");
+        params.put("dataid", id);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void cancelSubscribe(int favid, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&action=del&favid=XXX
+        RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("action", "del");
+        params.put("favid", favid);
         ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
     }
     
     public static void getMySubscribeList(AsyncHttpResponseHandler handler){
-    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=sharelink&type=app&action=list
     	 RequestParams params = new RequestParams();
-         params.put("func", "sharelink");
-         params.put("type", "app");
+         params.put("func", "myfavorite");
+         params.put("type", "infolist");
          params.put("action", "list");
          ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
     }

@@ -35,6 +35,11 @@ public class SubscribeAdapter extends BaseListAdapter<Subscribe>{
         // TODO Auto-generated method stub
         vh.setImageForNet(R.id.iv_icon, item.getLogo());
         vh.setText(R.id.tv_name, item.getTitle());
+        if(item.getFavid() != 0){
+        	vh.setText(R.id.btn_add_subscribe, "取消订阅");
+        }else{
+        	vh.setText(R.id.btn_add_subscribe, "+ 订阅");
+        }
         vh.getView(R.id.btn_add_subscribe).setOnClickListener(new OnClickListener() {
 			
 			@Override

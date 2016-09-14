@@ -1,41 +1,29 @@
 
 package com.android.backchina.ui;
 
+import java.io.File;
 import java.lang.reflect.Type;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.backchina.AppContext;
-import com.android.backchina.R;
 import com.android.backchina.api.remote.BackChinaApi;
-import com.android.backchina.base.BaseActivity;
-import com.android.backchina.bean.Login;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.NewsDetail;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultBean;
-import com.android.backchina.bean.base.StateBean;
-import com.android.backchina.fragment.DetailFragment;
 import com.android.backchina.fragment.NewsDetailFragment;
-import com.android.backchina.interf.IContractDetail;
-import com.android.backchina.interf.OperatorCallBack;
 import com.android.backchina.ui.dialog.DialogHelper;
 import com.android.backchina.ui.dialog.WaitDialog;
-import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
@@ -128,8 +116,17 @@ public class NewsDetailActivity extends BaseDetailActivity{
     @Override
     public void toShare() {
         // TODO Auto-generated method stub
-        
+    	shareMsg("分享到",currentNews.getTitle(),currentNews.getUrl());
     }
+    
+	public void shareMsg(String activityTitle, String msgTitle, String msgText) {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain"); // 纯文本
+		intent.putExtra(Intent.EXTRA_SUBJECT, msgTitle);
+		intent.putExtra(Intent.EXTRA_TEXT, msgText);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(Intent.createChooser(intent, activityTitle));
+	}
 
     @Override
     public void toSendComment(final String comment) {
@@ -140,7 +137,7 @@ public class NewsDetailActivity extends BaseDetailActivity{
         }
         mWaitDialog.show();
         int id = currentNews.getId();
-        BackChinaApi.sendNewsComment(id,comment,new TextHttpResponseHandler() {
+        BackChinaApi.sendNewsComment(id,"回帖",comment,new TextHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

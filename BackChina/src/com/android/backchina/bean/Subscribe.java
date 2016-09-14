@@ -8,6 +8,14 @@ public class Subscribe extends Entity {
      */
     private static final long serialVersionUID = -8711860084114233572L;
 
+    private int favid;//
+    
+    private String idtype;//
+    
+    private int spaceuid;//
+    
+    private String desc;//
+    
     private String title;
 
     private String title_long;
@@ -22,6 +30,39 @@ public class Subscribe extends Entity {
 
     private String urlapi;
 
+
+	public int getFavid() {
+		return favid;
+	}
+
+	public void setFavid(int favid) {
+		this.favid = favid;
+	}
+
+	public String getIdtype() {
+		return idtype;
+	}
+
+	public void setIdtype(String idtype) {
+		this.idtype = idtype;
+	}
+
+	public int getSpaceuid() {
+		return spaceuid;
+	}
+
+	public void setSpaceuid(int spaceuid) {
+		this.spaceuid = spaceuid;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	
     public String getTitle() {
         return title;
     }
@@ -77,5 +118,4 @@ public class Subscribe extends Entity {
     public void setUrlapi(String urlapi) {
         this.urlapi = urlapi;
     }
-
 }

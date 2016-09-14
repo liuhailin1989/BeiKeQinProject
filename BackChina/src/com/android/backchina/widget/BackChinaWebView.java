@@ -259,7 +259,9 @@ public class BackChinaWebView extends WebView {
         public synchronized void run() {
             if (!mDone) {
                 mDone = true;
-                if (mFinishCallback != null) mFinishCallback.run();
+                if (mFinishCallback != null) {
+                mFinishCallback.run();
+                }
             }
         }
 

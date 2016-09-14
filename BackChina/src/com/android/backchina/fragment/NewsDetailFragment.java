@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     private TextView mCommentsCount;
     
     private Button mBtnSend;
+    
+    private ImageView mBtnShare;
     
 	public static NewsDetailFragment newInstance() {
 		NewsDetailFragment fragment = new NewsDetailFragment();
@@ -113,6 +116,16 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 				// TODO Auto-generated method stub
 				handleSendComment();
 				hideCommentView();
+			}
+		});
+        
+        mBtnShare = (ImageView) root.findViewById(R.id.iv_share);
+        mBtnShare.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				iDetail.toShare();
 			}
 		});
     }

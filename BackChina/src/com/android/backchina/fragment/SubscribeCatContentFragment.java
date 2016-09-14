@@ -211,7 +211,7 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> imp
 	@Override
 	public void onSubscribe(Subscribe subscribe) {
 		// TODO Auto-generated method stub
-		BackChinaApi.Subscribe(subscribe.getUrlapi(),subscribe.getTitle(), new TextHttpResponseHandler() {
+		BackChinaApi.subscribe(subscribe.getId(), new TextHttpResponseHandler() {
 			
 			@Override
 			public void onSuccess(int code, Header[] headers, String responseString) {
@@ -233,6 +233,7 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> imp
         StatusBean statusBean = activitiesBean.getActivities();
         if (statusBean.getStatus() == 1) {
         	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+        	UIHelper.notifySubscribeDataChanged(getActivity());
         }else if (statusBean.getStatus() == -1) {
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
         }else if (statusBean.getStatus() == -2) {

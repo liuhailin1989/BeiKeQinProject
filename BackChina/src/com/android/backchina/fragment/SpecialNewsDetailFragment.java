@@ -16,11 +16,14 @@ import android.widget.TextView.OnEditorActionListener;
 import com.android.backchina.R;
 import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.SpecialNewsDetail;
+import com.android.backchina.bean.base.BlogCommentBean;
+import com.android.backchina.ui.comment.BlogCommentsView;
 import com.android.backchina.ui.comment.CommentsView;
+import com.android.backchina.ui.comment.OnBlogCommentClickListener;
 import com.android.backchina.ui.comment.OnCommentClickListener;
 import com.android.backchina.utils.StringUtils;
 
-public class SpecialNewsDetailFragment extends DetailFragment<Object> implements OnCommentClickListener{
+public class SpecialNewsDetailFragment extends DetailFragment<Object> implements OnBlogCommentClickListener{
 
     private TextView mTitle;
     private TextView mPubTime;
@@ -28,7 +31,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     
     private TextView mInput;
     
-    private CommentsView mComments;
+    private BlogCommentsView mComments;
     
     private LinearLayout layCommit;
     
@@ -66,7 +69,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
         mAuthor = (TextView) root.findViewById(R.id.tv_author);
         
-        mComments = (CommentsView) root.findViewById(R.id.lay_comment_view);
+        mComments = (BlogCommentsView) root.findViewById(R.id.lay_comment_view);
         
         layCommit = (LinearLayout) root.findViewById(R.id.lay_commit_edit);
         layCommit.setVisibility(View.VISIBLE);
@@ -142,7 +145,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     protected void initData() {
         // TODO Auto-generated method stub
         super.initData();
-        SpecialNewsDetail specialNewsDetail = (SpecialNewsDetail) iDetail.getData();
+        SpecialNewsDetail<BlogCommentBean> specialNewsDetail = (SpecialNewsDetail<BlogCommentBean>) iDetail.getData();
         if(specialNewsDetail == null){
             return;
         }
@@ -151,14 +154,14 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         mPubTime.setText(StringUtils.friendlyTime(specialNewsDetail.getDateline()));
         mAuthor.setText(specialNewsDetail.getUsername());
         mComments.setTitle("最新评论");
-        mComments.init(specialNewsDetail.getCommurlapi(), 0, specialNewsDetail.getComments(), null, this);
+        mComments.init(specialNewsDetail.getBlogcomments(), 0, 20, null, this);
         mCommentsCount.setText(String.valueOf(specialNewsDetail.getComments()));
         setImageFromNet(mBlogerCardAvatar, specialNewsDetail.getAvatar(),R.drawable.default_avatar);
         mBlogerCardAuthor.setText(specialNewsDetail.getUsername());
     }
 
     @Override
-    public void onClick(View view, Comment comment) {
+    public void onClick(View view, BlogCommentBean comment) {
         // TODO Auto-generated method stub
         
     }

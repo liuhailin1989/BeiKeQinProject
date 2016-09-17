@@ -107,6 +107,17 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.android.backchina.ui.CommentNewsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.android.backchina.ui.CommentBlogActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+
         <provider
             android:name="com.android.backchina.db.DataProvider"
             android:authorities="com.android.backchina.DataProvider"

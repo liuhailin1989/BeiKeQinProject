@@ -119,6 +119,18 @@
     <dimen name="blog_detail_card_author_text_size">20dp</dimen>
     <dimen name="blog_detail_card_floor_flag_text_size">18dp</dimen>
     
+    <!-- video -->
+    <dimen name="video_item_height">160dp</dimen>
+    <dimen name="video_item_title_height">30dp</dimen>
+    <dimen name="video_item_title_size">14dp</dimen>
+    <dimen name="video_item_thumb_intro_height">30dp</dimen>
+    <dimen name="video_item_thumb_intro_text_size">12dp</dimen>
+    
+    <dimen name="video_linear_item_thumb_height">204dp</dimen>
+    <dimen name="video_linear_item_bottom_height">40dp</dimen>
+    <dimen name="video_linear_item_avatar_width">30dp</dimen>
+    <dimen name="video_linear_item_avatar_height">30dp</dimen>
+    
     <!-- 我的 -->
     <dimen name="mine_avatar_width">50dp</dimen>
     <dimen name="mine_avatar_height">50dp</dimen>

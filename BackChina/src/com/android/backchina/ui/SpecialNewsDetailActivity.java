@@ -100,9 +100,18 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 	@Override
 	public void toShare() {
 		// TODO Auto-generated method stub
-		
+		shareMsg("分享到",mCurrentSubscribeDetail.getTitle(),mCurrentSubscribeDetail.getUrl());
 	}
 
+	public void shareMsg(String activityTitle, String msgTitle, String msgText) {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain"); // 纯文本
+		intent.putExtra(Intent.EXTRA_SUBJECT, msgTitle);
+		intent.putExtra(Intent.EXTRA_TEXT, msgText);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(Intent.createChooser(intent, activityTitle));
+	}
+	
 	@Override
 	public void toSendComment(String comment) {
 		// TODO Auto-generated method stub

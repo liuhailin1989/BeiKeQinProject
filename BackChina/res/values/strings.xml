@@ -20,6 +20,9 @@
     <!-- blog -->
     <string name="blog_item_views">%1$d 评 / %2$s 阅</string>
     
+    <!-- Video -->
+    <string name="video_item_views">%1$s 次播放</string>
+    
     <!-- 我的 -->
     <string name="mine_login_text">点击登录</string>
     <string name="mine_logout_text">退出登录</string>

@@ -11,6 +11,7 @@ import com.android.backchina.ui.AboutUsActivity;
 import com.android.backchina.ui.BlogDetailActivity;
 import com.android.backchina.ui.ChannelBlogActivity;
 import com.android.backchina.ui.ChannelNewsActivity;
+import com.android.backchina.ui.ChannelVideoActivity;
 import com.android.backchina.ui.CityListActivity;
 import com.android.backchina.ui.LoginActivity;
 import com.android.backchina.ui.NewsDetailActivity;
@@ -46,6 +47,10 @@ public class UIHelper {
     
     public static void enterChannelBlogActivity(Context context,Fragment fragment) {
     	ChannelBlogActivity.show(context,fragment);
+    }
+    
+    public static void enterChannelVideoActivity(Context context,Fragment fragment) {
+    	ChannelVideoActivity.show(context,fragment);
     }
     
     public static void enterNewsDetail(Context context, long newsId, int commentCount) {

@@ -91,6 +91,10 @@
     <color name="blog_detail_card_author_text_color">#000000</color>
     <color name="blog_detail_card_floor_flag_text_color">#000000</color>
     
+    <!-- Video -->
+    <color name="video_item_title_color">#000000</color>
+    <color name="video_item_thumb_intro_text_color">#ffffff</color>
+    
     <!-- 我的 -->
     <color name="mine_longin_text_color">#FFFFFF</color>
     <color name="longin_edit_text_color">#000000</color>

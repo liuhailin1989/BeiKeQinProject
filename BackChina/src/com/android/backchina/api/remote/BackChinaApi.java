@@ -92,6 +92,14 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
+    public static void getVideoList(String url, int page,AsyncHttpResponseHandler handler) {
+    	url = url.replace("&page=1", "");
+    	url = url.replace("page=1", "");
+        RequestParams params = new RequestParams();
+        params.put("page", page);
+        ApiHttpClient.get(url, params, handler);
+    }
+    
     public static void getNewsChannelList(AsyncHttpResponseHandler handler){
     	RequestParams params = new RequestParams();
         ApiHttpClient.get("api/appxml/topchannel.php", params, handler);

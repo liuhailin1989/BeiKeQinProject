@@ -111,6 +111,7 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
                 	if(mTabsAdapter != null && mTabsAdapter.getCount() > 0){
                 		if(isChannelDataChanged){
                 			mTabsAdapter.removeAll();
+                			isChannelDataChanged = false;
 						} else {
 							onRequestSuccess();
 							return;

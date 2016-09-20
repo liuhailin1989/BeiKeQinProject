@@ -63,6 +63,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.android.backchina.ui.ChannelVideoActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.android.backchina.ui.NewsDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
@@ -107,6 +112,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+
         <provider
             android:name="com.android.backchina.db.DataProvider"
             android:authorities="com.android.backchina.DataProvider"

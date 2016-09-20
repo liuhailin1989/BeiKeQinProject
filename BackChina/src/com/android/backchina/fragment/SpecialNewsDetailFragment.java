@@ -49,6 +49,8 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     
     private TextView mBlogerCardSubscribe;
     
+    private ImageView mBtnShare;
+    
 	public static SpecialNewsDetailFragment newInstance() {
 		SpecialNewsDetailFragment fragment = new SpecialNewsDetailFragment();
 		return fragment;
@@ -123,6 +125,16 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 				// TODO Auto-generated method stub
 				handleSendComment();
 				hideCommentView();
+			}
+		});
+        
+        mBtnShare = (ImageView) root.findViewById(R.id.iv_share);
+        mBtnShare.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				iDetail.toShare();
 			}
 		});
     }

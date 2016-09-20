@@ -16,10 +16,14 @@ import com.android.backchina.base.BaseViewPagerFragment;
 import com.android.backchina.bean.ChannelItem;
 import com.android.backchina.bean.base.ChannelBean;
 import com.android.backchina.fragment.VideoFragment;
+import com.android.backchina.fragment.VideoLinearFrament;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.manager.ChannelManager;
+import com.android.backchina.ui.BaseChannelActivity;
 import com.android.backchina.ui.ChannelNewsActivity;
+import com.android.backchina.ui.ChannelVideoActivity;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -28,6 +32,8 @@ import cz.msebera.android.httpclient.Header;
 public class TabVideoFragment extends BaseViewPagerFragment implements OnTabReselectListener{
 
 	protected TextHttpResponseHandler mHandler;
+	
+	private boolean isChannelDataChanged = false;
     
 
     protected Type getType() {
@@ -38,6 +44,7 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
 	@Override
 	protected void initData() {
 		// TODO Auto-generated method stub
+		isChannelDataChanged = false;
 		mHandler = new TextHttpResponseHandler() {
 
 			@Override
@@ -81,12 +88,25 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
                 public void run() {
                     // TODO Auto-generated method stub
                 	if(mTabsAdapter != null && mTabsAdapter.getCount() > 0){
-                		onRequestSuccess();
-                		return;
+                		if(isChannelDataChanged){
+                			mTabsAdapter.removeAll();
+                			isChannelDataChanged = false;
+						} else {
+							onRequestSuccess();
+							return;
+						}
                 	}
                     for(ChannelItem item : localChannelItems){
                         TLog.d("tab name =" +item.getName());
-                        mTabsAdapter.addTab(item.getName(), item.getName(), VideoFragment.class, getBundle(item.getId(),item));
+						if (isLinearVideo(item)) {
+							mTabsAdapter.addTab(item.getName(), item.getName(),
+									VideoLinearFrament.class,
+									getBundle(item.getName(), item));
+						} else {
+							mTabsAdapter.addTab(item.getName(), item.getName(),
+									VideoFragment.class,
+									getBundle(item.getName(), item));
+						}
                     }
                     onRequestSuccess();
                     //
@@ -100,6 +120,20 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
             BackChinaApi.getVideoChannelList(mHandler);
         }
     }
+    
+	private boolean isLinearVideo(ChannelItem item){
+		if (item != null && item.getName() != null) {
+			String name = item.getName();
+			if (name.equals("推荐") || name.equals("最新") || name.equals("最热")
+					|| name.equals("电影") || name.equals("电视剧")) {
+				return false;
+			} else {
+				return true;
+			}
+		}else{
+			return true;
+		}
+	}
     
     protected void setListData(ChannelBean<ChannelItem> channelBean) {
         TLog.d("called");
@@ -116,8 +150,15 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
             ChannelManager.getInstance().saveVideoChannelItemToTabLocal(getActivity(), defaultLocalChannelItems);
             //
             for(ChannelItem item : defaultLocalChannelItems){
-                TLog.d("tab name =" +item.getName());
-                mTabsAdapter.addTab(item.getName(), item.getName(), VideoFragment.class, getBundle(item.getId(),item));
+				if (isLinearVideo(item)) {
+					mTabsAdapter.addTab(item.getName(), item.getName(),
+							VideoLinearFrament.class,
+							getBundle(item.getName(), item));
+				} else {
+					mTabsAdapter.addTab(item.getName(), item.getName(),
+							VideoFragment.class,
+							getBundle(item.getName(), item));
+				}
             }
             //
             Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());
@@ -134,10 +175,10 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
      * @param catalog 要显示的数据类别
      * @return
      */
-    private Bundle getBundle(int catalog,ChannelItem item) {
+    private Bundle getBundle(String cataName,ChannelItem item) {
         Bundle bundle = new Bundle();
-//        bundle.putInt(VideoFragment.BUNDLE_KEY_CATALOG, catalog);
-//        bundle.putSerializable(VideoFragment.BUNDLE_KEY_CHANNELITEM, item);
+        bundle.putString(VideoFragment.BUNDLE_KEY_CATNAME, cataName);
+        bundle.putSerializable(VideoFragment.BUNDLE_KEY_CHANNELITEM, item);
         return bundle;
     }
 
@@ -147,11 +188,23 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	// TODO Auto-generated method stub
+    	if(resultCode == BaseChannelActivity.RESULT_CODE_OK){
+    		Bundle bundle = data.getExtras();
+    		isChannelDataChanged = bundle.getBoolean(BaseChannelActivity.BUNDLE_KEY_DATA_CHANGED);
+    		if(isChannelDataChanged){
+    		requestData();
+    		}else{
+    			TLog.d("isDataChanged = " +isChannelDataChanged);
+    		}
+    	}
+    }
+    
+    @Override
     protected void enterChannelManagerActivity() {
         // TODO Auto-generated method stub
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), ChannelNewsActivity.class);
-        getActivity().startActivity(intent);
+    	UIHelper.enterChannelVideoActivity(getActivity(),this);
     }
 
 }

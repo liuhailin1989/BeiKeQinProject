@@ -94,6 +94,7 @@
     <!-- Video -->
     <color name="video_item_title_color">#000000</color>
     <color name="video_item_thumb_intro_text_color">#ffffff</color>
+    <color name="youtobe_player_detial_item_name_text_color">#000000</color>
     
     <!-- 我的 -->
     <color name="mine_longin_text_color">#FFFFFF</color>

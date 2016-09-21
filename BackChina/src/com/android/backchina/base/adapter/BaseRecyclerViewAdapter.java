@@ -39,6 +39,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 		return mDatas.size();
 	}
 	
+	public List<T> getmDatas() {
+		return mDatas;
+	}
+	
 	public void updateItem(int location, T item) {
         if (mDatas.isEmpty()) {
         	return;

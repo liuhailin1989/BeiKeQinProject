@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseRecyclerViewAdapter;
+import com.android.backchina.base.adapter.BaseRecyclerViewAdapter.OnItemClickListener;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.widget.RecycleViewItemDecoration;
 
@@ -34,6 +35,14 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implem
 		mRecyclerView = (RecyclerView) root.findViewById(R.id.base_recycler_view);
 		mRecyclerView.setLayoutManager(getLayoutManager());
 		mAdapter = getAdapter();
+		mAdapter.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(View view, int position) {
+				// TODO Auto-generated method stub
+				onVideoItemClick(view,position);
+			}
+		});
 		mRecyclerView.setAdapter(mAdapter);
 		mRecyclerView.addItemDecoration(getItemDecoration());
 	}
@@ -91,4 +100,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implem
 	 protected abstract LayoutManager getLayoutManager();
 	 
 	 protected abstract ItemDecoration  getItemDecoration();
+	 
+	 protected abstract void onVideoItemClick(View view, int position);
 }

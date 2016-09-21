@@ -127,6 +127,11 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
+    public static void getVideoDetail(String url,AsyncHttpResponseHandler handler){
+    	RequestParams params = new RequestParams();
+        ApiHttpClient.get(url, params, handler);
+    }
+    
     public static void getComments(String url,AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
         ApiHttpClient.get(url, params, handler);

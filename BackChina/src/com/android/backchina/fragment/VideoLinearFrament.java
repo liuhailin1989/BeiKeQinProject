@@ -1,10 +1,10 @@
 package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView.ItemDecoration;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.View;
@@ -12,6 +12,7 @@ import android.view.View;
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.adapter.VideoAdapter;
+import com.android.backchina.adapter.VideoLinearAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseRecyclerViewFragment;
 import com.android.backchina.base.adapter.BaseRecyclerViewAdapter;
@@ -21,14 +22,13 @@ import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
-import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.RecycleViewItemDecoration;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class VideoFragment extends BaseRecyclerViewFragment<Video> implements OnTabReselectListener {
+public class VideoLinearFrament extends BaseRecyclerViewFragment<Video> implements OnTabReselectListener {
 
 	private static final String CACHE_KEY_PREFIX = "videolist_";
 	
@@ -81,20 +81,20 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 	@Override
 	protected BaseRecyclerViewAdapter<Video> getAdapter() {
 		// TODO Auto-generated method stub
-		return new VideoAdapter(getActivity(), this);
+		return new VideoLinearAdapter(getActivity(), this);
 	}
 
 	@Override
 	protected LayoutManager getLayoutManager() {
 		// TODO Auto-generated method stub
-		return new GridLayoutManager(getActivity(), 3);
+		return new LinearLayoutManager(getActivity());
 	}
 	
 
 	@Override
 	protected ItemDecoration getItemDecoration() {
 		// TODO Auto-generated method stub
-		return new RecycleViewItemDecoration(0,0,2,2);
+		return new RecycleViewItemDecoration(0,30,0,0);
 	}
 	
 	protected Type getType() {
@@ -194,7 +194,6 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 	@Override
 	protected void onVideoItemClick(View view, int position) {
 		// TODO Auto-generated method stub
-		List<Video> datas = mAdapter.getmDatas();
-		UIHelper.enterVideoPlayerActivity(getActivity(), datas.get(position));
+		
 	}
 }

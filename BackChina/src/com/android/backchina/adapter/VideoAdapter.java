@@ -3,6 +3,7 @@ package com.android.backchina.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,10 +22,20 @@ public class VideoAdapter extends BaseRecyclerViewAdapter<Video> {
 	}
 
 	@Override
-	public void onBindViewHolder(BaseRecycleViewHolder holder, int position) {
+	public void onBindViewHolder(BaseRecycleViewHolder holder, final int position) {
 		// TODO Auto-generated method stub
 		if (holder != null && holder instanceof VideoRecyclerViewHolder) {
 			VideoRecyclerViewHolder viewHolder = (VideoRecyclerViewHolder) holder;
+			viewHolder.itemView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if (itemClickListener != null) {
+						itemClickListener.onItemClick(v, position);
+					}
+				}
+			});
 			Video item = mDatas.get(position);
 			if (StringUtils.isEmpty(item.getPic_large())) {
 				setImageForNet(viewHolder.thumb,

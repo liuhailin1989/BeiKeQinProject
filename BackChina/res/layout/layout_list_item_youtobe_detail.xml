@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/youtobe_player_detial_item_height"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@drawable/selector_youtobe_player_list_item_bg" >
+    
+    <ImageView 
+        android:id="@+id/iv_img"
+        android:layout_width="@dimen/youtobe_player_detial_item_img_width"
+        android:layout_height="@dimen/youtobe_player_detial_item_img_height"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scaleType="fitXY"/>
+    
+    <TextView 
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/youtobe_player_detial_item_name_height"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:duplicateParentState="true"
+        android:gravity="center"
+        android:textColor="@color/youtobe_player_detial_item_name_text_color"
+        android:textSize="@dimen/youtobe_player_detial_item_name_textsize"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+</LinearLayout>

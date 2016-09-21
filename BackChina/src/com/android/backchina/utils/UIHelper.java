@@ -1,12 +1,21 @@
 
 package com.android.backchina.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.widget.Toast;
+
 import com.android.backchina.AppContext;
 import com.android.backchina.BackChinaMode;
 import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeDetail;
+import com.android.backchina.bean.Video;
 import com.android.backchina.ui.AboutUsActivity;
 import com.android.backchina.ui.BlogDetailActivity;
 import com.android.backchina.ui.ChannelBlogActivity;
@@ -19,14 +28,7 @@ import com.android.backchina.ui.RegisterActivity;
 import com.android.backchina.ui.SpecialNewsDetailActivity;
 import com.android.backchina.ui.SubscribeActivity;
 import com.android.backchina.ui.SubscribeDetailActivity;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.widget.Toast;
+import com.android.backchina.ui.YouToBeVideoPlayerActivity;
 
 public class UIHelper {
 
@@ -63,6 +65,10 @@ public class UIHelper {
     
     public static void enterBlogDetail(Context context, Blog blog) {
     	BlogDetailActivity.show(context, blog);
+    }
+    
+    public static void enterVideoPlayerActivity(Context context,Video video){
+    	YouToBeVideoPlayerActivity.show(context,video);
     }
     
     public static void enterLoginActivity(Context context){

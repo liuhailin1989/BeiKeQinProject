@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+  <com.google.android.youtube.player.YouTubePlayerView
+      android:id="@+id/youtube_view"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:layout_gravity="center_vertical"/>
+
+    <LinearLayout
+        android:id="@+id/videoplayer_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/video_activity_player_toolbar_height"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="@color/video_item_title_color"
+            android:textSize="@dimen/video_item_title_size" />
+
+        <TextView
+            android:id="@+id/tv_play_count"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical|right"
+            android:singleLine="true"
+            android:textColor="@color/video_item_title_color"
+            android:textSize="@dimen/video_item_title_size" />
+    </LinearLayout>
+
+    <View style="@style/h_line" />
+
+    <ListView 
+        android:id="@+id/detail_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent"
+        android:choiceMode="singleChoice"/>
+</LinearLayout>

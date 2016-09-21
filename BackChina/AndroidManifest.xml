@@ -78,6 +78,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.android.backchina.ui.YouToBeVideoPlayerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="nosensor"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+        </activity>
+        <activity
             android:name="com.android.backchina.ui.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

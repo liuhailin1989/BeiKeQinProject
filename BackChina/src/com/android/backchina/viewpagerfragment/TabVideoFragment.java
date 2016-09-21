@@ -98,15 +98,9 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
                 	}
                     for(ChannelItem item : localChannelItems){
                         TLog.d("tab name =" +item.getName());
-						if (isLinearVideo(item)) {
-							mTabsAdapter.addTab(item.getName(), item.getName(),
-									VideoLinearFrament.class,
-									getBundle(item.getName(), item));
-						} else {
 							mTabsAdapter.addTab(item.getName(), item.getName(),
 									VideoFragment.class,
 									getBundle(item.getName(), item));
-						}
                     }
                     onRequestSuccess();
                     //
@@ -150,15 +144,9 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
             ChannelManager.getInstance().saveVideoChannelItemToTabLocal(getActivity(), defaultLocalChannelItems);
             //
             for(ChannelItem item : defaultLocalChannelItems){
-				if (isLinearVideo(item)) {
-					mTabsAdapter.addTab(item.getName(), item.getName(),
-							VideoLinearFrament.class,
-							getBundle(item.getName(), item));
-				} else {
 					mTabsAdapter.addTab(item.getName(), item.getName(),
 							VideoFragment.class,
 							getBundle(item.getName(), item));
-				}
             }
             //
             Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());

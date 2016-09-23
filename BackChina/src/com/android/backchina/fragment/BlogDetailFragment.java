@@ -15,12 +15,14 @@ import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.android.backchina.AppConfig;
 import com.android.backchina.R;
 import com.android.backchina.bean.BlogDetail;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.ui.comment.BlogCommentsView;
 import com.android.backchina.ui.comment.OnBlogCommentClickListener;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
 
 public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnBlogCommentClickListener{
@@ -122,12 +124,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                layCommit.setVisibility(View.GONE);
-                layRealComentEdit.setVisibility(View.VISIBLE);
-                mCommentEditView.setFocusable(true);  
-                mCommentEditView.setFocusableInTouchMode(true);  
-                mCommentEditView.requestFocus();
-                showSoftInput(mCommentEditView);
+            	String hintString = getResources().getString(R.string.comments_hint_text);
+            	handleInputComment(hintString);
             }
         });
         
@@ -198,6 +196,16 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         mTvFontSize = (TextView) root.findViewById(R.id.tv_fontsize);
     }
     
+	private void handleInputComment(String hintString) {
+		layCommit.setVisibility(View.GONE);
+        layRealComentEdit.setVisibility(View.VISIBLE);
+        mCommentEditView.setHint(hintString);
+        mCommentEditView.setFocusable(true);  
+        mCommentEditView.setFocusableInTouchMode(true);  
+        mCommentEditView.requestFocus();
+        showSoftInput(mCommentEditView);
+	}
+    
     public void showSoftInput(View input) {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -225,7 +233,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         mPubTime.setText(StringUtils.friendlyTime(blogDetail.getDateline()));
         mAuthor.setText(blogDetail.getUsername());
         mComments.setTitle("最新评论");
-        mComments.init(blogDetail.getBlogcomments(), 0, 20, getImgLoader(), this);
+        mComments.init(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
         mCommentsCount.setText(String.valueOf(blogDetail.getComments()));
         setImageFromNet(mBlogerCardAvatar, blogDetail.getAvatar(),R.drawable.default_avatar);
         mBlogerCardAuthor.setText(blogDetail.getUsername());
@@ -234,8 +242,22 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     @Override
     public void onClick(View view, BlogCommentBean comment) {
         // TODO Auto-generated method stub
-        
+    	mCurrentClickComment = comment;
+    	String result = getResources().getString(R.string.comments_hint_text);
+		if (mCurrentClickComment != null) {
+			String hintString = getResources().getString(
+					R.string.comments_hint_blog_refer_text);
+			result = String.format(hintString,
+					mCurrentClickComment.getAuthor());
+		}
+    	handleInputComment(result);
     }
+    
+	@Override
+	public void seeMoreComments(View view) {
+		// TODO Auto-generated method stub
+		UIHelper.enterCommentBlogActivity(getActivity());
+	}
     
     private void handleSendComment() {
     	int cid = 0;
@@ -264,6 +286,6 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 	public void toSendCommentSucess() {
 		// TODO Auto-generated method stub
 		BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
-		mComments.refreshComments(blogDetail.getBlogcomments(), 0, 20, getImgLoader(), this);
+		mComments.refreshComments(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
 	}
 }

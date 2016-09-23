@@ -13,6 +13,7 @@
     <!--  -->
     <string name="comments_webview_font_size">字体大小:%1$d</string>
     <string name="comments_hint_refer_text">回复 %1$d楼</string>
+    <string name="comments_hint_blog_refer_text">回复 %1$s</string>
     <string name="comments_hint_text">发表评论</string>
     <string name="comments_send_text">发送</string>
     <string name="comments_group_title_text">最新评论</string>

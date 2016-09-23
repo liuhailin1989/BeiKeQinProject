@@ -82,14 +82,23 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
         if (listBlogCommentBean != null && listBlogCommentBean.size() > 0) {
             if (listBlogCommentBean.size() > commentTotal) {
                 mSeeMore.setVisibility(VISIBLE);
-                mSeeMore.setOnClickListener(this);
+                mSeeMore.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						if (onCommentClickListener != null) {
+							onCommentClickListener.seeMoreComments(v);
+						}
+					}
+				});
             }
 
             if (getVisibility() != VISIBLE) {
                 setVisibility(VISIBLE);
             }
-
-            for (int i = 0 ;i < listBlogCommentBean.size() ; i++) {
+            int count = listBlogCommentBean.size() > commentTotal ? commentTotal:listBlogCommentBean.size();
+            for (int i = 0 ;i < count ; i++) {
             	BlogCommentBean comment = listBlogCommentBean.get(i);
                 if (comment == null ){
                     continue;
@@ -143,11 +152,13 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(StringUtils.friendly_time(comment.getDateline()));
 
-        lay.findViewById(R.id.tv_message).setOnClickListener(new OnClickListener() {
+        lay.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                onCommentClickListener.onClick(v, comment);
-            }
+			public void onClick(View v) {
+				if (onCommentClickListener != null) {
+					onCommentClickListener.onClick(v, comment);
+				}
+			}
         });
 
         if (first){

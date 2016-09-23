@@ -13,12 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-/**
- * 应用程序配置类：用于保存用户相关信息及设置
- *
- * @author FireAnt（http://my.oschina.net/LittleDY）
- * @created 2014年9月25日 下午5:29:00
- */
 public class AppConfig {
 
     private final static String APP_CONFIG = "config";
@@ -41,8 +35,8 @@ public class AppConfig {
     public static final String KEY_FRITST_START = "KEY_FRIST_START";
 
     public static final String KEY_NIGHT_MODE_SWITCH = "night_mode_switch";
-
-    public static final String APP_QQ_KEY = "100942993";
+    
+    public static final int CONF_DETAIL_COMMENTS_MAX_COUNT = 10;
 
     // 默认存放图片的路径
     public final static String DEFAULT_SAVE_IMAGE_PATH = Environment

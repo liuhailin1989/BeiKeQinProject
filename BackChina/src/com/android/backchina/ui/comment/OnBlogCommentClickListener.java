@@ -6,4 +6,5 @@ import com.android.backchina.bean.base.BlogCommentBean;
 
 public interface OnBlogCommentClickListener {
     void onClick(View view, BlogCommentBean comment);
+    void seeMoreComments(View view);
 }

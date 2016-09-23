@@ -68,7 +68,7 @@ public class BlogDetailActivity extends BaseDetailActivity {
 	@Override
 	public void onRequestData() {
 		// TODO Auto-generated method stub
-		 BackChinaApi.getNewsDetail(mCurrentBlog.getUrlapi(), mHandler);
+		 BackChinaApi.getBlogDetail(mCurrentBlog.getUrlapi(), mHandler);
 	}
 	
     private Type getType(){
@@ -134,7 +134,7 @@ public class BlogDetailActivity extends BaseDetailActivity {
        }
        mWaitDialog.show();
        int id = mCurrentBlog.getId();
-       BackChinaApi.sendBlogComment(id,comment,new TextHttpResponseHandler() {
+       BackChinaApi.sendBlogComment(id,cid,comment,new TextHttpResponseHandler() {
 
            @Override
            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

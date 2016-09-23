@@ -237,6 +237,12 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         
     }
     
+	@Override
+	public void seeMoreComments(View view) {
+		// TODO Auto-generated method stub
+		
+	}
+    
     private void handleSendComment() {
     	int cid = 0;
     	int position = 0;

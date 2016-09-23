@@ -16,6 +16,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.android.backchina.AppConfig;
 import com.android.backchina.R;
 import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.NewsDetail;
@@ -229,7 +230,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mFrom.setText(newsDetail.getFrom());
         
         mComments.setTitle("最新评论");
-        mComments.init(newsDetail.getCommurlapi(), 0, 5, getImgLoader(), this);
+        mComments.init(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
         
         mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
     }
@@ -282,6 +283,6 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 	public void toSendCommentSucess() {
 		// TODO Auto-generated method stub
 		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
-		mComments.refreshComments(newsDetail.getCommurlapi(), 0, 5, getImgLoader(), this);
+		mComments.refreshComments(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
 	}
 }

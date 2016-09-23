@@ -12,6 +12,7 @@
 
     <!--  -->
     <string name="comments_hint_refer_text">Refer %1$dFloor</string>
+    <string name="comments_hint_blog_refer_text">Refer %1$s</string>
     <string name="comments_webview_font_size">FontSize:%1$d</string>
     <string name="comments_hint_text">Write comments</string>
     <string name="comments_send_text">Send</string>

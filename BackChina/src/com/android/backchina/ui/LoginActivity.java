@@ -282,6 +282,7 @@ public class LoginActivity extends BaseActivity {
         Intent data = new Intent();
         setResult(RESULT_OK, data);
         this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
+        UIHelper.notifySubscribeDataChanged(this);
         finish();
     }
 

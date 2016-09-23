@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">倍可亲</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="tip_double_click_exit">再次点击退出</string>
+    <string name="tab_name_news">新闻</string>
+    <string name="tab_name_blog">博客</string>
+    <string name="tab_name_subscribe">订阅</string>
+    <string name="tab_name_video">视频</string>
+    <string name="tab_name_me">我的</string>
+
+    <!--  -->
+    <string name="comments_webview_font_size">字体大小:%1$d</string>
+    <string name="comments_hint_refer_text">回复 %1$d楼</string>
+    <string name="comments_hint_text">发表评论</string>
+    <string name="comments_send_text">发送</string>
+    <string name="comments_group_title_text">最新评论</string>
+    <string name="comments_floor_count">%1$d 楼</string>
+    <string name="comments_see_more_text">查看更多</string>
+    
+    <!-- blog -->
+    <string name="blog_item_views">%1$d 评 / %2$s 阅</string>
+    
+    <!-- Video -->
+    <string name="video_item_views">%1$s 次播放</string>
+    
+    <!-- 我的 -->
+    <string name="mine_login_text">点击登录</string>
+    <string name="mine_logout_text">退出登录</string>
+    <string name="login_btn_text">登录</string>
+    <string name="login_no_acount_text">没有账号？点击这里</string>
+    <string name="register_btn_text">提交注册</string>
+    <string name="login_has_acount_text">已有账号,点击这里</string>
+   
+    <!--  -->
+    <string name="header_hint_refresh_notify">%1$s 条数据更新</string>
+    <string name="header_hint_refresh_normal">下拉刷新</string>
+    <string name="header_hint_refresh_ready">释放刷新</string>
+    <string name="header_hint_refresh_loading">刷新中&#8230;</string>
+    <string name="header_hint_refresh_time">上次刷新时间：</string>
+    <string name="footer_hint_load_normal">加载更多</string>
+    <string name="footer_hint_load_ready">释放加载更多</string>
+    <string name="footer_hint_load_no_more">没有更多数据</string>
+
+    <!-- error -->
+    <string name="error_view_loading">加载中…</string>
+    <string name="error_view_load_error_click_to_refresh">加载失败\r\n点击刷新</string>
+    <string name="error_view_network_error_click_to_refresh">网络错误</string>
+    <string name="error_view_no_data">无数据</string>
+    
+    <!-- subscribe -->
+    <string name="subscribe_my_category">我的频道</string>
+    <string name="subscribe_manager_category_info_2">单击增删频道，长按拖拽排序</string>
+    <string name="subscribe_more_category">更多频道</string>
+    <string name="subscribe_views">%1$s 评论 / %2$s 阅读</string>
+    
+
+    <!--  -->
+    <string name="footer_type_loading">正在加载中…</string>
+    <string name="footer_type_error">加载失败</string>
+    <string name="footer_type_net_error">网络错误</string>
+    <string name="footer_type_not_more">没有更多数据</string>
+
+</resources>

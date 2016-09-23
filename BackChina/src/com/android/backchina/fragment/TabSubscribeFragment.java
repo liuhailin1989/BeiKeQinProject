@@ -13,10 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.adapter.SubscribeAdapter;
+import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseFragment;
 import com.android.backchina.base.adapter.BaseListAdapter.Callback;
@@ -28,12 +30,18 @@ import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.ISubscribeListener;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.interf.SubscribeCallback;
+import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.client.protocol.ClientContext;
+import cz.msebera.android.httpclient.cookie.Cookie;
+import cz.msebera.android.httpclient.protocol.HttpContext;
 
 public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnTabReselectListener,Callback,OnItemClickListener,ISubscribeListener,SubscribeCallback{
 
@@ -183,7 +191,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		Subscribe currentSubscribe = (Subscribe) parent.getAdapter().getItem(position);//减去header view count
+		Subscribe currentSubscribe = (Subscribe) parent.getAdapter().getItem(position);
 		if (currentSubscribe != null) {
 			UIHelper.enterSubscribeDetailActivity(getActivity(),currentSubscribe);
 		}
@@ -272,12 +280,43 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
         StatusBean statusBean = activitiesBean.getActivities();
         if(statusBean != null && statusBean.getStatus() == 0){
-        	return false;
-        }else{
         	return true;
+        }else{
+//        	handleCookie(headers);
+        	return false;
         }
     }
 
+    private void handleCookie(Header[] headers){
+        AsyncHttpClient client = ApiHttpClient.getHttpClient();
+        HttpContext httpContext = client.getHttpContext();
+        CookieStore cookies = (CookieStore) httpContext
+                .getAttribute(ClientContext.COOKIE_STORE);
+        if (cookies != null) {
+            String tmpcookies = "";
+            for (Cookie c : cookies.getCookies()) {
+                TLog.d("cookie:" + c.getName() + " " + c.getValue());
+                tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
+            }
+            if (StringUtils.isEmpty(tmpcookies)) {
+
+                if (headers != null) {
+                    for (Header header : headers) {
+                        String key = header.getName();
+                        String value = header.getValue();
+                        if (key.contains("Set-Cookie"))
+                            tmpcookies += value + ";";
+                    }
+                    if (tmpcookies.length() > 0) {
+                        tmpcookies = tmpcookies.substring(0, tmpcookies.length() - 1);
+                    }
+                }
+            }
+            AppContext.getInstance().setProperty(AppConfig.CONF_COOKIE,tmpcookies);
+            ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext.getInstance()));
+        }
+    }
+    
 	@Override
 	public void OnSubscribeDataChanged() {
 		// TODO Auto-generated method stub

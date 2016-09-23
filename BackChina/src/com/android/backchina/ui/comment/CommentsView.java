@@ -18,6 +18,7 @@ import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.bean.base.CommentBean;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.TLog;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -141,6 +142,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
                 setVisibility(VISIBLE);
             }
             for (final Comment comment : comments) {
+            	TLog.d("comment floor = " + comment.getPosition());
                 if (comment == null || comment.getId() == 0){
                     continue;
                 }
@@ -172,7 +174,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 		}
 		
 		TextView floor = (TextView) lay.findViewById(R.id.tv_floor);
-		String floorText = String.format(getContext().getResources().getString(R.string.comments_floor_count),comment.getPosition() - 1);
+		String floorText = String.format(getContext().getResources().getString(R.string.comments_floor_count),comment.getPosition());
 		floor.setText(floorText);
 
 		TextView refer = (TextView) lay.findViewById(R.id.tv_refer);
@@ -199,7 +201,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(StringUtils.friendly_time(comment.getDateline()));
 
-        lay.findViewById(R.id.tv_message).setOnClickListener(new OnClickListener() {
+        lay.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCommentClickListener.onClick(v, comment);

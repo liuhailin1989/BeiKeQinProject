@@ -50,8 +50,6 @@ public class YouToBeVideoPlayerActivity extends YouTubeFailureRecoveryActivity i
 	
 	private TextView mToolBarPlayCount;
 	
-	private ImageView mToolBarShare;
-	
 	private ListView mDetailListView;
 	
 	private Video mCurrentVideo;

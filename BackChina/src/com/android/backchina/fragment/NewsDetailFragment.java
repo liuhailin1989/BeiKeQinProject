@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -21,6 +23,7 @@ import com.android.backchina.bean.SubscribeCat;
 import com.android.backchina.ui.comment.CommentsView;
 import com.android.backchina.ui.comment.OnCommentClickListener;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.TLog;
 
 public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentClickListener{
 
@@ -34,6 +37,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private LinearLayout layCommit;
     
+    private LinearLayout layFontControlContainer;
+    
     private RelativeLayout layRealComentEdit;
     
     private EditText mCommentEditView;
@@ -42,7 +47,15 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private Button mBtnSend;
     
+    private ImageView mBtnFontSize;
+    
     private ImageView mBtnShare;
+    
+    private SeekBar mFontSizeSeekBar;
+    
+    private TextView mTvFontSize;
+    
+    private Comment mCurrentClickComment = null;
     
 	public static NewsDetailFragment newInstance() {
 		NewsDetailFragment fragment = new NewsDetailFragment();
@@ -62,13 +75,19 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         super.setupViews(root);
         
         mTitle = (TextView) root.findViewById(R.id.tv_title);
+        
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
+        
         mFrom = (TextView) root.findViewById(R.id.tv_from);
         
         mComments = (CommentsView) root.findViewById(R.id.lay_comment_view);
         
         layCommit = (LinearLayout) root.findViewById(R.id.lay_commit_edit);
         layCommit.setVisibility(View.VISIBLE);
+        //
+        layFontControlContainer = (LinearLayout) root.findViewById(R.id.lay_font_control_container);
+        layFontControlContainer.setVisibility(View.GONE);
+        
         mCommentsCount = (TextView) root.findViewById(R.id.tv_commit_count);
         
         layRealComentEdit = (RelativeLayout) root.findViewById(R.id.lay_real_comment_edit);
@@ -99,12 +118,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                layCommit.setVisibility(View.GONE);
-                layRealComentEdit.setVisibility(View.VISIBLE);
-                mCommentEditView.setFocusable(true);  
-                mCommentEditView.setFocusableInTouchMode(true);  
-                mCommentEditView.requestFocus();
-                showSoftInput(mCommentEditView);
+            	String hintString = getResources().getString(R.string.comments_hint_text);
+                handleInputComment(hintString);
             }
         });
         
@@ -119,6 +134,24 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 			}
 		});
         
+        mBtnFontSize = (ImageView) root.findViewById(R.id.iv_set_font_size);
+        mBtnFontSize.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(layFontControlContainer.getVisibility() == View.VISIBLE){
+					layFontControlContainer.setVisibility(View.GONE);
+				}else{
+					layFontControlContainer.setVisibility(View.VISIBLE);
+					String fontsizeString = getActivity().getResources().getString(R.string.comments_webview_font_size);
+					int zoom = mWebView.getTextZoom();
+					String result = String.format(fontsizeString, zoom)+"%";
+					mTvFontSize.setText(result);
+				}
+			}
+		});
+        
         mBtnShare = (ImageView) root.findViewById(R.id.iv_share);
         mBtnShare.setOnClickListener(new OnClickListener() {
 			
@@ -128,7 +161,44 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 				iDetail.toShare();
 			}
 		});
+        
+        mFontSizeSeekBar = (SeekBar) root.findViewById(R.id.font_size_seekbar);
+        mFontSizeSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				int value = seekBar.getProgress();
+				int textZoom = value + 80;
+				mWebView.setTextZoom(textZoom);
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				// TODO Auto-generated method stub
+				String fontsizeString = getActivity().getResources().getString(R.string.comments_webview_font_size);
+				String result = String.format(fontsizeString, progress + 80)+"%";
+				mTvFontSize.setText(result);
+			}
+		});
+        mTvFontSize = (TextView) root.findViewById(R.id.tv_fontsize);
     }
+    
+	private void handleInputComment(String hintString) {
+		layCommit.setVisibility(View.GONE);
+        layRealComentEdit.setVisibility(View.VISIBLE);
+        mCommentEditView.setHint(hintString);
+        mCommentEditView.setFocusable(true);  
+        mCommentEditView.setFocusableInTouchMode(true);  
+        mCommentEditView.requestFocus();
+        showSoftInput(mCommentEditView);
+	}
     
     public void showSoftInput(View input) {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(
@@ -166,11 +236,26 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     @Override
     public void onClick(View view, Comment comment) {
         // TODO Auto-generated method stub
-        
+    	mCurrentClickComment = comment;
+    	String result = getResources().getString(R.string.comments_hint_text);
+		if (mCurrentClickComment != null) {
+			String hintString = getResources().getString(
+					R.string.comments_hint_refer_text);
+			result = String.format(hintString,
+					mCurrentClickComment.getPosition());
+		}
+    	handleInputComment(result);
     }
     
     private void handleSendComment() {
-        iDetail.toSendComment(mCommentEditView.getText().toString());
+    	int cid = 0;
+    	int position = 0;
+		if (mCurrentClickComment != null) {
+			cid = mCurrentClickComment.getCid();
+			position = mCurrentClickComment.getPosition();
+		}
+        iDetail.toSendComment(mCommentEditView.getText().toString(), cid, position);
+        mCurrentClickComment = null;
     }
 
 

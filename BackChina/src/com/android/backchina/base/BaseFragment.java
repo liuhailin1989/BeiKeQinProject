@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.android.backchina.utils.ImageLoader;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.widget.crouton.Crouton;
+import com.android.backchina.widget.crouton.Style;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
@@ -223,4 +225,13 @@ public abstract class BaseFragment<T> extends Fragment{
     protected void onRestartInstance(Bundle bundle) {
 
     }
+    
+	protected void showCrouton(String msg, ViewGroup group) {
+		Style croutonStyle = Style.ALERT;
+		if (group != null) {
+			Crouton.showText(getActivity(), msg, croutonStyle, group);
+		} else {
+			Crouton.showText(getActivity(), msg, croutonStyle);
+		}
+	}
 }

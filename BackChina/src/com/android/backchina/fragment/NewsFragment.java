@@ -1,15 +1,18 @@
 package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import android.R.color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
+import com.android.backchina.R;
 import com.android.backchina.adapter.NewsAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseListFragment;
@@ -113,6 +116,7 @@ public class NewsFragment extends BaseListFragment<News> {
 					if (resultBean != null
 							&& resultBean.getResult().getItems() != null) {
 						if (mCurrentPage == 1) {
+							showDataUpdate(resultBean.getResult().getItems());
 							setListData(resultBean.getResult(), true);
 						}else{
 							setListData(resultBean.getResult(), false);
@@ -133,6 +137,30 @@ public class NewsFragment extends BaseListFragment<News> {
 				}
 			}
 		};
+	}
+	
+	private void showDataUpdate(List<News> newDatas){
+		if(newDatas == null){
+			return;
+		}
+		int updateValue = 0;
+		final NewsListBean<News> bean = (NewsListBean<News>) CacheManager.readObject(getActivity(), getCacheKey());
+		if (bean == null) {
+			updateValue = newDatas.size();
+		} else {
+			List<News> oldDatas = bean.getItems();
+			News news = oldDatas.get(0);
+			for(int i = 0; i < newDatas.size(); i++){
+				News temp = newDatas.get(i);
+				if(temp.getId() == news.getId()){
+					updateValue = i;
+					break;
+				}
+			}
+		}
+		String value = getActivity().getResources().getString(R.string.header_hint_refresh_notify);
+		String resultData = String.format(value, updateValue);
+		showCrouton(resultData,(ViewGroup)mRoot);
 	}
 
 	protected void setListData(final NewsListBean<News> pageBean,

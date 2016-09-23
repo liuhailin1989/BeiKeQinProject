@@ -1,12 +1,10 @@
 
 package com.android.backchina.ui;
 
-import java.io.File;
 import java.lang.reflect.Type;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
@@ -59,7 +57,7 @@ public class NewsDetailActivity extends BaseDetailActivity{
     protected void setupViews() {
     	// TODO Auto-generated method stub
     	super.setupViews();
-    	setTitle("新闻资讯");
+    	setTitle("");
     	setCommentCount(currentNews.getComments());
     }
     
@@ -129,7 +127,7 @@ public class NewsDetailActivity extends BaseDetailActivity{
 	}
 
     @Override
-    public void toSendComment(final String comment) {
+    public void toSendComment(final String comment,int cid, int position) {
         // TODO Auto-generated method stub
         if (StringUtils.isEmpty(comment)) {
 //            AppContext.showToastShort("评论不能为空");
@@ -137,7 +135,7 @@ public class NewsDetailActivity extends BaseDetailActivity{
         }
         mWaitDialog.show();
         int id = currentNews.getId();
-        BackChinaApi.sendNewsComment(id,"回帖",comment,new TextHttpResponseHandler() {
+        BackChinaApi.sendNewsComment(id,cid,position,"回帖",comment,new TextHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

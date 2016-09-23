@@ -126,7 +126,7 @@ public class BlogDetailActivity extends BaseDetailActivity {
 	}
 
 	@Override
-	public void toSendComment(String comment) {
+	public void toSendComment(String comment,int cid, int position) {
 		// TODO Auto-generated method stub
 		 if (StringUtils.isEmpty(comment)) {
 //           AppContext.showToastShort("评论不能为空");

@@ -11,9 +11,11 @@ import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.adapter.ViewPageFragmentAdapter;
+import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseViewPagerFragment;
 import com.android.backchina.bean.ChannelItem;
@@ -24,14 +26,20 @@ import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.manager.ChannelManager;
 import com.android.backchina.ui.BaseChannelActivity;
 import com.android.backchina.ui.ChannelNewsActivity;
+import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.PagerSlidingTabStrip.OnPagerChangeLis;
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.android.backchina.base.BaseListFragment;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.client.protocol.ClientContext;
+import cz.msebera.android.httpclient.cookie.Cookie;
+import cz.msebera.android.httpclient.protocol.HttpContext;
 
 /**
  * 新闻

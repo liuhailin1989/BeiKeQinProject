@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,21 +12,15 @@ import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.adapter.BlogAdapter;
-import com.android.backchina.adapter.NewsAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
-import com.android.backchina.base.BaseFragment;
 import com.android.backchina.base.BaseListFragment;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.ChannelItem;
-import com.android.backchina.bean.News;
-import com.android.backchina.bean.base.NewsListBean;
-import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
-import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
@@ -107,6 +100,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 							.fromJson(responseString, getType());
 					if (resultBean != null && resultBean.getItems() != null) {
 						if (mCurrentPage == 1) {
+							showDataUpdate(resultBean.getItems());
 							setListData(resultBean, true);
 						}else{
 							setListData(resultBean, false);
@@ -129,6 +123,29 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 		};
 	}
 
+	private void showDataUpdate(List<Blog> newDatas){
+		if(newDatas == null){
+			return;
+		}
+		int updateValue = 0;
+		final ResultListBean<Blog> bean = (ResultListBean<Blog>) CacheManager.readObject(getActivity(), getCacheKey());
+		if (bean == null) {
+			updateValue = newDatas.size();
+		} else {
+			List<Blog> oldDatas = bean.getItems();
+			Blog blog = oldDatas.get(0);
+			for(int i = 0; i < newDatas.size(); i++){
+				Blog temp = newDatas.get(i);
+				if(temp.getId() == blog.getId()){
+					updateValue = i;
+					break;
+				}
+			}
+		}
+		String value = getActivity().getResources().getString(R.string.header_hint_refresh_notify);
+		String resultData = String.format(value, updateValue);
+		showCrouton(resultData,(ViewGroup)mRoot);
+	}
 	protected void setListData(final ResultListBean<Blog> resultBean,
 			boolean isrefresh) {
 		// is refresh

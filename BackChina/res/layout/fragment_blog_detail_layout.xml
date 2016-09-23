@@ -47,11 +47,11 @@
                     android:layout_height="1px"
                     android:background="@color/list_divider_color" />
 
-                 <include
-                     layout="@layout/layout_blog_detail_bloger_card"
-                     android:layout_width="match_parent"
-                     android:layout_height="100dp"/>
-                 
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    layout="@layout/layout_blog_detail_bloger_card" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
@@ -64,11 +64,40 @@
             </LinearLayout>
         </ScrollView>
 
+        <LinearLayout
+            android:id="@+id/lay_font_control_container"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/tv_fontsize"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:id="@+id/font_size_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="80"
+                android:maxHeight="8dp"
+                android:minHeight="8dp"
+                android:progress="20"
+                android:visibility="visible" />
+        </LinearLayout>
+
         <include
             android:id="@+id/lay_commit_edit"
-            layout="@layout/layout_commit_eidt_layout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            layout="@layout/layout_commit_eidt_layout"
             android:visibility="visible" />
     </LinearLayout>
 

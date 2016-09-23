@@ -87,6 +87,17 @@ public class BackChinaWebView extends WebView {
             }, "mWebViewImageListener");
         }
     }
+    
+    @SuppressLint("NewApi")
+	public void setTextZoom(int textZoom){
+    	 WebSettings settings = getSettings();
+    	 settings.setTextZoom(textZoom);
+    }
+    
+    public int getTextZoom(){
+    	 WebSettings settings = getSettings();
+    	 return settings.getTextZoom();
+    }
 
     public void loadDetailDataAsync(final String content, Runnable finishCallback) {
         this.setWebViewClient(new OWebClient(finishCallback));

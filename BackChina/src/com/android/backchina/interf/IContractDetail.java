@@ -15,5 +15,5 @@ public interface IContractDetail {
    void toShare();
 
    // 提交评价
-   void toSendComment(String comment);
+   void toSendComment(String comment,int cid, int position);
 }

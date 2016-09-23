@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -35,12 +36,14 @@
         android:layout_marginTop="15dp"
         android:orientation="horizontal" >
 
-        <ImageView
+        <com.android.backchina.widget.ShapeImageView
             android:id="@+id/iv_thumb"
             android:layout_width="@dimen/blog_item_thumb_width"
             android:layout_height="@dimen/blog_item_thumb_height"
             android:layout_marginLeft="10dp"
-            android:scaleType="fitXY" />
+            app:siv_round_radius="10dp"
+            app:siv_shape="rect"
+            android:src="@drawable/bg_normal"/>
 
         <RelativeLayout
             android:id="@+id/ll_item_container"

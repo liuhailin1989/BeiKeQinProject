@@ -113,14 +113,14 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 	}
 	
 	@Override
-	public void toSendComment(String comment) {
+	public void toSendComment(String comment,int cid, int position) {
 		// TODO Auto-generated method stub
         if (StringUtils.isEmpty(comment)) {
 //          AppContext.showToastShort("评论不能为空");
           return;
       }
       int id = mSpecialNewsDetail.getId();
-      BackChinaApi.sendNewsComment(id,comment,"专题",new TextHttpResponseHandler() {
+      BackChinaApi.sendNewsComment(id,cid,position,comment,"专题",new TextHttpResponseHandler() {
 
           @Override
           public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

@@ -1,7 +1,6 @@
 package com.android.backchina.ui;
 
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.backchina.AppContext;
@@ -20,17 +17,14 @@ import com.android.backchina.R;
 import com.android.backchina.adapter.SubscribeDetailAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseActivity;
-import com.android.backchina.base.adapter.BaseListAdapter.Callback;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
-import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.UIHelper;
+import com.android.backchina.widget.CircleImageView;
 import com.android.backchina.widget.XListView;
 import com.android.backchina.widget.XListView.IXListViewListener;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -40,7 +34,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 
 	public final static String BUNDLE_KEY_SUBSCRIBE = "BUNDLE_KEY_SUBSCRIBE";
 
-	private ImageView mLogo;
+	private CircleImageView mLogo;
 
 	private TextView mName;
 
@@ -83,7 +77,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	}
 
 	private void setupViews() {
-		mLogo = (ImageView) findViewById(R.id.iv_logo);
+		mLogo = (CircleImageView) findViewById(R.id.iv_logo);
 		mName = (TextView) findViewById(R.id.tv_name);
 		mBtnSubscribe = (TextView) findViewById(R.id.btn_subscribe);
 		mListView = (XListView) findViewById(R.id.list_view);

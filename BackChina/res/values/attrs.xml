@@ -6,5 +6,19 @@
         <attr name="allowWidthFull" format="boolean" />
         <attr name="disableViewPager" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+    <declare-styleable name="ShapeImageView">
+        <attr name="siv_shape" format="enum">
+            <enum name="rect" value="1" />
+            <enum name="circle" value="2" />
+            <enum name="oval" value="3" />
+        </attr>
+        <attr name="siv_round_radius" format="dimension" />
+        <attr name="siv_border_size" format="dimension" />
+        <attr name="siv_border_color" format="color" />
+    </declare-styleable>
 
 </resources>

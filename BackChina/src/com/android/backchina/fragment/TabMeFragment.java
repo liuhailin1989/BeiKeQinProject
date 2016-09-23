@@ -34,6 +34,7 @@ import com.android.backchina.utils.FileUtil;
 import com.android.backchina.utils.MethodsCompat;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
+import com.android.backchina.widget.CircleImageView;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -49,7 +50,7 @@ public class TabMeFragment extends BaseFragment {
     private TextView mBlogs;//日志
     private TextView mAlbums;//相册
     
-    private ImageView mAvatar;
+    private CircleImageView mAvatar;
     
     private Button mUserName;
     
@@ -162,7 +163,7 @@ public class TabMeFragment extends BaseFragment {
         mCacheContainer = (LinearLayout) root.findViewById(R.id.ll_cache_container);;
         mAboutContainer = (LinearLayout) root.findViewById(R.id.ll_about_container);;
         
-        mAvatar = (ImageView) root.findViewById(R.id.iv_avatar);
+        mAvatar = (CircleImageView) root.findViewById(R.id.iv_avatar);
         mBtnLogout =(Button) root.findViewById(R.id.btn_logout);
         mBtnLogout.setOnClickListener(new OnClickListener() {
 			
@@ -170,6 +171,7 @@ public class TabMeFragment extends BaseFragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				AppContext.getInstance().Logout();
+				UIHelper.notifySubscribeDataChanged(getActivity());
 			}
 		});
         mUserName = (Button) root.findViewById(R.id.tv_user_name);

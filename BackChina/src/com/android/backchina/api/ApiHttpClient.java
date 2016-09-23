@@ -140,6 +140,7 @@ public class ApiHttpClient {
 
     public static void cleanCookie() {
         appCookie = "";
+        client.addHeader("Cookie", appCookie);
     }
 
     public static String getCookie(AppContext appContext) {

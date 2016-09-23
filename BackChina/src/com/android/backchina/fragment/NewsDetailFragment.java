@@ -24,6 +24,7 @@ import com.android.backchina.ui.comment.CommentsView;
 import com.android.backchina.ui.comment.OnCommentClickListener;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 
 public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentClickListener{
 
@@ -228,7 +229,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mFrom.setText(newsDetail.getFrom());
         
         mComments.setTitle("最新评论");
-        mComments.init(newsDetail.getCommurlapi(), 0, newsDetail.getComments(), getImgLoader(), this);
+        mComments.init(newsDetail.getCommurlapi(), 0, 5, getImgLoader(), this);
         
         mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
     }
@@ -247,6 +248,13 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     	handleInputComment(result);
     }
     
+	@Override
+	public void seeMoreComments(View view) {
+		// TODO Auto-generated method stub
+		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
+		UIHelper.enterCommentNewsActivity(getActivity(),newsDetail);
+	}
+    
     private void handleSendComment() {
     	int cid = 0;
     	int position = 0;
@@ -258,13 +266,11 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mCurrentClickComment = null;
     }
 
-
 	@Override
 	public void toFavoriteSucess() {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 	@Override
 	public void toShareSucess() {
@@ -272,11 +278,10 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 		
 	}
 
-
 	@Override
 	public void toSendCommentSucess() {
 		// TODO Auto-generated method stub
 		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
-		mComments.refreshComments(newsDetail.getCommurlapi(), 0, newsDetail.getComments(), getImgLoader(), this);
+		mComments.refreshComments(newsDetail.getCommurlapi(), 0, 5, getImgLoader(), this);
 	}
 }

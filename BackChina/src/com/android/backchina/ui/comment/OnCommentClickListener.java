@@ -7,4 +7,5 @@ import android.view.View;
 
 public interface OnCommentClickListener {
     void onClick(View view, Comment comment);
+    void seeMoreComments(View view);
 }

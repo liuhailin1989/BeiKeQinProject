@@ -132,8 +132,11 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
-    public static void getComments(String url,AsyncHttpResponseHandler handler){
+    public static void getComments(String url, int page, AsyncHttpResponseHandler handler){
+    	url = url.replace("&page=1", "");
+    	url = url.replace("page=1", "");
         RequestParams params = new RequestParams();
+        params.put("page", page);
         ApiHttpClient.get(url, params, handler);
     }
     

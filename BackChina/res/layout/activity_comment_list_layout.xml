@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_detail_titlebar_height"
+            layout="@layout/layout_title_bar" />
+
+        <FrameLayout
+            android:id="@+id/comment_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <com.android.backchina.ui.empty.EmptyLayout
+                android:id="@+id/error_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+            <com.android.backchina.widget.XListView
+                android:id="@+id/pull_and_load_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/transparent"
+                android:dividerHeight="0dp"
+                android:visibility="visible" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_commit_edit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:background="@color/background_color"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_put"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ql_textfield_default_emui_new"
+                android:text="@string/comments_hint_text"
+                android:textColor="@color/comments_hint_text_color"
+                android:textSize="@dimen/comments_hint_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/lay_real_comment_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#77000000"
+        android:visibility="gone" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/layout_comment_edit"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</FrameLayout>

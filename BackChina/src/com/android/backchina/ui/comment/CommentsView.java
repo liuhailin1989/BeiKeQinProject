@@ -17,6 +17,7 @@ import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.bean.base.CommentBean;
+import com.android.backchina.ui.CommentNewsActivity;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.bumptech.glide.RequestManager;
@@ -71,7 +72,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         if(url == null){
         	return;
         }
-        BackChinaApi.getComments(url, new TextHttpResponseHandler() {
+        BackChinaApi.getComments(url, 1,new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (throwable != null)
@@ -105,7 +106,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         if(url == null){
         	return;
         }
-        BackChinaApi.getComments(url, new TextHttpResponseHandler() {
+        BackChinaApi.getComments(url,1, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (throwable != null)
@@ -133,16 +134,26 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
     
     private void addComment(List<Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         if (comments != null && comments.size() > 0) {
-            if (comments.size() < commentTotal) {
+            if (comments.size() > commentTotal) {
                 mSeeMore.setVisibility(VISIBLE);
-                mSeeMore.setOnClickListener(this);
+                mSeeMore.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						if (onCommentClickListener != null) {
+							onCommentClickListener.seeMoreComments(v);
+						}
+					}
+				});
             }
 
             if (getVisibility() != VISIBLE) {
                 setVisibility(VISIBLE);
             }
-            for (final Comment comment : comments) {
-            	TLog.d("comment floor = " + comment.getPosition());
+            int count = comments.size() > commentTotal ? commentTotal:comments.size();
+            for (int i = 0 ;i < count ; i++) {
+            	Comment comment = comments.get(i);
                 if (comment == null || comment.getId() == 0){
                     continue;
                 }
@@ -204,7 +215,9 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         lay.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCommentClickListener.onClick(v, comment);
+				if (onCommentClickListener != null) {
+					onCommentClickListener.onClick(v, comment);
+				}
             }
         });
 
@@ -219,7 +232,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-//        if (mId != 0 && mType != 0)
-//            CommentsActivity.show(getContext(), mId, mType);
+
+    	
     }
 }

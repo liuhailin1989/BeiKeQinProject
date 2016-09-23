@@ -27,7 +27,6 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="资讯详情"
             android:textColor="@color/white" />
         
     </LinearLayout>

@@ -13,6 +13,7 @@ import com.android.backchina.AppContext;
 import com.android.backchina.BackChinaMode;
 import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.News;
+import com.android.backchina.bean.NewsDetail;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.bean.Video;
@@ -22,6 +23,8 @@ import com.android.backchina.ui.ChannelBlogActivity;
 import com.android.backchina.ui.ChannelNewsActivity;
 import com.android.backchina.ui.ChannelVideoActivity;
 import com.android.backchina.ui.CityListActivity;
+import com.android.backchina.ui.CommentBlogActivity;
+import com.android.backchina.ui.CommentNewsActivity;
 import com.android.backchina.ui.LoginActivity;
 import com.android.backchina.ui.NewsDetailActivity;
 import com.android.backchina.ui.RegisterActivity;
@@ -94,6 +97,14 @@ public class UIHelper {
     
     public static void enterCityListActivity(Context context,Fragment fragment){
     	CityListActivity.show(context,fragment);
+    }
+    
+    public static void enterCommentNewsActivity(Context context,NewsDetail newsDetail){
+    	CommentNewsActivity.show(context,newsDetail);
+    }
+    
+    public static void enterCommentBlogActivity(Context context){
+    	CommentBlogActivity.show(context);
     }
     
     /**

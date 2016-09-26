@@ -78,6 +78,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.android.backchina.ui.BlogSpaceActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
             android:name="com.android.backchina.ui.YouToBeVideoPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"

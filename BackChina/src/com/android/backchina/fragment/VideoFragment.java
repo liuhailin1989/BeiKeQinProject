@@ -115,7 +115,12 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 			public void onFailure(int statusCode, Header[] headers, String responseString,
 					Throwable throwable) {
 				// TODO Auto-generated method stub
-				onRequestError(EmptyLayout.NODATA);
+				if (isLoadMoreAction) {
+					loadMoreNodata();
+				} else {
+					onRequestError(EmptyLayout.NODATA);
+				}
+				isLoadMoreAction = false;
 			}
 
 			@Override
@@ -124,12 +129,21 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 				ResultListBean<Video> resultBean = AppContext
 						.createGson().fromJson(responseString, getType());
 				if (resultBean != null && resultBean.getItems() != null && resultBean.getItems().size() > 0) {
-					setListData(resultBean,true);
+					if (mCurrentPage == 1) {
+						setListData(resultBean, true);
+					} else {
+						setListData(resultBean, false);
+					}
 					onRequestSuccess();
 					stopLoadMore();
 				}else{
+					if(isLoadMoreAction){
+						loadMoreNodata();
+					}else{
 					onRequestError(EmptyLayout.NODATA);
+					}
 				}
+				isLoadMoreAction = false;
 			}
 		};
 	}
@@ -182,6 +196,14 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 	protected void onRequestData() {
 		// TODO Auto-generated method stub
 		mCurrentPage = 1;
+		BackChinaApi.getVideoList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
+	}
+	
+	@Override
+	public void onLoadMore() {
+		// TODO Auto-generated method stub
+		mCurrentPage = mCurrentPage+1;
+		isLoadMoreAction = true;
 		BackChinaApi.getVideoList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
 	}
 	

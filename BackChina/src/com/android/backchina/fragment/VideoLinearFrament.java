@@ -1,6 +1,7 @@
 package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,6 +23,7 @@ import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.RecycleViewItemDecoration;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -194,6 +196,7 @@ public class VideoLinearFrament extends BaseRecyclerViewFragment<Video> implemen
 	@Override
 	protected void onVideoItemClick(View view, int position) {
 		// TODO Auto-generated method stub
-		
+		List<Video> datas = mAdapter.getmDatas();
+		UIHelper.enterVideoPlayerActivity(getActivity(), datas.get(position));
 	}
 }

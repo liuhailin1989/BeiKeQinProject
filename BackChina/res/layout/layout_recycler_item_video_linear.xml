@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <ImageView 
+        android:id="@+id/iv_thmub"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/video_linear_item_thumb_height"
+        android:scaleType="fitXY"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -185,12 +185,12 @@ public class CommentNewsActivity extends BaseCommentsActivity<Comment>{
         }.getType();
         ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
         StatusBean statusBean = activitiesBean.getActivities();
-        if (statusBean.getStatus() == 1) {
+        if (statusBean.getStatus().equals("1")) {
         	Toast.makeText(getContext(), "评论成功", Toast.LENGTH_SHORT).show();
         	onRequestData();
-        }else if (statusBean.getStatus() == -1) {
+        }else if (statusBean.getStatus().equals("-1")) {
         	Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus() == -2) {
+        }else if (statusBean.getStatus().equals("-2")) {
         	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
         }else{
         	Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();

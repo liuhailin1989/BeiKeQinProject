@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.backchina.AppContext;
 import com.android.backchina.BackChinaMode;
 import com.android.backchina.bean.Blog;
+import com.android.backchina.bean.BlogDetail;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.NewsDetail;
 import com.android.backchina.bean.Subscribe;
@@ -19,6 +20,7 @@ import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.bean.Video;
 import com.android.backchina.ui.AboutUsActivity;
 import com.android.backchina.ui.BlogDetailActivity;
+import com.android.backchina.ui.BlogSpaceActivity;
 import com.android.backchina.ui.ChannelBlogActivity;
 import com.android.backchina.ui.ChannelNewsActivity;
 import com.android.backchina.ui.ChannelVideoActivity;
@@ -105,6 +107,10 @@ public class UIHelper {
     
     public static void enterCommentBlogActivity(Context context,Blog blog){
     	CommentBlogActivity.show(context,blog);
+    }
+    
+    public static void enterBlogSpaceActivity(Context context,BlogDetail blogDetail){
+    	BlogSpaceActivity.show(context, blogDetail);
     }
     
     /**

@@ -64,8 +64,10 @@ public abstract class BaseBean extends Entity {
      * 分类网址
      */
     private String caturl;
+    
+    private String caturlapi;
 
-    /**
+	/**
      * 网址
      */
     private String url;
@@ -220,6 +222,14 @@ public abstract class BaseBean extends Entity {
     public void setCaturl(String caturl) {
         this.caturl = caturl;
     }
+    
+    public String getCaturlapi() {
+		return caturlapi;
+	}
+
+	public void setCaturlapi(String caturlapi) {
+		this.caturlapi = caturlapi;
+	}
 
     public String getUrl() {
         return url;

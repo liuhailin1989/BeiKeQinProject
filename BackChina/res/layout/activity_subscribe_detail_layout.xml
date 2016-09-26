@@ -42,13 +42,25 @@
             android:text="+ 订阅" />
     </RelativeLayout>
 
-    <com.android.backchina.widget.XListView
-        android:id="@+id/list_view"
+    <FrameLayout
+        android:id="@+id/lay_content_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@color/transparent"
-        android:dividerHeight="0dp"
-        android:scrollbars="none"
-        android:visibility="visible" />
+        android:layout_height="match_parent" >
+
+        <com.android.backchina.widget.XListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/transparent"
+            android:dividerHeight="0dp"
+            android:scrollbars="none"
+            android:visibility="visible" />
+
+        <com.android.backchina.ui.empty.EmptyLayout
+            android:id="@+id/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+    </FrameLayout>
 
 </LinearLayout>

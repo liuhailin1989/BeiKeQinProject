@@ -19,6 +19,8 @@ import com.android.backchina.R;
 import com.android.backchina.adapter.SubscribeDetailAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseActivity;
+import com.android.backchina.bean.Blog;
+import com.android.backchina.bean.BlogDetail;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeDetail;
@@ -35,9 +37,9 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SubscribeDetailActivity extends BaseActivity implements OnItemClickListener,IXListViewListener{
+public class BlogSpaceActivity extends BaseActivity implements OnItemClickListener,IXListViewListener{
 
-	public final static String BUNDLE_KEY_SUBSCRIBE = "BUNDLE_KEY_SUBSCRIBE";
+	public final static String BUNDLE_KEY_BLOG_DETAIL = "BUNDLE_KEY_BLOG_DETAIL";
 
 	private CircleImageView mLogo;
 
@@ -46,10 +48,10 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	private TextView mBtnSubscribe;
 
 	private XListView mListView;
-
-	private EmptyLayout mEmptyLayout;
 	
-	private Subscribe mCurrentSubscribe;
+	private EmptyLayout mEmptyLayout;
+
+	private BlogDetail mCurrentBlogDetail;
 
 	protected TextHttpResponseHandler mHandler;
 
@@ -61,9 +63,9 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	
 	private boolean isLoadMoreAction = false;
 
-	public static void show(Context context, Subscribe subscribe) {
-		Intent intent = new Intent(context, SubscribeDetailActivity.class);
-		intent.putExtra(BUNDLE_KEY_SUBSCRIBE, subscribe);
+	public static void show(Context context, BlogDetail blogDetail) {
+		Intent intent = new Intent(context, BlogSpaceActivity.class);
+		intent.putExtra(BUNDLE_KEY_BLOG_DETAIL, blogDetail);
 		context.startActivity(intent); 
 	}
 
@@ -79,8 +81,8 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	}
 
 	protected void initBundle(Bundle bundle) {
-		mCurrentSubscribe = (Subscribe) bundle
-				.getSerializable(BUNDLE_KEY_SUBSCRIBE);
+		mCurrentBlogDetail = (BlogDetail) bundle
+				.getSerializable(BUNDLE_KEY_BLOG_DETAIL);
 	}
 
 	private void setupViews() {
@@ -92,34 +94,31 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				BackChinaApi.subscribe(mCurrentSubscribe.getId(),
-						new TextHttpResponseHandler() {
-
-							@Override
-							public void onSuccess(int code, Header[] headers,
-									String responseString) {
-								// TODO Auto-generated method stub
-								handleSubscribeResponse(headers, responseString);
-							}
-
-							@Override
-							public void onFailure(int code, Header[] headers,
-									String responseString, Throwable arg3) {
-								// TODO Auto-generated method stub
-								Toast.makeText(getContext(), "订阅失败",
-										Toast.LENGTH_SHORT).show();
-							}
-						});
+				BackChinaApi.subscribeBlog(mCurrentBlogDetail.getAuthorid(), new TextHttpResponseHandler() {
+					
+					@Override
+					public void onSuccess(int code, Header[] headers, String response) {
+						// TODO Auto-generated method stub
+						handleSubscribeResponse(headers,response);
+					}
+					
+					@Override
+					public void onFailure(int code, Header[] headers, String response, Throwable throwable) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getContext(), "订阅失败",
+								Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 		});
 		mListView = (XListView) findViewById(R.id.list_view);
 		mListView.setAutoLoadEnable(true);
 		mListView.setXListViewListener(this);
 		mListView.setOnItemClickListener(this);
-		
-		mEmptyLayout = (EmptyLayout) findViewById(R.id.error_layout);
+		//
+		 mEmptyLayout = (EmptyLayout) findViewById(R.id.error_layout);
 	}
-
+	
     private void handleSubscribeResponse(Header[] headers,String response) {
     	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
         }.getType();
@@ -136,7 +135,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
         }
     }
-    
+
 	private void initData() {
 		mCurrentPage = 1;
 		isLoadMoreAction = false;
@@ -150,7 +149,6 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 					onRequestError(EmptyLayout.NODATA);
 				}
 				isLoadMoreAction = false;
-				refreshComplete();
 			}
 
 			@Override
@@ -168,10 +166,11 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 					onRequestSuccess();
 					stopLoadMore();
 				}
+				isLoadMoreAction = false;
 			}
 		};
-		setImageFromNet(mLogo, mCurrentSubscribe.getLogo());//
-		mName.setText(mCurrentSubscribe.getTitle());
+		setImageFromNet(mLogo, mCurrentBlogDetail.getAvatar());//
+		mName.setText(mCurrentBlogDetail.getUsername());
 		mAdapter = new SubscribeDetailAdapter(this);
 		mListView.setAdapter(mAdapter);
 		loadData();
@@ -203,7 +202,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	}
 	
     private String getCacheKey(){
-    	return "subscribe_detail_" + mCurrentSubscribe.getId();
+    	return "subscribe_detail_" + mCurrentBlogDetail.getAuthorid();
     }
 	
 	private Type getType() {
@@ -253,7 +252,8 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 
 	private void requestData() {
 		mCurrentPage = 1;
-		BackChinaApi.getSubscribeDetail(mCurrentSubscribe.getUrlapi(),mCurrentPage, mHandler);
+//		BackChinaApi.getSubscribeDetail(mCurrentBlog.getCaturlapi(),mCurrentPage, mHandler);
+		BackChinaApi.getBlogerList(mCurrentBlogDetail.getAuthorid(),mCurrentPage, mHandler);
 	}
 	
 	@Override
@@ -267,7 +267,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 		// TODO Auto-generated method stub
 		mCurrentPage = mCurrentPage+1;
 		isLoadMoreAction = true;
-		BackChinaApi.getSubscribeDetail(mCurrentSubscribe.getUrlapi(),mCurrentPage, mHandler);
+		BackChinaApi.getBlogerList(mCurrentBlogDetail.getAuthorid(),mCurrentPage, mHandler);
 	}
 	
 	
@@ -298,4 +298,5 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
     		mEmptyLayout.setErrorType(type);
 		}
     }
+	
 }

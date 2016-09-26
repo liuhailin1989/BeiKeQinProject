@@ -1,6 +1,7 @@
 package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,20 +56,62 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
     
     private SubscribeAdapter mAdapter;
     
+    private boolean isMySubscribeHandlerNone = false;
+    
+    private List<Subscribe> mTotalSubscribeList = new ArrayList<Subscribe>();
+    
     protected TextHttpResponseHandler mMySubscribeHandler = new TextHttpResponseHandler() {
         
         @Override
         public void onSuccess(int code, Header[] headers, String responseString) {
             // TODO Auto-generated method stub
         	if(!handleMySubscribeResponse(headers, responseString)){
-        		requestHotSubscribeData();
+        		//requestHotSubscribeData();
+        		isMySubscribeHandlerNone = true;
 			} else {
 				Type type = new TypeToken<ResultListBean<Subscribe>>() {
 				}.getType();
 				ResultListBean<Subscribe> resultListBean = AppContext
 						.createGson().fromJson(responseString, type);
 				if (resultListBean != null && resultListBean.getItems() != null) {
-					setDataList(resultListBean);
+					for(Subscribe subscribe : resultListBean.getItems()){
+						subscribe.setType(SubscribeAdapter.TYPE_INFOLIST);
+						mTotalSubscribeList.add(subscribe);
+					}
+				}
+			}
+        	BackChinaApi.getMySubscribeBlogList(mMySubscribeBlogHandler);
+        }
+        
+        @Override
+        public void onFailure(int code, Header[] headers, String responseString, Throwable throwable) {
+            // TODO Auto-generated method stub
+            TLog.d("called");
+        }
+    };
+    
+    protected TextHttpResponseHandler mMySubscribeBlogHandler = new TextHttpResponseHandler() {
+        
+        @Override
+        public void onSuccess(int code, Header[] headers, String responseString) {
+            // TODO Auto-generated method stub
+        	if(!handleMySubscribeResponse(headers, responseString)){
+				if (isMySubscribeHandlerNone) {
+					requestHotSubscribeData();
+				}else{
+					setDataList(mTotalSubscribeList);
+				}
+			} else {
+				Type type = new TypeToken<ResultListBean<Subscribe>>() {
+				}.getType();
+				ResultListBean<Subscribe> resultListBean = AppContext
+						.createGson().fromJson(responseString, type);
+				if (resultListBean != null && resultListBean.getItems() != null) {
+					for(Subscribe subscribe : resultListBean.getItems()){
+						subscribe.setType(SubscribeAdapter.TYPE_SPACE);
+						mTotalSubscribeList.add(subscribe);
+					}
+					setDataList(mTotalSubscribeList);
 				}
 			}
         }
@@ -88,7 +131,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
             Type type = new TypeToken<ResultListBean<Subscribe>>() {}.getType();
             ResultListBean<Subscribe> resultListBean = AppContext.createGson().fromJson(responseString, type);
             if(resultListBean != null && resultListBean.getItems() != null){
-                setDataList(resultListBean);
+                setDataList(resultListBean.getItems());
             }
         }
         
@@ -148,6 +191,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
     @Override
     protected void initData() {
         // TODO Auto-generated method stub
+    	isMySubscribeHandlerNone = false;
         super.initData();
         mAdapter = new SubscribeAdapter(this);
         mAdapter.setSubscribeListener(this);
@@ -157,23 +201,19 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 
     
     private void requestData(){
+    	mTotalSubscribeList.clear();
     	BackChinaApi.getMySubscribeList(mMySubscribeHandler);
 //        BackChinaApi.getHotSubscribeList(mHandler);
     }
     
     private void requestHotSubscribeData(){
+    	mTotalSubscribeList.clear();
     	BackChinaApi.getHotSubscribeList(mHotSubscribeHandler);
     }
     
-    private void setDataList( final ResultListBean<Subscribe> resultListBean){
-        mAdapter.clear();
-        mAdapter.addItem(resultListBean.getItems());
-        AppOperator.runOnThread(new Runnable() {
-            @Override
-            public void run() {
-                CacheManager.saveObject(getActivity(), resultListBean, getCacheKey());
-            }
-        });
+    private void setDataList( List<Subscribe> subscribes){
+    	mAdapter.clear();
+        mAdapter.addItem(subscribes);
     }
     
     @Override
@@ -200,14 +240,56 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 	@Override
 	public void onSubscribe(Subscribe subscribe) {
 		// TODO Auto-generated method stub
-		if(subscribe.getFavid() != 0){
-			BackChinaApi.cancelSubscribe(subscribe.getFavid(), new TextHttpResponseHandler() {
+		if (subscribe.getType() == SubscribeAdapter.TYPE_INFOLIST) {
+			if (StringUtils.isEmpty(subscribe.getFavid())) {
+				BackChinaApi.subscribe(subscribe.getId(),
+						new TextHttpResponseHandler() {
+
+							@Override
+							public void onSuccess(int code, Header[] headers,
+									String responseString) {
+								// TODO Auto-generated method stub
+								handleSubscribeResponse(headers, responseString);
+							}
+
+							@Override
+							public void onFailure(int code, Header[] headers,
+									String responseString, Throwable arg3) {
+								// TODO Auto-generated method stub
+								Toast.makeText(getContext(), "订阅失败",
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+			} else {
+				BackChinaApi.cancelSubscribe(subscribe.getFavid(),
+						new TextHttpResponseHandler() {
+
+							@Override
+							public void onSuccess(int code, Header[] headers,
+									String responseString) {
+								// TODO Auto-generated method stub
+								handleCancelSubscribeResponse(headers,
+										responseString);
+							}
+
+							@Override
+							public void onFailure(int code, Header[] headers,
+									String responseString, Throwable arg3) {
+								// TODO Auto-generated method stub
+								Toast.makeText(getContext(), "取消成功",
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+			}
+		}else if (subscribe.getType() == SubscribeAdapter.TYPE_SPACE) {
+			BackChinaApi.cancleSubscribeBlog(subscribe.getId(), new TextHttpResponseHandler() {
 
 				@Override
 				public void onSuccess(int code, Header[] headers,
 						String responseString) {
 					// TODO Auto-generated method stub
-					handleCancelSubscribeResponse(headers, responseString);
+					handleCancelSubscribeResponse(headers,
+							responseString);
 				}
 
 				@Override
@@ -218,25 +300,6 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
 							Toast.LENGTH_SHORT).show();
 				}
 			});
-		} else {
-			BackChinaApi.subscribe(subscribe.getId(),
-					new TextHttpResponseHandler() {
-
-						@Override
-						public void onSuccess(int code, Header[] headers,
-								String responseString) {
-							// TODO Auto-generated method stub
-							handleSubscribeResponse(headers, responseString);
-						}
-
-						@Override
-						public void onFailure(int code, Header[] headers,
-								String responseString, Throwable arg3) {
-							// TODO Auto-generated method stub
-							Toast.makeText(getContext(), "订阅失败",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
 		}
 	}
 	
@@ -245,12 +308,12 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         }.getType();
         ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
         StatusBean statusBean = activitiesBean.getActivities();
-        if (statusBean.getStatus() == 1) {
+        if (statusBean.getStatus().equals("1")) {
         	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
         	UIHelper.notifySubscribeDataChanged(getActivity());
-        }else if (statusBean.getStatus() == -1) {
+        }else if (statusBean.getStatus().equals("-1")) {
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus() == -2) {
+        }else if (statusBean.getStatus().equals("-2")) {
         	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
         }else{
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
@@ -262,12 +325,12 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         }.getType();
         ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
         StatusBean statusBean = activitiesBean.getActivities();
-        if (statusBean.getStatus() == 1) {
+        if (statusBean.getStatus().equals("1")) {
         	Toast.makeText(getContext(), "取消成功", Toast.LENGTH_SHORT).show();
         	UIHelper.notifySubscribeDataChanged(getActivity());
-        }else if (statusBean.getStatus() == -1) {
+        }else if (statusBean.getStatus().equals("-1")) {
         	Toast.makeText(getContext(), "取消失败", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus() == -2) {
+        }else if (statusBean.getStatus().equals("-2")) {
         	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
         }else{
         	Toast.makeText(getContext(), "取消败", Toast.LENGTH_SHORT).show();
@@ -279,11 +342,10 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         }.getType();
         ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
         StatusBean statusBean = activitiesBean.getActivities();
-        if(statusBean != null && statusBean.getStatus() == 0){
-        	return true;
-        }else{
-//        	handleCookie(headers);
+        if(statusBean != null && statusBean.getStatus().equals("0")){
         	return false;
+        }else{
+        	return true;
         }
     }
 

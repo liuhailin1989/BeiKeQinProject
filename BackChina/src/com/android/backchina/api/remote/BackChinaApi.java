@@ -127,6 +127,19 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
+    public static void getBlogerList(String uid, int page, AsyncHttpResponseHandler handler){
+    	//http:\/\/www.backchina.com\/home.php?mod=space&uid=288584&do=blog&view=me&appxml=1&json=1
+      	 RequestParams params = new RequestParams();
+         params.put("mod", "space");
+         params.put("uid", uid);
+         params.put("do", "blog");
+         params.put("view", "me");
+         params.put("appxml", "1");
+         params.put("json", "1");
+         params.put("page", page);
+         ApiHttpClient.get("home.php?", params, handler);
+    }
+    
     public static void getVideoDetail(String url,AsyncHttpResponseHandler handler){
     	RequestParams params = new RequestParams();
         ApiHttpClient.get(url, params, handler);
@@ -216,12 +229,30 @@ public class BackChinaApi {
         ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
     }
     
-    public static void cancelSubscribe(int favid, AsyncHttpResponseHandler handler){
+    public static void cancelSubscribe(String favid, AsyncHttpResponseHandler handler){
     	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&action=del&favid=XXX
         RequestParams params = new RequestParams();
         params.put("func", "myfavorite");
         params.put("action", "del");
         params.put("favid", favid);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void subscribeBlog(String uid,AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=followuser&op=add&fuid=xxx
+    	RequestParams params = new RequestParams();
+        params.put("func", "followuser");
+        params.put("op", "add");
+        params.put("fuid", uid);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void cancleSubscribeBlog(int uid,AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=followuser&op=add&fuid=xxx
+    	RequestParams params = new RequestParams();
+        params.put("func", "followuser");
+        params.put("op", "del");
+        params.put("fuid", uid);
         ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
     }
     
@@ -231,5 +262,14 @@ public class BackChinaApi {
          params.put("type", "infolist");
          params.put("action", "list");
          ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void getMySubscribeBlogList(AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&type=space&action=list&page=1
+   	 RequestParams params = new RequestParams();
+     params.put("func", "myfavorite");
+     params.put("type", "space");
+     params.put("action", "list");
+     ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
     }
 }

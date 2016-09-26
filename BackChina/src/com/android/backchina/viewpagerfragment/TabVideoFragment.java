@@ -97,10 +97,15 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
 						}
                 	}
                     for(ChannelItem item : localChannelItems){
-                        TLog.d("tab name =" +item.getName());
-							mTabsAdapter.addTab(item.getName(), item.getName(),
-									VideoFragment.class,
-									getBundle(item.getName(), item));
+                    	if(isLinearVideo(item)){
+        					mTabsAdapter.addTab(item.getName(), item.getName(),
+        							VideoLinearFrament.class,
+        							getBundle(item.getName(), item));
+                    	}else{
+        					mTabsAdapter.addTab(item.getName(), item.getName(),
+        							VideoFragment.class,
+        							getBundle(item.getName(), item));
+                    	}
                     }
                     onRequestSuccess();
                     //
@@ -118,14 +123,13 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
 	private boolean isLinearVideo(ChannelItem item){
 		if (item != null && item.getName() != null) {
 			String name = item.getName();
-			if (name.equals("推荐") || name.equals("最新") || name.equals("最热")
-					|| name.equals("电影") || name.equals("电视剧")) {
-				return false;
-			} else {
+			if (name.equals("推荐")) {
 				return true;
+			} else {
+				return false;
 			}
 		}else{
-			return true;
+			return false;
 		}
 	}
     
@@ -144,9 +148,15 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
             ChannelManager.getInstance().saveVideoChannelItemToTabLocal(getActivity(), defaultLocalChannelItems);
             //
             for(ChannelItem item : defaultLocalChannelItems){
+            	if(isLinearVideo(item)){
+					mTabsAdapter.addTab(item.getName(), item.getName(),
+							VideoLinearFrament.class,
+							getBundle(item.getName(), item));
+            	}else{
 					mTabsAdapter.addTab(item.getName(), item.getName(),
 							VideoFragment.class,
 							getBundle(item.getName(), item));
+            	}
             }
             //
             Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());
@@ -155,7 +165,6 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
             }
         } 
     }
-    
 
     /**
      * 基类会根据不同的catalog展示相应的数据

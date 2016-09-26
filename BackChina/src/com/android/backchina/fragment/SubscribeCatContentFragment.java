@@ -231,12 +231,12 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> imp
         }.getType();
         ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
         StatusBean statusBean = activitiesBean.getActivities();
-        if (statusBean.getStatus() == 1) {
+        if (statusBean.getStatus().equals("1")) {
         	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
         	UIHelper.notifySubscribeDataChanged(getActivity());
-        }else if (statusBean.getStatus() == -1) {
+        }else if (statusBean.getStatus().equals("-1")) {
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus() == -2) {
+        }else if (statusBean.getStatus().equals("-2")) {
         	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
         }else{
         	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();

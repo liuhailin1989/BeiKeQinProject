@@ -1,5 +1,7 @@
 package com.android.backchina.fragment;
 
+import java.lang.reflect.Type;
+
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,18 +14,27 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.android.backchina.AppConfig;
+import com.android.backchina.AppContext;
 import com.android.backchina.R;
+import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.BlogDetail;
+import com.android.backchina.bean.StatusBean;
+import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.ui.comment.BlogCommentsView;
 import com.android.backchina.ui.comment.OnBlogCommentClickListener;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
 
 public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnBlogCommentClickListener{
 
@@ -118,7 +129,53 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         
         //
         mBlogerCardAvatar = (CircleImageView) root.findViewById(R.id.iv_card_avatar);
+        mBlogerCardAvatar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
+				UIHelper.enterBlogSpaceActivity(getActivity(), blogDetail);
+			}
+		});
         mBlogerCardAuthor = (TextView) root.findViewById(R.id.tv_card_author);
+        mBlogerCardAuthor.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
+				UIHelper.enterBlogSpaceActivity(getActivity(), blogDetail);
+			}
+		});
+        
+        mBlogerCardSubscribe = (TextView) root.findViewById(R.id.btn_card_subscribe);
+        mBlogerCardSubscribe.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
+				BackChinaApi.subscribeBlog(blogDetail.getAuthorid(),
+						new TextHttpResponseHandler() {
+
+							@Override
+							public void onSuccess(int code, Header[] headers,
+									String response) {
+								// TODO Auto-generated method stub
+								handleSubscribeResponse(headers, response);
+							}
+
+							@Override
+							public void onFailure(int code, Header[] headers,
+									String response, Throwable throwable) {
+								// TODO Auto-generated method stub
+								Toast.makeText(getContext(), "订阅失败",
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+			}
+		});
         mInput = (TextView) root.findViewById(R.id.tv_put);
         
         mInput.setOnClickListener(new OnClickListener() {
@@ -293,4 +350,21 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 		BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
 		mComments.refreshComments(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
 	}
+	
+    private void handleSubscribeResponse(Header[] headers,String response) {
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        if (statusBean.getStatus().equals("1")) {
+        	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+        	UIHelper.notifySubscribeDataChanged(getActivity());
+        }else if (statusBean.getStatus().equals("-1")) {
+        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-2")) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

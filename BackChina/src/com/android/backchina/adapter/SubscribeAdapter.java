@@ -10,9 +10,14 @@ import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.interf.ISubscribeListener;
+import com.android.backchina.utils.StringUtils;
 
 public class SubscribeAdapter extends BaseListAdapter<Subscribe>{
 
+    public static final int TYPE_INFOLIST = 0;//infolist
+	
+	public static final int TYPE_SPACE = 1;//space
+	
 	private ISubscribeListener listener;
 	
     public SubscribeAdapter(Callback callback) {
@@ -35,11 +40,15 @@ public class SubscribeAdapter extends BaseListAdapter<Subscribe>{
         // TODO Auto-generated method stub
         vh.setImageForNet(R.id.iv_icon, item.getLogo());
         vh.setText(R.id.tv_name, item.getTitle());
-        if(item.getFavid() != 0){
-        	vh.setText(R.id.btn_add_subscribe, "取消订阅");
-        }else{
-        	vh.setText(R.id.btn_add_subscribe, "+ 订阅");
-        }
+		if (item.getType() == TYPE_INFOLIST) {
+			if (StringUtils.isEmpty(item.getFavid())) {
+				vh.setText(R.id.btn_add_subscribe, "+ 订阅");
+			} else {
+				vh.setText(R.id.btn_add_subscribe, "取消订阅");
+			}
+		}else if(item.getType() == TYPE_SPACE){
+			vh.setText(R.id.btn_add_subscribe, "取消订阅");
+		}
         vh.getView(R.id.btn_add_subscribe).setOnClickListener(new OnClickListener() {
 			
 			@Override

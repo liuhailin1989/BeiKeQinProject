@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
@@ -26,6 +27,7 @@ import com.android.backchina.Constants;
 import com.android.backchina.R;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseFragment;
+import com.android.backchina.bean.BlogDetail;
 import com.android.backchina.bean.UserInfo;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.cache.CacheManager;
@@ -160,6 +162,23 @@ public class TabMeFragment extends BaseFragment {
         mAlbums = (TextView) root.findViewById(R.id.tv_my_albums);
         //
         mBlogContainer = (LinearLayout) root.findViewById(R.id.ll_my_blog_container);
+        mBlogContainer.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				 if (mUserInfo == null || mUserInfo.getUid() <=0 ){
+					 Toast.makeText(getContext(), "请登录", Toast.LENGTH_SHORT).show();
+					 return;
+				 }
+				BlogDetail myBlogDetail = new BlogDetail();
+				myBlogDetail.setAuthorid(String.valueOf(mUserInfo.getUid()));
+				myBlogDetail.setAvatar(mUserInfo.getAvatar());
+				myBlogDetail.setUsername(mUserInfo.getUsername());
+				
+				UIHelper.enterBlogSpaceActivity(getActivity(), myBlogDetail);
+			}
+		});
         mCacheContainer = (LinearLayout) root.findViewById(R.id.ll_cache_container);;
         mAboutContainer = (LinearLayout) root.findViewById(R.id.ll_about_container);;
         

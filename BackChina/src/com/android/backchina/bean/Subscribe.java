@@ -8,11 +8,16 @@ public class Subscribe extends Entity {
      */
     private static final long serialVersionUID = -8711860084114233572L;
 
-    private int favid;//
+    /*
+     * <link SubscribeAdapter/>
+     */
+    private int type;//类型
+    
+	private String favid;//
     
     private String idtype;//
     
-    private int spaceuid;//
+    private String spaceuid;//
     
     private String desc;//
     
@@ -30,12 +35,19 @@ public class Subscribe extends Entity {
 
     private String urlapi;
 
+    public int getType() {
+		return type;
+	}
 
-	public int getFavid() {
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getFavid() {
 		return favid;
 	}
 
-	public void setFavid(int favid) {
+	public void setFavid(String favid) {
 		this.favid = favid;
 	}
 
@@ -47,11 +59,11 @@ public class Subscribe extends Entity {
 		this.idtype = idtype;
 	}
 
-	public int getSpaceuid() {
+	public String getSpaceuid() {
 		return spaceuid;
 	}
 
-	public void setSpaceuid(int spaceuid) {
+	public void setSpaceuid(String spaceuid) {
 		this.spaceuid = spaceuid;
 	}
 

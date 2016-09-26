@@ -9,13 +9,13 @@ public class StatusBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 6278293472355214362L;
 
-	int status;
+	String status;
 
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	

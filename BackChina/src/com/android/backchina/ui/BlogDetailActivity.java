@@ -23,6 +23,7 @@ import com.android.backchina.ui.dialog.WaitDialog;
 import com.android.backchina.utils.FileUtil;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -103,6 +104,12 @@ public class BlogDetailActivity extends BaseDetailActivity {
 		// TODO Auto-generated method stub
 		onRequestDataSuccess();
 	}
+	
+	@Override
+	public void toSeeMoreComments() {
+		// TODO Auto-generated method stub
+		UIHelper.enterCommentBlogActivity(this, mCurrentBlog);
+	}
 
 	@Override
 	public void toFavorite() {
@@ -134,7 +141,7 @@ public class BlogDetailActivity extends BaseDetailActivity {
        }
        mWaitDialog.show();
        int id = mCurrentBlog.getId();
-       BackChinaApi.sendBlogComment(id,cid,comment,new TextHttpResponseHandler() {
+       BackChinaApi.sendBlogComment(id,cid,position,comment,new TextHttpResponseHandler() {
 
            @Override
            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

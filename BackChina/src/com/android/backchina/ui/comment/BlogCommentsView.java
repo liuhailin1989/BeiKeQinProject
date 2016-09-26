@@ -117,7 +117,7 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
         return addComment(true, position,comment, imageLoader, onCommentClickListener);
     }
 
-    private ViewGroup addComment(boolean first,int position, final BlogCommentBean comment, RequestManager imageLoader, final OnBlogCommentClickListener onCommentClickListener) {
+    private ViewGroup addComment(boolean first,final int position, final BlogCommentBean comment, RequestManager imageLoader, final OnBlogCommentClickListener onCommentClickListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.layout_comment_item, null, false);
 //        imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
@@ -156,7 +156,7 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
             @Override
 			public void onClick(View v) {
 				if (onCommentClickListener != null) {
-					onCommentClickListener.onClick(v, comment);
+					onCommentClickListener.onClick(v, position,comment);
 				}
 			}
         });

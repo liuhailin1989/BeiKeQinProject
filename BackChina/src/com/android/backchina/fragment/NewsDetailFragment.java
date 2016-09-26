@@ -252,8 +252,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 	@Override
 	public void seeMoreComments(View view) {
 		// TODO Auto-generated method stub
-		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
-		UIHelper.enterCommentNewsActivity(getActivity(),newsDetail);
+		iDetail.toSeeMoreComments();
 	}
     
     private void handleSendComment() {

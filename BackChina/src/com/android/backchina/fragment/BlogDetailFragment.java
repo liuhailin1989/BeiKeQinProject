@@ -63,6 +63,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     
     private BlogCommentBean mCurrentClickComment = null;
     
+    private int mCurrentReferPosition = 0;
+    
 	public static BlogDetailFragment newInstance() {
 		BlogDetailFragment fragment = new BlogDetailFragment();
 		return fragment;
@@ -223,6 +225,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     @Override
     protected void initData() {
         // TODO Auto-generated method stub
+    	mCurrentReferPosition = 0;
         super.initData();
         BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
         if(blogDetail == null){
@@ -240,9 +243,10 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     }
 
     @Override
-    public void onClick(View view, BlogCommentBean comment) {
+    public void onClick(View view, int position, BlogCommentBean comment) {
         // TODO Auto-generated method stub
     	mCurrentClickComment = comment;
+    	mCurrentReferPosition = position;
     	String result = getResources().getString(R.string.comments_hint_text);
 		if (mCurrentClickComment != null) {
 			String hintString = getResources().getString(
@@ -256,7 +260,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 	@Override
 	public void seeMoreComments(View view) {
 		// TODO Auto-generated method stub
-		UIHelper.enterCommentBlogActivity(getActivity());
+		iDetail.toSeeMoreComments();
 	}
     
     private void handleSendComment() {
@@ -264,10 +268,11 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     	int position = 0;
 		if (mCurrentClickComment != null) {
 			cid = mCurrentClickComment.getCid();
-			position = 0;
+			position = mCurrentReferPosition;
 		}
         iDetail.toSendComment(mCommentEditView.getText().toString(),cid,position);
         mCurrentClickComment = null;
+        mCurrentReferPosition = 0;
     }
 
 	@Override

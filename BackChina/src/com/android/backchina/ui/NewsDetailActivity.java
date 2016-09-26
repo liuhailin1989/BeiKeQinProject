@@ -21,6 +21,7 @@ import com.android.backchina.ui.dialog.DialogHelper;
 import com.android.backchina.ui.dialog.WaitDialog;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -105,6 +106,12 @@ public class NewsDetailActivity extends BaseDetailActivity{
         onRequestDataSuccess();
     }
 
+	@Override
+	public void toSeeMoreComments() {
+		// TODO Auto-generated method stub
+		UIHelper.enterCommentNewsActivity(this,mDetail);
+	}
+	
     @Override
     public void toFavorite() {
         // TODO Auto-generated method stub

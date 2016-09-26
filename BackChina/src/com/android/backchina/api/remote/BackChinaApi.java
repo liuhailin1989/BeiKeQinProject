@@ -154,11 +154,12 @@ public class BackChinaApi {
         ApiHttpClient.post(url, params, handler);
     }
     
-    public static void sendBlogComment(int aid,int cid,String message,AsyncHttpResponseHandler handler){
+    public static void sendBlogComment(int bid,int cid,int floor,String message,AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();
         params.put("func", "reply");
-        params.put("blogid", aid);
+        params.put("blogid", bid);
         params.put("cid", cid);
+        params.put("position", floor);
         params.put("subject", "test");
         params.put("message", message);
         String url = "plugin.php?id=bkc_app_iphone:user";

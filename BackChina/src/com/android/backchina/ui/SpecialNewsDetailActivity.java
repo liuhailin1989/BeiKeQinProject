@@ -92,6 +92,12 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 	}
 
 	@Override
+	public void toSeeMoreComments() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void toFavorite() {
 		// TODO Auto-generated method stub
 		

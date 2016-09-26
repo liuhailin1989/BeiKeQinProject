@@ -16,4 +16,7 @@ public interface IContractDetail {
 
    // 提交评价
    void toSendComment(String comment,int cid, int position);
+   
+   //
+   void toSeeMoreComments();
 }

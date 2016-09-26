@@ -103,8 +103,8 @@ public class UIHelper {
     	CommentNewsActivity.show(context,newsDetail);
     }
     
-    public static void enterCommentBlogActivity(Context context){
-    	CommentBlogActivity.show(context);
+    public static void enterCommentBlogActivity(Context context,Blog blog){
+    	CommentBlogActivity.show(context,blog);
     }
     
     /**

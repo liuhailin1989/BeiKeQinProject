@@ -33,7 +33,7 @@ OnItemClickListener, View.OnClickListener{
 	
 	private TextView mTitle;
 	
-	private XListView mListView;
+	protected XListView mListView;
 
 	private EmptyLayout mEmptyLayout;
 	

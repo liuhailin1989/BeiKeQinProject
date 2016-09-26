@@ -232,7 +232,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     }
 
     @Override
-    public void onClick(View view, BlogCommentBean comment) {
+    public void onClick(View view,int position, BlogCommentBean comment) {
         // TODO Auto-generated method stub
         
     }

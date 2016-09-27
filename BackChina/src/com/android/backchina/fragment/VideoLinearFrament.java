@@ -9,16 +9,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView.ItemDecoration;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
+import com.android.backchina.R;
 import com.android.backchina.adapter.VideoAdapter;
 import com.android.backchina.adapter.VideoLinearAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseRecyclerViewFragment;
 import com.android.backchina.base.adapter.BaseRecyclerViewAdapter;
 import com.android.backchina.bean.ChannelItem;
+import com.android.backchina.bean.News;
 import com.android.backchina.bean.Video;
+import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
@@ -117,7 +121,12 @@ public class VideoLinearFrament extends BaseRecyclerViewFragment<Video> implemen
 			public void onFailure(int statusCode, Header[] headers, String responseString,
 					Throwable throwable) {
 				// TODO Auto-generated method stub
-				onRequestError(EmptyLayout.NODATA);
+				if (isLoadMoreAction) {
+					loadMoreNodata();
+				} else {
+					onRequestError(EmptyLayout.NODATA);
+				}
+				isLoadMoreAction = false;
 			}
 
 			@Override
@@ -126,16 +135,50 @@ public class VideoLinearFrament extends BaseRecyclerViewFragment<Video> implemen
 				ResultListBean<Video> resultBean = AppContext
 						.createGson().fromJson(responseString, getType());
 				if (resultBean != null && resultBean.getItems() != null && resultBean.getItems().size() > 0) {
-					setListData(resultBean,true);
+					if (mCurrentPage == 1) {
+						showDataUpdate(resultBean.getItems());
+						setListData(resultBean, true);
+					} else {
+						setListData(resultBean, false);
+					}
 					onRequestSuccess();
 					stopLoadMore();
 				}else{
+					if(isLoadMoreAction){
+						loadMoreNodata();
+					}else{
 					onRequestError(EmptyLayout.NODATA);
+					}
 				}
+				isLoadMoreAction = false;
 			}
 		};
 	}
 	
+	
+	private void showDataUpdate(List<Video> newDatas){
+		if(newDatas == null){
+			return;
+		}
+		int updateValue = 0;
+		final ResultListBean<Video> bean = (ResultListBean<Video>) CacheManager.readObject(getActivity(), getCacheKey());
+		if (bean == null) {
+			updateValue = newDatas.size();
+		} else {
+			List<Video> oldDatas = bean.getItems();
+			Video video = oldDatas.get(0);
+			for(int i = 0; i < newDatas.size(); i++){
+				Video temp = newDatas.get(i);
+				if(temp.getId() == video.getId()){
+					updateValue = i;
+					break;
+				}
+			}
+		}
+		String value = getActivity().getResources().getString(R.string.header_hint_refresh_notify);
+		String resultData = String.format(value, updateValue);
+		showCrouton(resultData,(ViewGroup)mRoot);
+	}
 	
 	protected void setListData(final ResultListBean<Video> pageBean,
 			boolean isrefresh) {
@@ -184,6 +227,14 @@ public class VideoLinearFrament extends BaseRecyclerViewFragment<Video> implemen
 	protected void onRequestData() {
 		// TODO Auto-generated method stub
 		mCurrentPage = 1;
+		BackChinaApi.getVideoList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
+	}
+	
+	@Override
+	public void onLoadMoreData() {
+		// TODO Auto-generated method stub
+		mCurrentPage = mCurrentPage+1;
+		isLoadMoreAction = true;
 		BackChinaApi.getVideoList(currentChannelItem.getUrlapi(),mCurrentPage, mHandler);
 	}
 	

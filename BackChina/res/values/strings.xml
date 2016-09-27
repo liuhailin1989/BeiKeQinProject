@@ -19,14 +19,13 @@
     <string name="comments_group_title_text">New Comments</string>
     <string name="comments_floor_count">%1$d Floor</string>
     <string name="comments_see_more_text">See More</string>
-    
-    
+
     <!-- blog -->
     <string name="blog_item_views">%1$d comments / %2$s views</string>
-    
+
     <!-- Video -->
     <string name="video_item_views">%1$s play</string>
-    
+
     <!-- 我的 -->
     <string name="mine_login_text">Login</string>
     <string name="mine_logout_text">Logout</string>
@@ -34,7 +33,7 @@
     <string name="login_no_acount_text">No Account？Click Here</string>
     <string name="register_btn_text">Submit</string>
     <string name="login_has_acount_text">I have account,click here</string>
-   
+
     <!--  -->
     <string name="header_hint_refresh_notify">%1$s DatasUpdate</string>
     <string name="header_hint_refresh_normal">Pull to refresh</string>
@@ -45,18 +44,26 @@
     <string name="footer_hint_load_ready">Release to load more</string>
     <string name="footer_hint_load_no_more">No more data</string>
 
+    <!--  -->
+    <string name="listview_header_hint_normal">pull to refresh</string>
+    <string name="listview_header_hint_release">release to start refresh</string>
+    <string name="listview_loading">loading...</string>
+    <string name="nomore_loading">no more to be loaded</string>
+    <string name="refreshing">refreshing...</string>
+    <string name="refresh_done">refresh done</string>
+    <string name="listview_header_last_time">last update：</string>
+
     <!-- error -->
     <string name="error_view_loading">Loading…</string>
     <string name="error_view_load_error_click_to_refresh">LoadingFailed\r\nClickToRefresh</string>
     <string name="error_view_network_error_click_to_refresh">NoNetWork</string>
     <string name="error_view_no_data">NoData</string>
-    
+
     <!-- subscribe -->
     <string name="subscribe_my_category">My Channel</string>
     <string name="subscribe_manager_category_info_2">Click change,long press order</string>
     <string name="subscribe_more_category">More Channel</string>
     <string name="subscribe_views">%1$s comments / %2$s views</string>
-    
 
     <!--  -->
     <string name="footer_type_loading">Loading…</string>

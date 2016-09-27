@@ -7,17 +7,21 @@ import android.support.v7.widget.RecyclerView.ItemDecoration;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.View;
 
+import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseRecyclerViewAdapter;
 import com.android.backchina.base.adapter.BaseRecyclerViewAdapter.OnItemClickListener;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.widget.xrecyclerview.ProgressStyle;
+import com.android.backchina.widget.xrecyclerview.XRecyclerView;
+import com.android.backchina.widget.xrecyclerview.XRecyclerView.LoadingListener;
 
 public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 		implements BaseRecyclerViewAdapter.Callback {
 
 	protected EmptyLayout mErrorLayout;
 
-	protected RecyclerView mRecyclerView;
+	protected XRecyclerView mRecyclerView;
 
 	protected BaseRecyclerViewAdapter mAdapter;
 
@@ -32,7 +36,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 		// TODO Auto-generated method stub
 		super.setupViews(root);
 		mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
-		mRecyclerView = (RecyclerView) root
+		mRecyclerView = (XRecyclerView) root
 				.findViewById(R.id.base_recycler_view);
 		mRecyclerView.setLayoutManager(getLayoutManager());
 		mAdapter = getAdapter();
@@ -46,6 +50,37 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 		});
 		mRecyclerView.setAdapter(mAdapter);
 		mRecyclerView.addItemDecoration(getItemDecoration());
+		mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+		mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
+		mRecyclerView.setLoadingListener(new LoadingListener() {
+
+			@Override
+			public void onRefresh() {
+				// TODO Auto-generated method stub
+				AppOperator.runOnMainThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						onRefreshData();
+					}
+				});
+			}
+
+			@Override
+			public void onLoadMore() {
+				// TODO Auto-generated method stub
+				AppOperator.runOnMainThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						onLoadMoreData();
+					}
+				});
+
+			}
+		});
 	}
 
 	@Override
@@ -62,20 +97,21 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 
 	}
 
-	public void onRefresh() {
+	public void onRefreshData() {
 		// TODO Auto-generated method stub
 		requestData();
 	}
 
-	public void onLoadMore() {
+	public void onLoadMoreData() {
 		// TODO Auto-generated method stub
 	}
 
 	public void stopLoadMore() {
+		mRecyclerView.loadMoreComplete();
 	}
 
 	public void loadMoreNodata() {
-
+		mRecyclerView.setNoMore(true);
 	}
 
 	protected void onRequestError(int type) {
@@ -89,6 +125,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 	}
 
 	public void refreshComplete() {
+		mRecyclerView.refreshComplete();
 	}
 
 	protected void setEmptyLayoutStatus(int type) {

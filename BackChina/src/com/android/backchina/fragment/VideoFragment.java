@@ -8,9 +8,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView.ItemDecoration;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
+import com.android.backchina.R;
 import com.android.backchina.adapter.VideoAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseRecyclerViewFragment;
@@ -130,6 +132,7 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 						.createGson().fromJson(responseString, getType());
 				if (resultBean != null && resultBean.getItems() != null && resultBean.getItems().size() > 0) {
 					if (mCurrentPage == 1) {
+						showDataUpdate(resultBean.getItems());
 						setListData(resultBean, true);
 					} else {
 						setListData(resultBean, false);
@@ -148,6 +151,29 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 		};
 	}
 	
+	private void showDataUpdate(List<Video> newDatas){
+		if(newDatas == null){
+			return;
+		}
+		int updateValue = 0;
+		final ResultListBean<Video> bean = (ResultListBean<Video>) CacheManager.readObject(getActivity(), getCacheKey());
+		if (bean == null) {
+			updateValue = newDatas.size();
+		} else {
+			List<Video> oldDatas = bean.getItems();
+			Video video = oldDatas.get(0);
+			for(int i = 0; i < newDatas.size(); i++){
+				Video temp = newDatas.get(i);
+				if(temp.getId() == video.getId()){
+					updateValue = i;
+					break;
+				}
+			}
+		}
+		String value = getActivity().getResources().getString(R.string.header_hint_refresh_notify);
+		String resultData = String.format(value, updateValue);
+		showCrouton(resultData,(ViewGroup)mRoot);
+	}
 	
 	protected void setListData(final ResultListBean<Video> pageBean,
 			boolean isrefresh) {
@@ -200,7 +226,7 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 	}
 	
 	@Override
-	public void onLoadMore() {
+	public void onLoadMoreData() {
 		// TODO Auto-generated method stub
 		mCurrentPage = mCurrentPage+1;
 		isLoadMoreAction = true;

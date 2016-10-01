@@ -19,6 +19,7 @@
     <string name="comments_group_title_text">最新评论</string>
     <string name="comments_floor_count">%1$d 楼</string>
     <string name="comments_see_more_text">查看更多</string>
+     <string name="related_more_title_text">相关推荐</string>
     
     <!-- blog -->
     <string name="blog_item_views">%1$d 评 / %2$s 阅</string>

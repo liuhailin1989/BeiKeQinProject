@@ -19,6 +19,7 @@ import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.fragment.NewsDetailFragment;
 import com.android.backchina.ui.dialog.DialogHelper;
 import com.android.backchina.ui.dialog.WaitDialog;
+import com.android.backchina.utils.FileUtil;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;

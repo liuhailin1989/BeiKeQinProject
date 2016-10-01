@@ -168,6 +168,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 					onRequestSuccess();
 					stopLoadMore();
 				}
+				isLoadMoreAction = false;
 			}
 		};
 		setImageFromNet(mLogo, mCurrentSubscribe.getLogo());//
@@ -193,6 +194,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 							requestData();
 						} else {
 							setData(bean);
+							setEmptyLayoutStatus(EmptyLayout.HIDE_LAYOUT);
 						}
 					}
 				});

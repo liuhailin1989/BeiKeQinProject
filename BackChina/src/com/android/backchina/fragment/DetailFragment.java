@@ -1,16 +1,19 @@
 package com.android.backchina.fragment;
 
+import java.util.Date;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.backchina.R;
 import com.android.backchina.base.BaseFragment;
+import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.interf.IContractDetail;
 import com.android.backchina.interf.OperatorCallBack;
 import com.android.backchina.widget.BackChinaWebView;
 
-public abstract class DetailFragment<T> extends BaseFragment<Object> implements OperatorCallBack{
+public abstract class DetailFragment<T> extends BaseFragment<Object> implements BaseListAdapter.Callback,OperatorCallBack{
     
     IContractDetail iDetail;
     
@@ -79,5 +82,10 @@ public abstract class DetailFragment<T> extends BaseFragment<Object> implements 
                 }
             }
         });
+    }
+    
+    @Override
+    public Date getSystemTime() {
+        return new Date();
     }
 }

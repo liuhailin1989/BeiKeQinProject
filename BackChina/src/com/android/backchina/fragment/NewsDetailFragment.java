@@ -1,15 +1,18 @@
 package com.android.backchina.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -18,16 +21,17 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.android.backchina.AppConfig;
 import com.android.backchina.R;
+import com.android.backchina.adapter.RelatedNewsAdapter;
 import com.android.backchina.bean.Comment;
+import com.android.backchina.bean.News;
 import com.android.backchina.bean.NewsDetail;
-import com.android.backchina.bean.SubscribeCat;
 import com.android.backchina.ui.comment.CommentsView;
 import com.android.backchina.ui.comment.OnCommentClickListener;
 import com.android.backchina.utils.StringUtils;
-import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
+import com.android.backchina.widget.FixedHeightListView;
 
-public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentClickListener{
+public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentClickListener,OnItemClickListener{
 
     private TextView mTitle;
     private TextView mPubTime;
@@ -59,6 +63,10 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private Comment mCurrentClickComment = null;
     
+    private FixedHeightListView mRelatedListView;
+    
+    private RelatedNewsAdapter relatedNewsAdapter;
+    
 	public static NewsDetailFragment newInstance() {
 		NewsDetailFragment fragment = new NewsDetailFragment();
 		return fragment;
@@ -75,7 +83,6 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     protected void setupViews(View root) {
         // TODO Auto-generated method stub
         super.setupViews(root);
-        
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
@@ -84,6 +91,15 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         
         mComments = (CommentsView) root.findViewById(R.id.lay_comment_view);
         
+        //
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View header = inflater.inflate(R.layout.layout_related_news_header_view, null);
+        mRelatedListView = (FixedHeightListView) root.findViewById(R.id.related_list_view);
+        mRelatedListView.addHeaderView(header);
+        relatedNewsAdapter = new RelatedNewsAdapter(this);
+        mRelatedListView.setAdapter(relatedNewsAdapter);
+        mRelatedListView.setOnItemClickListener(this);
+        //
         layCommit = (LinearLayout) root.findViewById(R.id.lay_commit_edit);
         layCommit.setVisibility(View.VISIBLE);
         //
@@ -91,7 +107,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         layFontControlContainer.setVisibility(View.GONE);
         
         mCommentsCount = (TextView) root.findViewById(R.id.tv_commit_count);
-        
+        //
+        //
         layRealComentEdit = (RelativeLayout) root.findViewById(R.id.lay_real_comment_edit);
         layRealComentEdit.setOnClickListener(new OnClickListener() {
             
@@ -233,6 +250,12 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mComments.init(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
         
         mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
+     
+        //
+        if(newsDetail.getRelated_b() != null){
+        	relatedNewsAdapter.clear();
+        	relatedNewsAdapter.addItem(newsDetail.getRelated_b());
+        }
     }
 
     @Override
@@ -283,5 +306,15 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 		// TODO Auto-generated method stub
 		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
 		mComments.refreshComments(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
+	}
+
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// TODO Auto-generated method stub
+		if (parent instanceof FixedHeightListView) {
+			News item = (News) parent.getAdapter().getItem(position);
+			UIHelper.enterNewsDetail(getActivity(), item);
+		}
 	}
 }

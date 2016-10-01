@@ -160,8 +160,9 @@ public class MainActivity extends FragmentActivity implements OnTouchListener,On
 		List<Fragment> frags = frag.getChildFragmentManager().getFragments();
 		if (frags != null) {
 			for (Fragment f : frags) {
-				if (f != null)
+				if (f != null){
 					handleResult(f, requestCode, resultCode, data);
+				}
 			}
 		}
 	}

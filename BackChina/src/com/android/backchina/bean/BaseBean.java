@@ -1,6 +1,8 @@
 
 package com.android.backchina.bean;
 
+import android.text.Html;
+
 public abstract class BaseBean extends Entity {
 
     /**
@@ -128,7 +130,8 @@ public abstract class BaseBean extends Entity {
     private String avatar_default;
 
     public String getTitle() {
-        return title;
+		String resultTitle = Html.fromHtml(title).toString();
+        return resultTitle;
     }
 
     public void setTitle(String title) {

@@ -1,5 +1,7 @@
 package com.android.backchina.bean;
 
+import java.util.List;
+
 /** 
  * 资讯详情
  */
@@ -17,7 +19,10 @@ public class NewsDetail extends BaseBean {
      */
     private long dateline;
     
-    public String getContent() {
+    private List<News> related_b;
+    
+
+	public String getContent() {
         return content;
     }
 
@@ -32,4 +37,12 @@ public class NewsDetail extends BaseBean {
     public void setDateline(long dateline) {
         this.dateline = dateline;
     }
+    
+    public List<News> getRelated_b() {
+		return related_b;
+	}
+
+	public void setRelated_b(List<News> related_b) {
+		this.related_b = related_b;
+	}
 }

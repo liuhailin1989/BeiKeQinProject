@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/white"
     android:orientation="vertical" >
 
     <include
@@ -21,21 +21,25 @@
             android:layout_width="@dimen/login_edittext_width"
             android:layout_height="@dimen/login_edittext_height"
             android:layout_marginTop="10dp"
+            android:paddingLeft="2dp"
             android:hint="user name"
             android:background="@drawable/selector_edittext_bg"
             android:textSize="@dimen/login_edittext_text_size"
-            android:textColor="@color/longin_edit_text_color"/>
+            android:textColor="@color/longin_edit_text_color"
+            android:drawableLeft="@drawable/ic_edit_user"/>
 
         <EditText
             android:id="@+id/et_user_password"
             android:layout_width="@dimen/login_edittext_width"
             android:layout_height="@dimen/login_edittext_height"
             android:layout_marginTop="10dp"
+            android:paddingLeft="2dp"
             android:hint="password"
             android:password="true"
             android:background="@drawable/selector_edittext_bg"
             android:textSize="@dimen/login_edittext_text_size"
-            android:textColor="@color/longin_edit_text_color" />
+            android:textColor="@color/longin_edit_text_color"
+            android:drawableLeft="@drawable/ic_edit_pass" />
 
         <Button
             android:id="@+id/btn_login"

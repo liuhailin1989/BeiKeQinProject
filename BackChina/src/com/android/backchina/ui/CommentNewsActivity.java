@@ -16,6 +16,7 @@ import com.android.backchina.adapter.CommentNewsAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.Comment;
+import com.android.backchina.bean.News;
 import com.android.backchina.bean.NewsDetail;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.base.ActivitiesBean;
@@ -160,7 +161,8 @@ public class CommentNewsActivity extends BaseCommentsActivity<Comment>{
 			cid = currentClickComment.getCid();
 			position = currentClickComment.getPosition();
 		}
-		BackChinaApi.sendNewsComment(mCurrentNewsDetail.getId(),cid,position,"回帖",content,new TextHttpResponseHandler() {
+        int type = mCurrentNewsDetail.getNewsType();
+		BackChinaApi.sendNewsComment(type,mCurrentNewsDetail.getId(),cid,position,"回帖",content,new TextHttpResponseHandler() {
 
 	            @Override
 	            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

@@ -99,6 +99,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         relatedNewsAdapter = new RelatedNewsAdapter(this);
         mRelatedListView.setAdapter(relatedNewsAdapter);
         mRelatedListView.setOnItemClickListener(this);
+        mRelatedListView.setVisibility(View.VISIBLE);
         //
         layCommit = (LinearLayout) root.findViewById(R.id.lay_commit_edit);
         layCommit.setVisibility(View.VISIBLE);
@@ -252,9 +253,11 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
      
         //
-        if(newsDetail.getRelated_b() != null){
+        if(newsDetail.getRelated_b() != null && newsDetail.getRelated_b().size() > 0){
         	relatedNewsAdapter.clear();
         	relatedNewsAdapter.addItem(newsDetail.getRelated_b());
+        }else{
+        	mRelatedListView.setVisibility(View.GONE);
         }
     }
 

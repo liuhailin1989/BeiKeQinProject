@@ -171,7 +171,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 				isLoadMoreAction = false;
 			}
 		};
-		setImageFromNet(mLogo, mCurrentSubscribe.getLogo());//
+		setImageFromNet(mLogo, mCurrentSubscribe.getLogo(),R.drawable.default_avatar);//
 		mName.setText(mCurrentSubscribe.getTitle());
 		mAdapter = new SubscribeDetailAdapter(this);
 		mListView.setAdapter(mAdapter);

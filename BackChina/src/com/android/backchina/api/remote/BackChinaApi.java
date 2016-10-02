@@ -1,6 +1,7 @@
 package com.android.backchina.api.remote;
 
 import com.android.backchina.api.ApiHttpClient;
+import com.android.backchina.bean.News;
 import com.android.backchina.utils.StringUtils;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -153,19 +154,56 @@ public class BackChinaApi {
         ApiHttpClient.get(url, params, handler);
     }
     
-    public static void sendNewsComment(int aid, int cid,int floor,String title, String message,AsyncHttpResponseHandler handler){
+    public static void sendNewsComment(int newsType,int id, int cid,int floor,String title, String message,AsyncHttpResponseHandler handler){
     	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=reply&tid=XXX&subject=test&message=verygood
         RequestParams params = new RequestParams();
         params.put("id", "bkc_app_iphone:user");
         params.put("func", "reply");
-        params.put("aid", aid);
+		if (newsType == News.TYPE_NEWS_LOCAL) {
+			params.put("tid", id);
+		} else {
+			params.put("aid", id);
+		}
         params.put("cid", cid);
         params.put("position", floor);
         params.put("subject", title);
         params.put("message", message);
         String url = "plugin.php?";
+        if (newsType == News.TYPE_NEWS_LOCAL) {
+        	url = "http://www.21uscity.com/plugin.php?";
+		} else {
+			url = "plugin.php?";
+		}
         ApiHttpClient.post(url, params, handler);
     }
+    
+//    public static void sendNewsComment(int aid, int cid,int floor,String title, String message,AsyncHttpResponseHandler handler){
+//    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=reply&tid=XXX&subject=test&message=verygood
+//        RequestParams params = new RequestParams();
+//        params.put("id", "bkc_app_iphone:user");
+//        params.put("func", "reply");
+//        params.put("aid", aid);
+//        params.put("cid", cid);
+//        params.put("position", floor);
+//        params.put("subject", title);
+//        params.put("message", message);
+//        String url = "plugin.php?";
+//        ApiHttpClient.post(url, params, handler);
+//    }
+//    
+//    public static void sendLocalNewsComment(int tid, int cid,int floor,String title, String message,AsyncHttpResponseHandler handler){
+//    	//http://www.21uscity.com/plugin.php?id=bkc_app_iphone:user&func=reply&tid=XXX&subject=test&message=verygood
+//        RequestParams params = new RequestParams();
+//        params.put("id", "bkc_app_iphone:user");
+//        params.put("func", "reply");
+//        params.put("tid", tid);
+//        params.put("cid", cid);
+//        params.put("position", floor);
+//        params.put("subject", title);
+//        params.put("message", message);
+//        String url = "http://www.21uscity.com/plugin.php?";
+//        ApiHttpClient.post(url, params, handler);
+//    }
     
     public static void sendBlogComment(int bid,int cid,int floor,String message,AsyncHttpResponseHandler handler){
         RequestParams params = new RequestParams();

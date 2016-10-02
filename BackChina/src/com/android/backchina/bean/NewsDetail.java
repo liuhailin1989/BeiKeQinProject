@@ -19,6 +19,8 @@ public class NewsDetail extends BaseBean {
      */
     private long dateline;
     
+    private int newsType = News.TYPE_NEWS_NORMAL;
+    
     private List<News> related_b;
     
 
@@ -37,6 +39,14 @@ public class NewsDetail extends BaseBean {
     public void setDateline(long dateline) {
         this.dateline = dateline;
     }
+    
+    public int getNewsType() {
+		return newsType;
+	}
+
+	public void setNewsType(int newsType) {
+		this.newsType = newsType;
+	}
     
     public List<News> getRelated_b() {
 		return related_b;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_item_list"
@@ -53,11 +54,13 @@
             android:layout_marginTop="5dp"
             android:orientation="horizontal" >
 
-            <ImageView 
+            <com.android.backchina.widget.ShapeImageView 
                 android:id="@+id/iv_thumb"
                 android:layout_width="@dimen/blog_item_thumb_width"
                 android:layout_height="@dimen/blog_item_thumb_height"
-                android:scaleType="fitXY"/>
+                app:siv_round_radius="10dp"
+                app:siv_shape="rect"
+                android:src="@drawable/bg_normal"/>
             
             <TextView
                 android:id="@+id/tv_summary"

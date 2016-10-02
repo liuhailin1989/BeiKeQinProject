@@ -83,6 +83,7 @@ public class NewsDetailActivity extends BaseDetailActivity{
         try {
         ResultBean<NewsDetail> bean = AppContext.createGson().fromJson(responseString, getType());
         mDetail = bean.getResult();
+        mDetail.setNewsType(currentNews.getNewsType());
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -143,7 +144,8 @@ public class NewsDetailActivity extends BaseDetailActivity{
         }
         mWaitDialog.show();
         int id = currentNews.getId();
-        BackChinaApi.sendNewsComment(id,cid,position,"回帖",comment,new TextHttpResponseHandler() {
+        int type = currentNews.getNewsType();
+        BackChinaApi.sendNewsComment(type,id,cid,position,"回帖",comment,new TextHttpResponseHandler() {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

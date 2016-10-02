@@ -126,20 +126,20 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
           return;
       }
       int id = mSpecialNewsDetail.getId();
-      BackChinaApi.sendNewsComment(id,cid,position,comment,"专题",new TextHttpResponseHandler() {
-
-          @Override
-          public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-              // TODO Auto-generated method stub
-              TLog.d("called");
-          }
-
-          @Override
-          public void onSuccess(int statusCode, Header[] headers, String responseString) {
-              // TODO Auto-generated method stub
-              TLog.d("called");
-          }
-      });
+//      BackChinaApi.sendNewsComment(id,cid,position,comment,"专题",new TextHttpResponseHandler() {
+//
+//          @Override
+//          public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//              // TODO Auto-generated method stub
+//              TLog.d("called");
+//          }
+//
+//          @Override
+//          public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//              // TODO Auto-generated method stub
+//              TLog.d("called");
+//          }
+//      });
 	}
 
 }

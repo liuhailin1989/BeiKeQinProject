@@ -115,6 +115,11 @@ public class NewsFragment extends BaseListFragment<News> {
 							.createGson().fromJson(responseString, getType());
 					if (resultBean != null
 							&& resultBean.getResult().getItems() != null) {
+						//
+						for(News news : resultBean.getResult().getItems()){
+							news.setNewsType(News.TYPE_NEWS_NORMAL);
+						}
+						//
 						if (mCurrentPage == 1) {
 							showDataUpdate(resultBean.getResult().getItems());
 							setListData(resultBean.getResult(), true);

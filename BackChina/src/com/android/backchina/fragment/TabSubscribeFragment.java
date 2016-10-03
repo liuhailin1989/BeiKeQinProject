@@ -202,6 +202,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
     
     private void requestData(){
     	mTotalSubscribeList.clear();
+    	isMySubscribeHandlerNone = false;
     	BackChinaApi.getMySubscribeList(mMySubscribeHandler);
 //        BackChinaApi.getHotSubscribeList(mHandler);
     }
@@ -342,7 +343,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements OnT
         }.getType();
         ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
         StatusBean statusBean = activitiesBean.getActivities();
-        if(statusBean != null && statusBean.getStatus().equals("0")){
+        if(statusBean != null ){//&& statusBean.getStatus().equals("0")
         	return false;
         }else{
         	return true;

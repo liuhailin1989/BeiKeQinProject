@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "597598504683",
+    "firebase_url": "https://backchina-144101.firebaseio.com",
+    "project_id": "backchina-144101",
+    "storage_bucket": "backchina-144101.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597598504683:android:335585a82c1eda53",
+        "android_client_info": {
+          "package_name": "com.android.backchina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597598504683-otjun8pro1ftktirgot3qnkibdost5ah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0H0AZqpniEk_aCPDH_cUWcAjBvccD8AQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

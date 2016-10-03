@@ -21,6 +21,7 @@ import com.android.backchina.utils.TLog;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
+import com.xiaonan.fcmpush.FcmPush;
 
 public class AppContext extends BaseApplication {
 	private static AppContext instance;
@@ -42,6 +43,7 @@ public class AppContext extends BaseApplication {
 		instance.registerReceiver(mBackChinaMode, filter);
 		init();
 		initLogin();
+		FcmPush.init(this);
 	}
 	
 	public BackChinaMode getBackChinaMode(){

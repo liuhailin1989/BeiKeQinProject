@@ -79,6 +79,7 @@
 
     <!-- 导航栏 -->
     <dimen name="top_channel_height">40dp</dimen>
+    <dimen name="tab_host_text_size">12dp</dimen>
 
     <!-- 频道管理 -->
     <dimen name="channel_item_width">80dp</dimen>
@@ -103,6 +104,10 @@
     <dimen name="comments_pub_date_text_size">14dp</dimen>
     <dimen name="comments_content_text_size">14dp</dimen>
     <dimen name="comments_see_more_text_size">14dp</dimen>
+    <dimen name="comments_iv_fontsize_width">30dp</dimen>
+    <dimen name="comments_iv_fontsize_height">30dp</dimen>
+    <dimen name="comments_iv_share_width">30dp</dimen>
+    <dimen name="comments_iv_share_height">30dp</dimen>
 
     <!-- blog -->
     <dimen name="blog_item_height">120dp</dimen>

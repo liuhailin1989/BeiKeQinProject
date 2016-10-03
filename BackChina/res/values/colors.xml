@@ -46,7 +46,8 @@
     <color name="recycle_view_item_sub_title_text_color">#cccccc</color>
 
     <!-- back_china_color APP主色 -->
-    <color name="back_china_color">#5C9D65</color>
+    <!-- #5C9D65 -->
+    <color name="back_china_color">#4B7F5A</color>
     <!-- 主背景色 -->
     <color name="background_color">#F1F1F1</color>
 

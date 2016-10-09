@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xiaonan.fcmpush"
+    package="com.android.backchina.fcmpush"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -13,9 +13,9 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <permission
-        android:name="com.xiaonan.fcmpush.permission.C2D_MESSAGE"
+        android:name="com.android.backchina.fcmpush.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.xiaonan.fcmpush.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.android.backchina.fcmpush.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true">
@@ -27,7 +27,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.xiaonan.fcmpush" />
+                <category android:name="com.android.backchina.fcmpush" />
             </intent-filter>
         </receiver>
 
@@ -43,7 +43,7 @@
              no need for explicit permissions despite exported="true"
         -->
         <service
-            android:name="com.xiaonan.fcmpush.MyIDService"
+            android:name="com.android.backchina.fcmpush.MyIDService"
             android:exported="true" >
             <intent-filter android:priority="-500" >
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -55,7 +55,7 @@
         <!-- FirebaseMessagingService performs security checks at runtime,
              no need for explicit permissions despite exported="true" -->
         <service
-            android:name="com.xiaonan.fcmpush.MyMessagingService"
+            android:name="com.android.backchina.fcmpush.MyMessagingService"
             android:exported="true">
             <intent-filter android:priority="-500">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

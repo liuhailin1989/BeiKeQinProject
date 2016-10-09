@@ -83,18 +83,18 @@
             <TextView
                 android:id="@+id/tv_fontsize"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14dp" />
 
             <SeekBar
                 android:id="@+id/font_size_seekbar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:max="80"
-                android:maxHeight="8dp"
-                android:minHeight="8dp"
+                style="@style/Widget.SeekBar.Normal"
                 android:progress="20"
-                android:visibility="visible" />
+                android:visibility="visible"/>
         </LinearLayout>
     </RelativeLayout>
 

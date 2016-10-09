@@ -168,6 +168,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 					int zoom = mWebView.getTextZoom();
 					String result = String.format(fontsizeString, zoom)+"%";
 					mTvFontSize.setText(result);
+					mFontSizeSeekBar.setProgress(zoom - 80);
 				}
 			}
 		});

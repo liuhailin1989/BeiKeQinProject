@@ -77,7 +77,9 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
 	
 	protected void setCommentCount(int count){
 		if (tvCommentCount != null) {
-			tvCommentCount.setText(String.valueOf(count));
+			String temp = getResources().getString(R.string.detial_title_bar_count);
+			String value = String.format(temp, String.valueOf(count));
+			tvCommentCount.setText(value);
 		}
 	}
 	

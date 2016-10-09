@@ -213,6 +213,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 					int zoom = mWebView.getTextZoom();
 					String result = String.format(fontsizeString, zoom)+"%";
 					mTvFontSize.setText(result);
+					mFontSizeSeekBar.setProgress(zoom - 80);
 				}
 			}
 		});

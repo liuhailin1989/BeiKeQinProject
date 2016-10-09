@@ -29,11 +29,13 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		View.OnClickListener {
@@ -326,11 +328,21 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 				&& currentSelectedTabPosition < tabsLayout.getChildCount()) {
 			if (currentSelectedTabView != null) {
 				currentSelectedTabView.setSelected(false);
+				View title = (View) ((ViewGroup)currentSelectedTabView).getChildAt(0);
+				if(title instanceof TextView){
+					TextPaint tp = ((TextView)title).getPaint();
+					tp.setFakeBoldText(false);
+				}
 			}
 			currentSelectedTabView = tabsLayout
 					.getChildAt(currentSelectedTabPosition);
 			if (currentSelectedTabView != null) {
 				currentSelectedTabView.setSelected(true);
+				View title = (View) ((ViewGroup)currentSelectedTabView).getChildAt(0);
+				if(title instanceof TextView){
+					TextPaint tp = ((TextView)title).getPaint();
+					tp.setFakeBoldText(true);
+				}
 			}
 		}
 	}

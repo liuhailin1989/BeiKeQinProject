@@ -157,6 +157,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 					int zoom = mWebView.getTextZoom();
 					String result = String.format(fontsizeString, zoom)+"%";
 					mTvFontSize.setText(result);
+					mFontSizeSeekBar.setProgress(zoom - 80);
 				}
 			}
 		});

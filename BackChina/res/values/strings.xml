@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="google_play_services_version">9080000</integer>
     <string name="app_name">BackChina</string>
     <string name="hello_world">Hello world!</string>
     <string name="tip_double_click_exit">exit click again</string>
@@ -20,6 +21,8 @@
     <string name="comments_floor_count">%1$d Floor</string>
     <string name="comments_see_more_text">See More</string>
     <string name="related_more_title_text">Related More</string>
+    
+    <string name="detial_title_bar_count">%1$s Follow</string>
 
     <!-- blog -->
     <string name="blog_item_views">%1$d comments / %2$s views</string>

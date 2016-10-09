@@ -47,19 +47,20 @@
 
     <!-- back_china_color APP主色 -->
     <!-- #5C9D65 -->
-    <color name="back_china_color">#4B7F5A</color>
+    <color name="back_china_color">#65A782</color>
     <!-- 主背景色 -->
     <color name="background_color">#F1F1F1</color>
 
     <!-- 通用 -->
-    <color name="title_bar_bg_color">#5C9D65</color>
+    <color name="title_bar_bg_color">#FFFFFF</color>
+    <color name="title_bar_count_text_bg_color">#FF4852</color>
     <color name="title_bar_title_text_color">#FFFFFF</color>
     <color name="title_bar_subtitle_text_color">#FFFFFF</color>
     <color name="common_detail_title_text_color">#111111</color>
     <color name="common_detail_subtitle_text_color">#6a6a6a</color>
     
     <!-- 顶部导航 -->
-    <color name="top_channel_text_color_normal">#222222</color>
+    <color name="top_channel_text_color_normal">#FFFFFF</color>
     <color name="top_channel_text_color_selected">#FFFFFF</color>
 
     <!-- 频道管理 -->
@@ -137,5 +138,12 @@
     <!--  -->
     <color name="border_red">#FF0000</color>
     <color name="border_black">#4D4D4D</color>
+    
+    <!-- seekbar -->
+    <color name="seekbar_bg">#D7D7D7</color>
+    <color name="seekbar_progress_color">#D7D7D7</color>
+    <color name="seekbar_secondary_progress_color">#33B5E5</color>
+    
+    
 
 </resources>

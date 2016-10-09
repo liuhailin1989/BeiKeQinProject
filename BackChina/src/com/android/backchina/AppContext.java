@@ -15,13 +15,13 @@ import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.base.BaseApplication;
 import com.android.backchina.bean.UserInfo;
 import com.android.backchina.cache.DataCleanManager;
+import com.android.backchina.fcmpush.FcmPush;
 import com.android.backchina.utils.MethodsCompat;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
-import com.xiaonan.fcmpush.FcmPush;
 
 public class AppContext extends BaseApplication {
 	private static AppContext instance;

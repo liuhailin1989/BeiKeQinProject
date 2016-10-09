@@ -36,6 +36,8 @@ public class AppConfig {
 
     public static final String KEY_NIGHT_MODE_SWITCH = "night_mode_switch";
     
+    public static final String KEY_WEBVIEW_TEXT_SIZE = "KEY_WEBVIEW_TEXT_SIZE";
+    
     public static final int CONF_DETAIL_COMMENTS_MAX_COUNT = 10;
 
     // 默认存放图片的路径

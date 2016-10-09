@@ -69,8 +69,19 @@ public class BaseApplication extends Application{
         return pre;
     }
     
-    public static boolean get(String key, boolean defValue) {
+    public static boolean getFromPreferences(String key, boolean defValue) {
         return getPreferences().getBoolean(key, defValue);
+    }
+    
+    public static int getFromPreferences(String key, int defValue) {
+        return getPreferences().getInt(key, defValue);
+    }
+    
+    public static void setToPreferences(String key, int value) {
+    	SharedPreferences preferences = getPreferences();
+    	Editor editor = preferences.edit();
+        editor.putInt(key, value);
+        apply(editor);
     }
     
 }

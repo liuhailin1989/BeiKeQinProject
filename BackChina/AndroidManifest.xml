@@ -30,12 +30,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
     <permission
-        android:name="com.xiaonan.fcmpush.permission.C2D_MESSAGE"
+        android:name="com.android.backchina.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.xiaonan.fcmpush.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.android.backchina.permission.C2D_MESSAGE" />
     <!--end fcm 权限 -->
     
     <application
@@ -147,6 +146,12 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.android.backchina.ui.PushMessageActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        
         
         <!--begin FCM  -->
                 <!-- iid服务和监听器 begin -->
@@ -157,7 +162,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.xiaonan.fcmpush" />
+                <category android:name="com.android.backchina.fcmpush" />
             </intent-filter>
         </receiver>
 
@@ -173,7 +178,7 @@
              no need for explicit permissions despite exported="true"
         -->
         <service
-            android:name="com.xiaonan.fcmpush.MyIDService"
+            android:name="com.android.backchina.fcmpush.MyIDService"
             android:exported="true" >
             <intent-filter android:priority="-500" >
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -185,7 +190,7 @@
         <!-- FirebaseMessagingService performs security checks at runtime,
              no need for explicit permissions despite exported="true" -->
         <service
-            android:name="com.xiaonan.fcmpush.MyMessagingService"
+            android:name="com.android.backchina.fcmpush.MyMessagingService"
             android:exported="true">
             <intent-filter android:priority="-500">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

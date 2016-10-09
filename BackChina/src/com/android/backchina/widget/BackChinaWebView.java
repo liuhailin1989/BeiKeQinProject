@@ -72,6 +72,8 @@ public class BackChinaWebView extends WebView {
         settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
         settings.setJavaScriptEnabled(true);
+        int textZoom = AppContext.getFromPreferences(AppConfig.KEY_WEBVIEW_TEXT_SIZE, 100);
+        settings.setTextZoom(textZoom);
 //        settings.setUseWideViewPort(true);
 //        settings.setLoadWithOverviewMode(true);
 
@@ -92,6 +94,7 @@ public class BackChinaWebView extends WebView {
 	public void setTextZoom(int textZoom){
     	 WebSettings settings = getSettings();
     	 settings.setTextZoom(textZoom);
+    	 AppContext.setToPreferences(AppConfig.KEY_WEBVIEW_TEXT_SIZE, textZoom);
     }
     
     public int getTextZoom(){
@@ -165,7 +168,7 @@ public class BackChinaWebView extends WebView {
     private static String setupWebContent(String content, String style) {
         if (TextUtils.isEmpty(content) || TextUtils.isEmpty(content.trim()))
             return "";
-        if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
+        if (AppContext.getFromPreferences(AppConfig.KEY_LOAD_IMAGE, true)
                 || NetworkUtils.isWifiOpen()) {
             Pattern pattern = Pattern.compile("<img[^>]+src\\s*=\\s*[\"\']([^\"\']*)[\"\'](\\s*data-url\\s*=\\s*[\"\']([^\"\']*)[\"\'])*");
             Matcher matcher = pattern.matcher(content);
@@ -200,7 +203,7 @@ public class BackChinaWebView extends WebView {
             return "";
 
         // 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-        if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
+        if (AppContext.getFromPreferences(AppConfig.KEY_LOAD_IMAGE, true)
                 || NetworkUtils.isWifiOpen()) {
             // 过滤掉 img标签的width,height属性
             content = content.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");

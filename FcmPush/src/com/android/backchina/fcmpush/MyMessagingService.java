@@ -1,4 +1,4 @@
-package com.xiaonan.fcmpush;
+package com.android.backchina.fcmpush;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,13 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-
+import com.android.backchina.fcmpush.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-/**
- * Created by xiaonan on 16/5/19.
- */
 public class MyMessagingService extends FirebaseMessagingService {
     private static final String TAG = "xiaonan_FCM";
     private static Context context = null;

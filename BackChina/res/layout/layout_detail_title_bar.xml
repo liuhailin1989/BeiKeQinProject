@@ -36,9 +36,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:padding="5dp"
             android:layout_marginRight="10dp"
             android:textColor="@color/title_bar_subtitle_text_color"
             android:textSize="@dimen/common_detail_titlebar_subtitle_text_size"
+            android:background="@drawable/detail_title_bar_count_bg"
             tools:text="跟帖 0" />
     </LinearLayout>
     

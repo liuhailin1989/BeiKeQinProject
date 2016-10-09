@@ -27,7 +27,7 @@ public class Style {
   
   public static final int NOT_SET = -1;
 
-  public static final int holoRedLight = 0xC8ff4444;//0xffff4444;//liuhailin
+  public static final int holoRedLight = 0xC865A782;//0xC8ff4444;透明红//0xffff4444;亮红//liuhailin
   public static final int holoGreenLight = 0xff99cc00;
   public static final int holoBlueLight = 0xff33b5e5;
 

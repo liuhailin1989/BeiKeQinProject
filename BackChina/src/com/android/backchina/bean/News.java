@@ -19,7 +19,9 @@ public class News extends BaseBean {
     private long dateline;
     
     private int newsType = TYPE_NEWS_NORMAL;
-
+    
+    private String favid;
+    
 	public long getDateline() {
         return dateline;
     }
@@ -36,4 +38,11 @@ public class News extends BaseBean {
 		this.newsType = newsType;
 	}
 	
+	public String getFavid() {
+		return favid;
+	}
+
+	public void setFavid(String favid) {
+		this.favid = favid;
+	}
 }

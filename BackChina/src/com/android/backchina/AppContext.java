@@ -40,6 +40,7 @@ public class AppContext extends BaseApplication {
 		mBackChinaMode = new BackChinaMode();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(BackChinaMode.ACTION_SUBSCRIBE_DATA_CHANGED);
+		filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
 		instance.registerReceiver(mBackChinaMode, filter);
 		init();
 		initLogin();

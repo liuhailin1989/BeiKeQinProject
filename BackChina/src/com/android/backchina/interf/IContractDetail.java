@@ -10,6 +10,9 @@ public interface IContractDetail {
    
    // 收藏
    void toFavorite();
+   
+   //
+   void cancleFavorite();
 
    // 分享
    void toShare();

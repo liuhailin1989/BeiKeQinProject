@@ -12,12 +12,14 @@ import com.android.backchina.AppContext;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.BlogDetail;
+import com.android.backchina.bean.FavoriteBean;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.fragment.BlogDetailFragment;
 import com.android.backchina.fragment.DetailFragment;
+import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.ui.dialog.DialogHelper;
 import com.android.backchina.ui.dialog.WaitDialog;
 import com.android.backchina.utils.FileUtil;
@@ -32,6 +34,7 @@ import cz.msebera.android.httpclient.Header;
 public class BlogDetailActivity extends BaseDetailActivity {
 
     private final static String BUNDLE_KEY_BLOG = "BUNDLE_KEY_BLOG";
+    private final static String BUNDLE_KEY_IS_FAVORITE = "BUNDLE_KEY_IS_FAVORITE";
     
     private Blog mCurrentBlog;
     
@@ -39,9 +42,12 @@ public class BlogDetailActivity extends BaseDetailActivity {
     
     private WaitDialog mWaitDialog;
     
-	public static void show(Context context, Blog blog) {
+    private boolean isFavorite;
+    
+	public static void show(Context context, Blog blog,boolean isFavorite) {
 		Intent intent = new Intent(context, BlogDetailActivity.class);
 		intent.putExtra(BUNDLE_KEY_BLOG, blog);
+		intent.putExtra(BUNDLE_KEY_IS_FAVORITE, isFavorite);
 		context.startActivity(intent);
 	}
 
@@ -49,6 +55,7 @@ public class BlogDetailActivity extends BaseDetailActivity {
 	protected void initBundle(Bundle bundle) {
 		// TODO Auto-generated method stub
 		mCurrentBlog = (Blog) bundle.getSerializable(BUNDLE_KEY_BLOG);
+		isFavorite = (boolean) bundle.getSerializable(BUNDLE_KEY_IS_FAVORITE);
 	}
 	
 	@Override
@@ -81,6 +88,7 @@ public class BlogDetailActivity extends BaseDetailActivity {
         try {
         ResultListBean<BlogDetail<BlogCommentBean>> bean = AppContext.createGson().fromJson(responseString, getType());
         mBlogDetail = bean.getItems().get(0);
+        mBlogDetail.setFavorite(isFavorite);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -114,8 +122,44 @@ public class BlogDetailActivity extends BaseDetailActivity {
 	@Override
 	public void toFavorite() {
 		// TODO Auto-generated method stub
-		
+		if(AppContext.getInstance().isLogin()){
+		    BackChinaApi.favoriteBlog(mCurrentBlog.getId(), mFavoriteHandler);
+		}else{
+			FavoriteBean favoriteBean = new FavoriteBean();
+			favoriteBean.setId(mCurrentBlog.getId());
+			favoriteBean.setFavid("favid_"+mCurrentBlog.getId());
+			favoriteBean.setIdtype("blogid");
+			favoriteBean.setSpaceuid("");
+			favoriteBean.setTitle(mCurrentBlog.getTitle());
+			favoriteBean.setDesc("");
+			favoriteBean.setDateline(""+mCurrentBlog.getDateline());
+			favoriteBean.setUrl(mCurrentBlog.getUrl());
+			favoriteBean.setUrlapi(mCurrentBlog.getUrlapi());
+			FavoriteManager.getInstance().saveFavoriteBeanToTabLocal(this,favoriteBean);
+			if (operatorCallBack != null) {
+				operatorCallBack.toFavoriteSucess();
+			}
+			Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+		}
 	}
+	
+    @Override
+    public void cancleFavorite(){
+      	if (AppContext.getInstance().isLogin()) {
+      		String favid = mCurrentBlog.getFavid();
+			if (!StringUtils.isEmpty(favid)) {
+				BackChinaApi.cancleFavoriteBlog(favid, mCancleFavoriteHandler);
+			}else{
+      			Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+      		}
+		}else{
+			FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+mCurrentBlog.getId(),"blogid");
+			if (operatorCallBack != null) {
+				operatorCallBack.toCancleFavoriteSucess();
+			}
+			Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+		}
+    }
 
 	@Override
 	public void toShare() {
@@ -203,5 +247,60 @@ public class BlogDetailActivity extends BaseDetailActivity {
         }else{
         	Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
         }
+    }
+    
+    @Override
+    protected void handleFavoriteResp(String responseString) {
+    	// TODO Auto-generated method stub
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        //favorite_repeat
+        if (statusBean.getStatus().equals("1")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("favorite_repeat")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "已收藏", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-1")) {
+        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-2")) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    @Override
+    protected void handleCancleFavoriteResp(String responseString) {
+    	// TODO Auto-generated method stub
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        //favorite_repeat
+        if (statusBean.getStatus().equals("1")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toCancleFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("favorite_repeat")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toCancleFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-1")) {
+        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-2")) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        }
+		FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+mCurrentBlog.getId(),"blogid");
     }
 }

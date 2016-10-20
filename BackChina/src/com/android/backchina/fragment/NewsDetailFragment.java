@@ -25,6 +25,7 @@ import com.android.backchina.adapter.RelatedNewsAdapter;
 import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.NewsDetail;
+import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.ui.comment.CommentsView;
 import com.android.backchina.ui.comment.OnCommentClickListener;
 import com.android.backchina.utils.StringUtils;
@@ -55,6 +56,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private ImageView mBtnFontSize;
     
+    private ImageView mBtnFavorite;
+    
     private ImageView mBtnShare;
     
     private SeekBar mFontSizeSeekBar;
@@ -66,6 +69,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     private FixedHeightListView mRelatedListView;
     
     private RelatedNewsAdapter relatedNewsAdapter;
+    
+    private  boolean isFavorite = false;
     
 	public static NewsDetailFragment newInstance() {
 		NewsDetailFragment fragment = new NewsDetailFragment();
@@ -172,6 +177,20 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 				}
 			}
 		});
+        //
+        mBtnFavorite = (ImageView) root.findViewById(R.id.iv_favorite);
+        mBtnFavorite.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(isFavorite){
+					iDetail.cancleFavorite();
+				} else {
+					iDetail.toFavorite();
+				}
+			}
+		});
         
         mBtnShare = (ImageView) root.findViewById(R.id.iv_share);
         mBtnShare.setOnClickListener(new OnClickListener() {
@@ -243,6 +262,12 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         if(newsDetail == null){
             return;
         }
+        isFavorite = newsDetail.isFavorite();
+        if(isFavorite){
+        	mBtnFavorite.setImageResource(R.drawable.ic_favorite_selected);
+        }else{
+        	mBtnFavorite.setImageResource(R.drawable.ic_favorite);
+        }
         setWebViewContent(newsDetail.getContent());
         mTitle.setText(newsDetail.getTitle());
         mPubTime.setText(StringUtils.friendlyTime(newsDetail.getDateline()));
@@ -296,7 +321,19 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 	@Override
 	public void toFavoriteSucess() {
 		// TODO Auto-generated method stub
-		
+		if(mBtnFavorite != null){
+			mBtnFavorite.setImageResource(R.drawable.ic_favorite_selected);
+		}
+		isFavorite = true;
+	}
+	
+	@Override
+	public void toCancleFavoriteSucess() {
+		// TODO Auto-generated method stub
+		if(mBtnFavorite != null){
+			mBtnFavorite.setImageResource(R.drawable.ic_favorite);
+		}
+		isFavorite = false;
 	}
 
 	@Override
@@ -318,7 +355,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 		// TODO Auto-generated method stub
 		if (parent instanceof FixedHeightListView) {
 			News item = (News) parent.getAdapter().getItem(position);
-			UIHelper.enterNewsDetail(getActivity(), item);
+			UIHelper.enterNewsDetail(getActivity(), item,false);
 		}
 	}
 }

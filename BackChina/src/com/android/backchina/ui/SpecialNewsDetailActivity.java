@@ -3,27 +3,25 @@ package com.android.backchina.ui;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import com.android.backchina.AppContext;
-import com.android.backchina.api.remote.BackChinaApi;
-import com.android.backchina.bean.News;
-import com.android.backchina.bean.NewsDetail;
-import com.android.backchina.bean.SpecialNewsDetail;
-import com.android.backchina.bean.SubscribeDetail;
-import com.android.backchina.bean.base.BlogCommentBean;
-import com.android.backchina.bean.base.ResultBean;
-import com.android.backchina.fragment.DetailFragment;
-import com.android.backchina.fragment.NewsDetailFragment;
-import com.android.backchina.fragment.SpecialNewsDetailFragment;
-import com.android.backchina.utils.StringUtils;
-import com.android.backchina.utils.TLog;
-import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.TextHttpResponseHandler;
-
-import cz.msebera.android.httpclient.Header;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
+
+import com.android.backchina.AppContext;
+import com.android.backchina.api.remote.BackChinaApi;
+import com.android.backchina.bean.FavoriteBean;
+import com.android.backchina.bean.SpecialNewsDetail;
+import com.android.backchina.bean.StatusBean;
+import com.android.backchina.bean.SubscribeDetail;
+import com.android.backchina.bean.base.ActivitiesBean;
+import com.android.backchina.bean.base.BlogCommentBean;
+import com.android.backchina.bean.base.ResultBean;
+import com.android.backchina.fragment.SpecialNewsDetailFragment;
+import com.android.backchina.manager.FavoriteManager;
+import com.android.backchina.utils.StringUtils;
+import com.google.gson.reflect.TypeToken;
 
 public class SpecialNewsDetailActivity extends BaseDetailActivity{
 
@@ -100,8 +98,48 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 	@Override
 	public void toFavorite() {
 		// TODO Auto-generated method stub
-		
+//		BackChinaApi.favoriteSpecialNews(mCurrentSubscribeDetail.getId(), mFavoriteHandler);
+//		BackChinaApi.favoriteSpecialNews(mSpecialNewsDetail.getId(), mFavoriteHandler);
+		if (AppContext.getInstance().isLogin()) {
+			BackChinaApi.favoriteNews(mCurrentSubscribeDetail.getId(),mFavoriteHandler);
+		}else{
+			FavoriteBean favoriteBean = new FavoriteBean();
+			favoriteBean.setId(mCurrentSubscribeDetail.getId());
+			favoriteBean.setFavid("favid_"+mCurrentSubscribeDetail.getId());
+			favoriteBean.setIdtype("aid");
+			favoriteBean.setSpaceuid("");
+			favoriteBean.setTitle(mCurrentSubscribeDetail.getTitle());
+			favoriteBean.setDesc("");
+			favoriteBean.setDateline(""+mCurrentSubscribeDetail.getDateline());
+			favoriteBean.setUrl(mCurrentSubscribeDetail.getUrl());
+			String urlapi = "http://www.backchina.com/portal.php?mod=view&aid="+mCurrentSubscribeDetail.getId() +"&appxml=1&json=1";
+			favoriteBean.setUrlapi(urlapi);
+//			favoriteBean.setUrlapi(mCurrentSubscribeDetail.getUrlapi());
+			FavoriteManager.getInstance().saveFavoriteBeanToTabLocal(this,favoriteBean);
+			if (operatorCallBack != null) {
+				operatorCallBack.toFavoriteSucess();
+			}
+			Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+		}
 	}
+	
+    @Override
+    public void cancleFavorite(){
+    	if (AppContext.getInstance().isLogin()) {
+    		String favid = mCurrentSubscribeDetail.getFavid();
+			if (!StringUtils.isEmpty(favid)) {
+				BackChinaApi.cancleFavoriteNews(favid, mCancleFavoriteHandler);
+			}else{
+    			Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+    		}
+		}else{
+			FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+mCurrentSubscribeDetail.getId(),"aid");
+			if (operatorCallBack != null) {
+				operatorCallBack.toCancleFavoriteSucess();
+			}
+			Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+		}
+    }
 
 	@Override
 	public void toShare() {
@@ -141,5 +179,60 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 //          }
 //      });
 	}
+    
+    @Override
+    protected void handleFavoriteResp(String responseString) {
+    	// TODO Auto-generated method stub
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        //favorite_repeat
+        if (statusBean.getStatus().equals("1")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("favorite_repeat")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "已收藏", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-1")) {
+        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-2")) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    @Override
+    protected void handleCancleFavoriteResp(String responseString) {
+    	// TODO Auto-generated method stub
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        //favorite_repeat
+        if (statusBean.getStatus().equals("1")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toCancleFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("favorite_repeat")) {
+        	if (operatorCallBack != null) {
+				operatorCallBack.toCancleFavoriteSucess();
+			}
+        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-1")) {
+        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-2")) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        }
+        FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+mCurrentSubscribeDetail.getId(),"aid");
+    }
 
 }

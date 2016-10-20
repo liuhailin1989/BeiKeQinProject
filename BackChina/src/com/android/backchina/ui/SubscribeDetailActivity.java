@@ -25,6 +25,7 @@ import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
+import com.android.backchina.manager.SubscribeManager;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
@@ -92,24 +93,34 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				BackChinaApi.subscribe(mCurrentSubscribe.getId(),
-						new TextHttpResponseHandler() {
+				if (AppContext.getInstance().isLogin()) {
+					BackChinaApi.subscribe(mCurrentSubscribe.getId(),
+							new TextHttpResponseHandler() {
 
-							@Override
-							public void onSuccess(int code, Header[] headers,
-									String responseString) {
-								// TODO Auto-generated method stub
-								handleSubscribeResponse(headers, responseString);
-							}
+								@Override
+								public void onSuccess(int code,
+										Header[] headers, String responseString) {
+									// TODO Auto-generated method stub
+									handleSubscribeResponse(headers,
+											responseString);
+								}
 
-							@Override
-							public void onFailure(int code, Header[] headers,
-									String responseString, Throwable arg3) {
-								// TODO Auto-generated method stub
-								Toast.makeText(getContext(), "订阅失败",
-										Toast.LENGTH_SHORT).show();
-							}
-						});
+								@Override
+								public void onFailure(int code,
+										Header[] headers,
+										String responseString, Throwable arg3) {
+									// TODO Auto-generated method stub
+									Toast.makeText(getContext(), "订阅失败",
+											Toast.LENGTH_SHORT).show();
+								}
+							});
+				}else{
+					mCurrentSubscribe.setFavid("local_"+mCurrentSubscribe.getId());
+					SubscribeManager.getInstance().saveSubscribeToTabLocal(mContext, mCurrentSubscribe);
+					Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT)
+							.show();
+					UIHelper.notifySubscribeDataChanged(mContext);
+				}
 			}
 		});
 		mListView = (XListView) findViewById(R.id.list_view);

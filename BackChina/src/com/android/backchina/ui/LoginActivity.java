@@ -151,8 +151,8 @@ public class LoginActivity extends BaseActivity {
     private void handleLogin() {
         mUserName = etUserName.getText().toString();
         mPassword = etPassword.getText().toString();
-//        mUserName = "liuhailin1989";
-//        mPassword = "Launcher20130829";
+        mUserName = "liuhailin1989";
+        mPassword = "Launcher20130829";
         //
         mWaitDialog.show();
         BackChinaApi.login(mUserName, mPassword, mLoginHandler);
@@ -282,7 +282,6 @@ public class LoginActivity extends BaseActivity {
         Intent data = new Intent();
         setResult(RESULT_OK, data);
         this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
-        UIHelper.notifySubscribeDataChanged(this);
         finish();
     }
 

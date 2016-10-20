@@ -47,6 +47,12 @@ img {
 	box-shadow: none;
 }
 
+iframe {
+    width:300px;
+    height:250px;
+    align=middle;
+}
+
 pre {
 	margin-top: 1px;
 	margin-bottom: 1px;

@@ -20,6 +20,7 @@ import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.ISubscribeListener;
+import com.android.backchina.manager.SubscribeManager;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
@@ -211,20 +212,32 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> imp
 	@Override
 	public void onSubscribe(Subscribe subscribe) {
 		// TODO Auto-generated method stub
-		BackChinaApi.subscribe(subscribe.getId(), new TextHttpResponseHandler() {
-			
-			@Override
-			public void onSuccess(int code, Header[] headers, String responseString) {
-				// TODO Auto-generated method stub
-				handleSubscribeResponse(headers,responseString);
-			}
-			
-			@Override
-			public void onFailure(int code, Header[] headers, String responseString, Throwable arg3) {
-				// TODO Auto-generated method stub
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
-			}
-		});
+		if (AppContext.getInstance().isLogin()) {
+			BackChinaApi.subscribe(subscribe.getId(),
+					new TextHttpResponseHandler() {
+
+						@Override
+						public void onSuccess(int code, Header[] headers,
+								String responseString) {
+							// TODO Auto-generated method stub
+							handleSubscribeResponse(headers, responseString);
+						}
+
+						@Override
+						public void onFailure(int code, Header[] headers,
+								String responseString, Throwable arg3) {
+							// TODO Auto-generated method stub
+							Toast.makeText(getContext(), "订阅失败",
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+		} else {
+			subscribe.setFavid("local_" + subscribe.getId());
+			SubscribeManager.getInstance().saveSubscribeToTabLocal(
+					getActivity(), subscribe);
+			Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+			UIHelper.notifySubscribeDataChanged(getActivity());
+		}
 	}
     private void handleSubscribeResponse(Header[] headers,String response) {
     	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {

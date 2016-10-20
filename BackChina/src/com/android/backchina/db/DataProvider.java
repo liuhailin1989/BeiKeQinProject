@@ -58,6 +58,36 @@ public class DataProvider extends ContentProvider{
     public static final String CHANNEL_URL = "url";
     public static final String CHANNEL_URLAPI = "urlapi";
     
+    //subscribe
+    public static final int CODE_SUBSCRIBE_LOCAL = 7;
+    public static final String TAB_SUBSCRIBE_LOCAL = "subscribe_local";
+    public static final Uri SUBSCRIBE_LOCAL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_SUBSCRIBE_LOCAL);
+    
+    public static final String SUBSCRIBE_ID = "id";
+    public static final String SUBSCRIBE_FAVID = "favid";
+    public static final String SUBSCRIBE_TYPE = "type";
+    public static final String SUBSCRIBE_TITLE = "title";
+    public static final String SUBSCRIBE_LOGO = "logo";
+    public static final String SUBSCRIBE_URL = "url";
+    public static final String SUBSCRIBE_URLAPI = "urlapi";
+    
+    //favorite
+    public static final int CODE_FAVORITE_LOCAL = 8;
+    public static final String TAB_FAVORITE_LOCAL = "favorite_local";
+    public static final Uri FAVORITE_LOCAL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_FAVORITE_LOCAL);
+    
+    public static final String FAVORITE_ID = "id";
+    public static final String FAVORITE_FAVID = "favid";
+    public static final String FAVORITE_IDTYPE = "idtype";
+    public static final String FAVORITE_SPACEUID = "spaceuid";
+    public static final String FAVORITE_TITLE = "title";
+    public static final String FAVORITE_DESC = "desc";
+    public static final String FAVORITE_DATELINE = "dateline";
+    public static final String FAVORITE_URL = "url";
+    public static final String FAVORITE_URLAPI = "urlapi";
+    
+    
+    
     public static final UriMatcher uriMatcher;
     
     static { 
@@ -68,6 +98,10 @@ public class DataProvider extends ContentProvider{
         uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_BLOG_ALL, CODE_CHANNEL_BLOG_ALL);
         uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_VIDEO_LOCAL, CODE_CHANNEL_VIDEO_LOCAL);
         uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_VIDEO_ALL, CODE_CHANNEL_VIDEO_ALL);
+        //subscribe
+        uriMatcher.addURI(DATA_AUTHORITY, TAB_SUBSCRIBE_LOCAL, CODE_SUBSCRIBE_LOCAL);
+        //favorite
+        uriMatcher.addURI(DATA_AUTHORITY, TAB_FAVORITE_LOCAL, CODE_FAVORITE_LOCAL);
     }
     
     @Override
@@ -105,6 +139,12 @@ public class DataProvider extends ContentProvider{
                 break;
             case CODE_CHANNEL_VIDEO_ALL:
                 c = db.query(TAB_CHANNEL_VIDEO_ALL, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CODE_SUBSCRIBE_LOCAL:
+                c = db.query(TAB_SUBSCRIBE_LOCAL, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CODE_FAVORITE_LOCAL:
+                c = db.query(TAB_FAVORITE_LOCAL, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -144,6 +184,12 @@ public class DataProvider extends ContentProvider{
             case CODE_CHANNEL_VIDEO_ALL:
                 id = db.insert(TAB_CHANNEL_VIDEO_ALL, "", values);
                 break;
+            case CODE_SUBSCRIBE_LOCAL:
+                id = db.insert(TAB_SUBSCRIBE_LOCAL, "", values);
+                break;
+            case CODE_FAVORITE_LOCAL:
+                id = db.insert(TAB_FAVORITE_LOCAL, "", values);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -177,6 +223,12 @@ public class DataProvider extends ContentProvider{
             case CODE_CHANNEL_VIDEO_ALL:
                 result = db.delete(TAB_CHANNEL_VIDEO_ALL, selection, selectionArgs);
                 break;
+            case CODE_SUBSCRIBE_LOCAL:
+                result = db.delete(TAB_SUBSCRIBE_LOCAL, selection, selectionArgs);
+                break;
+            case CODE_FAVORITE_LOCAL:
+                result = db.delete(TAB_FAVORITE_LOCAL, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -208,6 +260,12 @@ public class DataProvider extends ContentProvider{
                 break;
             case CODE_CHANNEL_VIDEO_ALL:
                 result = db.update(TAB_CHANNEL_VIDEO_ALL, values, selection, selectionArgs);
+                break;
+            case CODE_SUBSCRIBE_LOCAL:
+                result = db.update(TAB_SUBSCRIBE_LOCAL, values, selection, selectionArgs);
+                break;
+            case CODE_FAVORITE_LOCAL:
+                result = db.update(TAB_FAVORITE_LOCAL, values, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -241,6 +299,8 @@ public class DataProvider extends ContentProvider{
             createChannelBlogAllTab(db);
             createChannelVideoLocalTab(db);
             createChannelVideoAllTab(db);
+            createSubscribeLocalTab(db);
+            createFavoriteLocalTab(db);
         }
         
         private void createChannelNewsLocalTab(SQLiteDatabase db){
@@ -328,6 +388,44 @@ public class DataProvider extends ContentProvider{
                         CHANNEL_NAME + " VARCHAR," +
                         CHANNEL_URL + " VARCHAR," +
                         CHANNEL_URLAPI + " VARCHAR" +
+                        ")"
+                        );
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+        private void createSubscribeLocalTab(SQLiteDatabase db){
+            try{
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_SUBSCRIBE_LOCAL + "(" +
+                        _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                        SUBSCRIBE_ID + " INTEGER default -1," +
+                        SUBSCRIBE_FAVID + " VARCHAR," +
+                        SUBSCRIBE_TYPE +" INTEGER default -1," + 
+                        SUBSCRIBE_TITLE + " VARCHAR," +
+                        SUBSCRIBE_LOGO + " VARCHAR," +
+                        SUBSCRIBE_URL + " VARCHAR," +
+                        SUBSCRIBE_URLAPI + " VARCHAR" +
+                        ")"
+                        );
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+        private void createFavoriteLocalTab(SQLiteDatabase db){
+            try{
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_FAVORITE_LOCAL + "(" +
+                        _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                        FAVORITE_ID + " INTEGER default -1," +
+                        FAVORITE_FAVID + " VARCHAR," +
+                        FAVORITE_IDTYPE +" VARCHAR," + 
+                        FAVORITE_SPACEUID + " VARCHAR," +
+                        FAVORITE_TITLE + " VARCHAR," +
+                        FAVORITE_DESC + " VARCHAR," +
+                        FAVORITE_DATELINE + " VARCHAR," +
+                        FAVORITE_URL + " VARCHAR," +
+                        FAVORITE_URLAPI + " VARCHAR" +
                         ")"
                         );
             }catch(Exception e){

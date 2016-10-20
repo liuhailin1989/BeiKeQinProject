@@ -250,7 +250,7 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 			long id) {
 		// TODO Auto-generated method stub
 		News item = (News) parent.getAdapter().getItem(position);
-		UIHelper.enterNewsDetail(getActivity(), item);
+		UIHelper.enterNewsDetail(getActivity(), item,false);
 	}
 
 	@Override

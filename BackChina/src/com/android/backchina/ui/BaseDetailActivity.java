@@ -32,6 +32,10 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
     
     protected TextHttpResponseHandler mHandler;
     
+    protected TextHttpResponseHandler mFavoriteHandler;
+    
+    protected TextHttpResponseHandler mCancleFavoriteHandler;
+    
     protected OperatorCallBack operatorCallBack = null;
     
 	@Override
@@ -102,6 +106,38 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
                 }
             }
     	};
+    	mFavoriteHandler = new TextHttpResponseHandler(){
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String responseString,
+					Throwable throwable) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String responseString) {
+				// TODO Auto-generated method stub
+				handleFavoriteResp(responseString);
+			}
+        	
+        };
+        mCancleFavoriteHandler = new TextHttpResponseHandler(){
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String responseString,
+					Throwable throwable) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, String responseString) {
+				// TODO Auto-generated method stub
+				handleCancleFavoriteResp(responseString);
+			}
+        	
+        };
         requestData();
     }
     
@@ -136,6 +172,14 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    protected void handleFavoriteResp(String responseString){
+    	
+    }
+    
+    protected void handleCancleFavoriteResp(String responseString){
+    	
     }
     
     public Fragment getDataViewFragment(){

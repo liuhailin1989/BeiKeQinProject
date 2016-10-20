@@ -310,4 +310,91 @@ public class BackChinaApi {
      params.put("action", "list");
      ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
     }
+    
+    public static void getFavoriteNews(int page,AsyncHttpResponseHandler handler){
+     //http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&type=article&action=list&page=1
+   	 RequestParams params = new RequestParams();
+     params.put("func", "myfavorite");
+     params.put("type", "article");
+     params.put("action", "list");
+     params.put("page", page);
+     ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void favoriteNews(int id, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&type=article&action=add&dataid=447177
+        RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("type", "article");
+        params.put("action", "add");
+        params.put("dataid", id);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void cancleFavoriteNews(String favid, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&action=del&favid=XXX
+        RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("action", "del");
+        params.put("favid", favid);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void getFavoriteBlog(int page,AsyncHttpResponseHandler handler){
+        //http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&type=blog&action=list&page=1
+      	 RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("type", "blog");
+        params.put("action", "list");
+        params.put("page", page);
+        ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
+       }
+    
+    public static void favoriteBlog(int id, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&type=blog&action=add&dataid=259485
+        RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("type", "blog");
+        params.put("action", "add");
+        params.put("dataid", id);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void cancleFavoriteBlog(String favid, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&action=del&favid=XXX
+        RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("action", "del");
+        params.put("favid", favid);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void getFavoriteSpecialNews(int page,AsyncHttpResponseHandler handler){
+        //http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&type=thread&action=list&page=1
+      	 RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("type", "thread");
+        params.put("action", "list");
+        params.put("page", page);
+        ApiHttpClient.get("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void favoriteSpecialNews(int id, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&type=thread&action=add&dataid=1411087
+        RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("type", "thread");
+        params.put("action", "add");
+        params.put("dataid", id);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
+    
+    public static void cancleFavoriteSpecialNews(String favid, AsyncHttpResponseHandler handler){
+    	//http://www.backchina.com/plugin.php?id=bkc_app_iphone:user&func=myfavorite&action=del&favid=XXX
+        RequestParams params = new RequestParams();
+        params.put("func", "myfavorite");
+        params.put("action", "del");
+        params.put("favid", favid);
+        ApiHttpClient.post("plugin.php?id=bkc_app_iphone:user", params, handler);
+    }
 }

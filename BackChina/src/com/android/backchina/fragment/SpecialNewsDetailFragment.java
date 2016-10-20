@@ -52,6 +52,8 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     
     private ImageView mBtnFontSize;
     
+    private ImageView mBtnFavorite;
+    
     private ImageView mBtnShare;
     
     private LinearLayout layFontControlContainer;
@@ -61,6 +63,8 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     private TextView mTvFontSize;
     
     private BlogCommentBean mCurrentClickComment = null;
+    
+    private  boolean isFavorite = false;
     
 	public static SpecialNewsDetailFragment newInstance() {
 		SpecialNewsDetailFragment fragment = new SpecialNewsDetailFragment();
@@ -161,7 +165,20 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 				}
 			}
 		});
-        
+        //
+        mBtnFavorite = (ImageView) root.findViewById(R.id.iv_favorite);
+        mBtnFavorite.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(isFavorite){
+					iDetail.cancleFavorite();
+				} else {
+					iDetail.toFavorite();
+				}
+			}
+		});
         mBtnShare = (ImageView) root.findViewById(R.id.iv_share);
         mBtnShare.setOnClickListener(new OnClickListener() {
 			
@@ -221,6 +238,12 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         if(specialNewsDetail == null){
             return;
         }
+        isFavorite = specialNewsDetail.isFavorite();
+        if(isFavorite){
+        	mBtnFavorite.setImageResource(R.drawable.ic_favorite_selected);
+        }else{
+        	mBtnFavorite.setImageResource(R.drawable.ic_favorite);
+        }
         setWebViewContent(specialNewsDetail.getContent());
         mTitle.setText(specialNewsDetail.getTitle());
         mPubTime.setText(StringUtils.friendlyTime(specialNewsDetail.getDateline()));
@@ -258,7 +281,19 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 	@Override
 	public void toFavoriteSucess() {
 		// TODO Auto-generated method stub
-		
+		if(mBtnFavorite != null){
+			mBtnFavorite.setImageResource(R.drawable.ic_favorite_selected);
+		}
+		isFavorite = true;
+	}
+	
+	@Override
+	public void toCancleFavoriteSucess() {
+		// TODO Auto-generated method stub
+		if(mBtnFavorite != null){
+			mBtnFavorite.setImageResource(R.drawable.ic_favorite);
+		}
+		isFavorite = false;
 	}
 
 	@Override

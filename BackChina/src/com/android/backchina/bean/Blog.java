@@ -12,7 +12,9 @@ public class Blog extends BaseBean {
      */
     private long dateline;
     
-    public long getDateline() {
+    private String favid;
+    
+	public long getDateline() {
         return dateline;
     }
 
@@ -20,4 +22,11 @@ public class Blog extends BaseBean {
         this.dateline = dateline;
     }
 	
+    public String getFavid() {
+		return favid;
+	}
+
+	public void setFavid(String favid) {
+		this.favid = favid;
+	}
 }

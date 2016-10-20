@@ -64,6 +64,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     
     private ImageView mBtnFontSize;
     
+    private ImageView mBtnFavorite;
+    
     private ImageView mBtnShare;
     
     private LinearLayout layFontControlContainer;
@@ -75,6 +77,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     private BlogCommentBean mCurrentClickComment = null;
     
     private int mCurrentReferPosition = 0;
+    
+    private  boolean isFavorite = false;
     
 	public static BlogDetailFragment newInstance() {
 		BlogDetailFragment fragment = new BlogDetailFragment();
@@ -217,6 +221,20 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 				}
 			}
 		});
+        //
+        mBtnFavorite = (ImageView) root.findViewById(R.id.iv_favorite);
+        mBtnFavorite.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(isFavorite){
+					iDetail.cancleFavorite();
+				} else {
+					iDetail.toFavorite();
+				}
+			}
+		});
         
         mBtnShare = (ImageView) root.findViewById(R.id.iv_share);
         mBtnShare.setOnClickListener(new OnClickListener() {
@@ -289,6 +307,12 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         if(blogDetail == null){
             return;
         }
+        isFavorite = blogDetail.isFavorite();
+        if(isFavorite){
+        	mBtnFavorite.setImageResource(R.drawable.ic_favorite_selected);
+        }else{
+        	mBtnFavorite.setImageResource(R.drawable.ic_favorite);
+        }
         setWebViewContent(blogDetail.getContent());
         mTitle.setText(blogDetail.getTitle());
         mPubTime.setText(StringUtils.friendlyTime(blogDetail.getDateline()));
@@ -336,7 +360,19 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 	@Override
 	public void toFavoriteSucess() {
 		// TODO Auto-generated method stub
-		
+		if(mBtnFavorite != null){
+			mBtnFavorite.setImageResource(R.drawable.ic_favorite_selected);
+		}
+		isFavorite = true;
+	}
+	
+	@Override
+	public void toCancleFavoriteSucess() {
+		// TODO Auto-generated method stub
+		if(mBtnFavorite != null){
+			mBtnFavorite.setImageResource(R.drawable.ic_favorite);
+		}
+		isFavorite = false;
 	}
 
 	@Override

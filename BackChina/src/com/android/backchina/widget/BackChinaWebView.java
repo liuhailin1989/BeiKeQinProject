@@ -26,6 +26,7 @@ import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.interf.OnWebViewImageListener;
 import com.android.backchina.ui.AboutUsActivity;
+import com.android.backchina.utils.FileUtil;
 import com.android.backchina.utils.NetworkUtils;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TDevice;
@@ -111,6 +112,7 @@ public class BackChinaWebView extends WebView {
                 @Override
                 public void run() {
                     final String body = setupWebContent(content, true, true, "");
+                    FileUtil.saveStringToFile(body);
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -219,6 +221,12 @@ public class BackChinaWebView extends WebView {
             content = content.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
         }
 
+        //广告居中
+        content = content.replaceAll("<div class=\"adblock\">","<div class=\"adblock\" style=\"text-align: center;\">");
+        //过滤掉iframe
+        content = content.replaceAll("(<iframe class=\"ad\" [^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
+        content = content.replaceAll("(<iframe class=\"ad\" [^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+        
         // 过滤table的内部属性
         content = content.replaceAll("(<table[^>]*?)\\s+border\\s*=\\s*\\S+", "$1");
         content = content.replaceAll("(<table[^>]*?)\\s+cellspacing\\s*=\\s*\\S+", "$1");

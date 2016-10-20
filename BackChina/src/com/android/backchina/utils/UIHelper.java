@@ -28,6 +28,7 @@ import com.android.backchina.ui.CityListActivity;
 import com.android.backchina.ui.CommentBlogActivity;
 import com.android.backchina.ui.CommentNewsActivity;
 import com.android.backchina.ui.LoginActivity;
+import com.android.backchina.ui.MyFavoriteActivity;
 import com.android.backchina.ui.NewsDetailActivity;
 import com.android.backchina.ui.RegisterActivity;
 import com.android.backchina.ui.SpecialNewsDetailActivity;
@@ -64,12 +65,12 @@ public class UIHelper {
         NewsDetailActivity.show(context, newsId);
     }
     
-    public static void enterNewsDetail(Context context, News news) {
-    	NewsDetailActivity.show(context, news);
+    public static void enterNewsDetail(Context context, News news,boolean isFavorite) {
+    	NewsDetailActivity.show(context, news, isFavorite);
     }
     
-    public static void enterBlogDetail(Context context, Blog blog) {
-    	BlogDetailActivity.show(context, blog);
+    public static void enterBlogDetail(Context context, Blog blog, boolean isFavorite) {
+    	BlogDetailActivity.show(context, blog, isFavorite);
     }
     
     public static void enterVideoPlayerActivity(Context context,Video video){
@@ -78,6 +79,10 @@ public class UIHelper {
     
     public static void enterLoginActivity(Context context){
     	LoginActivity.show(context);
+    }
+    
+    public static void enterMyFavoriteActivity(Context context){
+    	MyFavoriteActivity.show(context);
     }
     
     public static void enterAboutUsActivity(Context context){

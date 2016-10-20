@@ -20,6 +20,14 @@ img {
 	max-width:100%;
 }
 
+iframe {
+    width:300px;
+    height:250px;
+    margin:0,0,0,0;
+    padding:0,0,0,0;
+    align=middle;
+}
+
 img.alignleft {
 	float:left;
 	max-width:120px;

@@ -19,6 +19,8 @@ public class SpecialNewsDetail<T> extends BaseBean{
     
     private List<T> blogcomments;
     
+    private boolean isFavorite;
+    
     public String getContent() {
         return content;
     }
@@ -42,5 +44,13 @@ public class SpecialNewsDetail<T> extends BaseBean{
 
 	public void setBlogcomments(List<T> blogcomments) {
 		this.blogcomments = blogcomments;
+	}
+	
+	public boolean isFavorite() {
+		return isFavorite;
+	}
+
+	public void setFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 }

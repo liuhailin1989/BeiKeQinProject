@@ -58,6 +58,7 @@ public class TabMeFragment extends BaseFragment {
     
     private Button mBtnLogout;
     
+    private LinearLayout mFavoriteContainer;
     private LinearLayout mBlogContainer;
     private LinearLayout mCacheContainer;
     private LinearLayout mAboutContainer;
@@ -161,6 +162,16 @@ public class TabMeFragment extends BaseFragment {
         mBlogs = (TextView) root.findViewById(R.id.tv_my_blogs);
         mAlbums = (TextView) root.findViewById(R.id.tv_my_albums);
         //
+        mFavoriteContainer = (LinearLayout) root.findViewById(R.id.ll_my_favorite_container);
+        mFavoriteContainer.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				UIHelper.enterMyFavoriteActivity(getActivity());
+			}
+		});
+        //
         mBlogContainer = (LinearLayout) root.findViewById(R.id.ll_my_blog_container);
         mBlogContainer.setOnClickListener(new OnClickListener() {
 			
@@ -179,8 +190,8 @@ public class TabMeFragment extends BaseFragment {
 				UIHelper.enterBlogSpaceActivity(getActivity(), myBlogDetail);
 			}
 		});
-        mCacheContainer = (LinearLayout) root.findViewById(R.id.ll_cache_container);;
-        mAboutContainer = (LinearLayout) root.findViewById(R.id.ll_about_container);;
+        mCacheContainer = (LinearLayout) root.findViewById(R.id.ll_cache_container);
+        mAboutContainer = (LinearLayout) root.findViewById(R.id.ll_about_container);
         
         mAvatar = (CircleImageView) root.findViewById(R.id.iv_avatar);
         mBtnLogout =(Button) root.findViewById(R.id.btn_logout);

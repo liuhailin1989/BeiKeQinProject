@@ -185,7 +185,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 			long id) {
 		// TODO Auto-generated method stub
 		Blog item = (Blog) parent.getAdapter().getItem(position);
-		 UIHelper.enterBlogDetail(getActivity(), item);
+		 UIHelper.enterBlogDetail(getActivity(), item,false);
 	}
 
 	@Override

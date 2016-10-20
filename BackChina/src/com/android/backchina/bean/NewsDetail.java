@@ -23,7 +23,8 @@ public class NewsDetail extends BaseBean {
     
     private List<News> related_b;
     
-
+    private boolean isFavorite;
+    
 	public String getContent() {
         return content;
     }
@@ -54,5 +55,13 @@ public class NewsDetail extends BaseBean {
 
 	public void setRelated_b(List<News> related_b) {
 		this.related_b = related_b;
+	}
+
+	public boolean isFavorite() {
+		return isFavorite;
+	}
+
+	public void setFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 }

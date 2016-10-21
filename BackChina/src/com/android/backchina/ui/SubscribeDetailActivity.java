@@ -260,7 +260,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		SubscribeDetail subscribeDetail = mAdapter.getItem(position);
+		SubscribeDetail subscribeDetail = (SubscribeDetail) parent.getAdapter().getItem(position);
 		UIHelper.enterSpecialNewsDetailActivity(this,subscribeDetail);
 	}
 

@@ -1,13 +1,17 @@
 package com.android.backchina.fcmpush;
 
+import java.util.Map;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 
 import com.android.backchina.R;
+import com.android.backchina.bean.News;
 import com.android.backchina.ui.PushMessageActivity;
 import com.android.backchina.utils.TLog;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -48,6 +52,12 @@ public class MyMessagingService extends FirebaseMessagingService {
         Notification.Builder builder = new Notification.Builder(context);
         //设置一个启动意图
         Intent it = new Intent(context,PushMessageActivity.class);
+        Map<String, String> messageData = message.getData();
+        Bundle bundle = new Bundle();
+        for (Map.Entry<String, String> entry : messageData.entrySet()) {
+        	bundle.putString(entry.getKey(),entry.getValue());
+		}  
+        it.putExtras(bundle);
         PendingIntent contentIndent = PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT);  
         builder.setTicker(message.getNotification().getTitle()); //首次提醒会有动画上升效果
         builder.setContentTitle(message.getNotification().getTitle());//设置下拉列表里的标题

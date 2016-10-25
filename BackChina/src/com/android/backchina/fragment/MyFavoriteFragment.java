@@ -2,6 +2,9 @@ package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
@@ -11,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.android.backchina.AppContext;
+import com.android.backchina.AppOperator;
+import com.android.backchina.BackChinaMode;
 import com.android.backchina.R;
 import com.android.backchina.adapter.MyFavoriteAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
@@ -20,8 +25,10 @@ import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.FavoriteBean;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.base.ResultListBean;
+import com.android.backchina.interf.FavoriteCallback;
 import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
@@ -29,7 +36,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> {
+public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> implements FavoriteCallback{
 
 	public final static String ID_TYPE_AID = "aid";
 	public final static String ID_TYPE_BLOGID = "blogid";
@@ -83,6 +90,7 @@ public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> {
 	protected void initData() {
 		// TODO Auto-generated method stub
 		super.initData();
+		AppContext.getInstance().getBackChinaMode().setFavoriteCallback(this);
 		mCurrentPage = 1;
 		isLoadMoreAction = false;
 		resetFlag();
@@ -201,13 +209,26 @@ public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> {
 	
 	protected void setListData(final List<FavoriteBean> favoriteBeans,
 			boolean isrefresh) {
+		if(favoriteBeans == null){
+			mAdapter.clear();
+			return;
+		}
 		// is refresh
+		Collections.sort(favoriteBeans, new FavoriteBeanComparator());
 		if (isrefresh) {
 			mAdapter.clear();
 			mAdapter.addItem(favoriteBeans);
 		} else {
 			mAdapter.addItem(favoriteBeans);
 		}
+		AppOperator.runOnThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				FavoriteManager.getInstance().saveFavoriteBeanToTabOnline(getActivity(), favoriteBeans);
+			}
+		});
 	}
 	
 	@Override
@@ -250,6 +271,7 @@ public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> {
 								if(isLoadMoreAction){
 									loadMoreNodata();
 								}else{
+								setListData(null,true);
 								onRequestError(EmptyLayout.NODATA);
 								}
 							}
@@ -283,6 +305,7 @@ public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> {
 				if(isLoadMoreAction){
 					loadMoreNodata();
 				}else{
+				setListData(null,true);
 				onRequestError(EmptyLayout.NODATA);
 				}
 			}
@@ -336,6 +359,28 @@ public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> {
 	}
 	
 	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		// TODO Auto-generated method stub
+		FavoriteBean item = (FavoriteBean) parent.getAdapter().getItem(position);
+		BackChinaApi.cancleFavoriteNews(item.getFavid(), new TextHttpResponseHandler() {
+			
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, String arg2) {
+				// TODO Auto-generated method stub
+				UIHelper.notifyFavoriteDataChanged(getActivity());
+			}
+			
+			@Override
+			public void onFailure(int arg0, Header[] arg1, String arg2, Throwable arg3) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		return true;
+	}
+	
+	@Override
 	public void onTabReselect() {
 		// TODO Auto-generated method stub
 		
@@ -352,6 +397,53 @@ public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> {
 		// TODO Auto-generated method stub
 		return new TypeToken<ResultListBean<FavoriteBean>>() {
 		}.getType();
+	}
+
+	@Override
+	public void OnFavoriteDataChanged() {
+		// TODO Auto-generated method stub
+		if (getActivity() != null) {
+			onRefresh();
+		}
+	}
+	
+	public class FavoriteBeanComparator implements Comparator<FavoriteBean>{
+
+		@Override
+		public int compare(FavoriteBean lhs, FavoriteBean rhs) {
+			// TODO Auto-generated method stub
+			try {
+				String lhs_dateline = lhs.getDateline();
+				String rhs_dateline = rhs.getDateline();
+				long lhs_time = 0;
+				long rhs_time = 0;
+				//
+				if(lhs_dateline.contains("-")){
+					Date date = StringUtils.toDate2(lhs_dateline);
+					lhs_time = date.getTime()/1000;
+				}else{
+					lhs_time = Long.valueOf(lhs_dateline);
+				}
+				//
+				if(rhs_dateline.contains("-")){
+					Date date = StringUtils.toDate2(rhs_dateline);
+					rhs_time = date.getTime()/1000;
+				}else{
+					rhs_time = Long.valueOf(rhs_dateline);
+				}
+				//
+				if (lhs_time > rhs_time) {
+					return -1;
+				} else if (lhs_time < rhs_time) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}catch(Exception ex){
+				return -1;
+			}
+		}
+		
 	}
 	
 }

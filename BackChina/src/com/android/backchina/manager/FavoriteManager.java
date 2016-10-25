@@ -34,6 +34,8 @@ public class FavoriteManager {
 		return instance;
 	}
 	
+	//local
+	
 	public boolean hasFavorited(Context context,String id,String idType){
 		List<FavoriteBean> result = queryFavoriteBeanByFavid(context, DataProvider.FAVORITE_LOCAL_URI, id, idType);
 		if(result != null && result.size() > 0){
@@ -43,7 +45,7 @@ public class FavoriteManager {
 		}
 	}
 	
-	public FavoriteBean getFavoriteBeanById(Context context,String id,String idType){
+	public FavoriteBean getFavoriteBeanFromTabLocalById(Context context,String id,String idType){
 		List<FavoriteBean> result = queryFavoriteBeanByFavid(context, DataProvider.FAVORITE_LOCAL_URI, id, idType);
 		if(result != null && result.size() > 0){
 			return result.get(0);
@@ -71,6 +73,40 @@ public class FavoriteManager {
 	public List<FavoriteBean> getFavoriteBeanFromTabLocal(Context context) {
 		return getFavoriteBeanListFromDb(context, DataProvider.FAVORITE_LOCAL_URI);
 	}
+	
+	
+	//Online
+	public void saveFavoriteBeanToTabOnline(Context context, FavoriteBean favoriteBean) {
+		saveFavoriteBeanToDb(context, DataProvider.FAVORITE_ONELINE_URI, favoriteBean);
+	}
+	
+	public void saveFavoriteBeanToTabOnline(Context context,List<FavoriteBean> favoriteBeans) {
+		saveFavoriteBeanToDb(context, DataProvider.FAVORITE_ONELINE_URI, favoriteBeans);
+	}
+	
+	public FavoriteBean getFavoriteBeanFromTabOnlineById(Context context,String id,String idType){
+		List<FavoriteBean> result = queryFavoriteBeanByFavid(context, DataProvider.FAVORITE_ONELINE_URI, id, idType);
+		if(result != null && result.size() > 0){
+			return result.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	public boolean isFavoritedFromTabOnline(Context context,String id,String idType){
+		List<FavoriteBean> result = queryFavoriteBeanByFavid(context, DataProvider.FAVORITE_ONELINE_URI, id, idType);
+		if(result != null && result.size() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public void deleteFavoriteBeanFromTabOnline(Context context, String id, String idType) {
+		deleteFavoriteBeanByIdFromDb(context, DataProvider.FAVORITE_ONELINE_URI, id, idType);
+	}
+	
+	
 	
 	private ContentValues favoriteBeanToContentValues(FavoriteBean favoriteBean) {
 		ContentValues values = null;
@@ -179,7 +215,7 @@ public class FavoriteManager {
 			Builder b = null;
 			//
 			if (favoriteBean != null) {
-				b = ContentProviderOperation.newDelete(url).withSelection("favid = ?",new String[]{favoriteBean.getFavid()});
+				b = ContentProviderOperation.newDelete(url).withSelection("id=? and idtype=?",new String[]{""+favoriteBean.getId(),favoriteBean.getIdtype()});
 				ops.add(b.build());
 			}
 			//
@@ -198,7 +234,7 @@ public class FavoriteManager {
 			Builder b = null;
 			//
 			if (favoriteBean != null) {
-				b = ContentProviderOperation.newDelete(url).withSelection("favid = ?",new String[]{favoriteBean.getFavid()});
+				b = ContentProviderOperation.newDelete(url).withSelection("id=? and idtype=?",new String[]{""+favoriteBean.getId(),favoriteBean.getIdtype()});
 				ops.add(b.build());
 			}
 			//
@@ -226,7 +262,7 @@ public class FavoriteManager {
 				for (FavoriteBean favoriteBean : favoriteBeans) {
 					if (favoriteBean != null) {
 						//
-						b = ContentProviderOperation.newDelete(url).withSelection("favid = ?",new String[]{favoriteBean.getFavid()});
+						b = ContentProviderOperation.newDelete(url).withSelection("id=? and idtype=?",new String[]{""+favoriteBean.getId(),favoriteBean.getIdtype()});
 						ops.add(b.build());
 						ContentValues values = favoriteBeanToContentValues(favoriteBean);
 						b = ContentProviderOperation.newInsert(url).withValues(

@@ -59,6 +59,10 @@ public class StringUtils {
 	public static Date toDate(String sdate) {
 		return toDate(sdate, dateFormater.get());
 	}
+	
+	public static Date toDate2(String sdate) {
+		return toDate(sdate, dateFormater2.get());
+	}
 
 	public static Date toDate(String sdate, SimpleDateFormat dateFormater) {
 		try {
@@ -75,7 +79,7 @@ public class StringUtils {
 	public static String getDateString(String sdate) {
 		return dateFormat3.get().format(toDate(sdate));
 	}
-
+	
 	public static String getDateString(long time) {
 		Date d = new Date(time);
 		return dateFormat3.get().format(d);
@@ -139,7 +143,7 @@ public class StringUtils {
 	 }
 	   
 	public static String friendlyTime(String sTime) {
-		String tempTime = sTime.substring(0, sTime.indexOf(" "));
+		String tempTime = sTime.substring(0, 9);//YYYY-MM-DD
 		String[] split = tempTime.split("-");
 		StringBuilder builder = new StringBuilder();
 		return builder.append(split[0]).append("年").append(split[1])

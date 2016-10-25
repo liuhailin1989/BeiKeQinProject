@@ -51,7 +51,7 @@ public abstract class YouTubeFailureRecoveryActivity extends YouTubeBaseActivity
       getYouTubePlayerProvider().initialize(DeveloperKey.DEVELOPER_KEY, this);
     }
   }
-
+  
   protected abstract YouTubePlayer.Provider getYouTubePlayerProvider();
 
 }

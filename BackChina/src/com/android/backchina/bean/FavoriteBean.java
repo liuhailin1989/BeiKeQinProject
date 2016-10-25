@@ -7,6 +7,8 @@ public class FavoriteBean extends Entity {
 	 */
 	private static final long serialVersionUID = 8224626535242994167L;
 	
+	private String status;
+	
 	private String favid;//
     
     private String idtype;//
@@ -22,6 +24,14 @@ public class FavoriteBean extends Entity {
     private String url;
 
     private String urlapi;
+    
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public String getFavid() {
 		return favid;

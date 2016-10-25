@@ -76,6 +76,10 @@ public class DataProvider extends ContentProvider{
     public static final String TAB_FAVORITE_LOCAL = "favorite_local";
     public static final Uri FAVORITE_LOCAL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_FAVORITE_LOCAL);
     
+    public static final int CODE_FAVORITE_ONLINE = 9;
+    public static final String TAB_FAVORITE_ONLINE = "favorite_online";
+    public static final Uri FAVORITE_ONELINE_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_FAVORITE_ONLINE);
+    
     public static final String FAVORITE_ID = "id";
     public static final String FAVORITE_FAVID = "favid";
     public static final String FAVORITE_IDTYPE = "idtype";
@@ -102,6 +106,7 @@ public class DataProvider extends ContentProvider{
         uriMatcher.addURI(DATA_AUTHORITY, TAB_SUBSCRIBE_LOCAL, CODE_SUBSCRIBE_LOCAL);
         //favorite
         uriMatcher.addURI(DATA_AUTHORITY, TAB_FAVORITE_LOCAL, CODE_FAVORITE_LOCAL);
+        uriMatcher.addURI(DATA_AUTHORITY, TAB_FAVORITE_ONLINE, CODE_FAVORITE_ONLINE);
     }
     
     @Override
@@ -145,6 +150,9 @@ public class DataProvider extends ContentProvider{
                 break;
             case CODE_FAVORITE_LOCAL:
                 c = db.query(TAB_FAVORITE_LOCAL, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CODE_FAVORITE_ONLINE:
+                c = db.query(TAB_FAVORITE_ONLINE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -190,6 +198,9 @@ public class DataProvider extends ContentProvider{
             case CODE_FAVORITE_LOCAL:
                 id = db.insert(TAB_FAVORITE_LOCAL, "", values);
                 break;
+            case CODE_FAVORITE_ONLINE:
+                id = db.insert(TAB_FAVORITE_ONLINE, "", values);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -229,6 +240,9 @@ public class DataProvider extends ContentProvider{
             case CODE_FAVORITE_LOCAL:
                 result = db.delete(TAB_FAVORITE_LOCAL, selection, selectionArgs);
                 break;
+            case CODE_FAVORITE_ONLINE:
+                result = db.delete(TAB_FAVORITE_ONLINE, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -267,6 +281,9 @@ public class DataProvider extends ContentProvider{
             case CODE_FAVORITE_LOCAL:
                 result = db.update(TAB_FAVORITE_LOCAL, values, selection, selectionArgs);
                 break;
+            case CODE_FAVORITE_ONLINE:
+                result = db.update(TAB_FAVORITE_ONLINE, values, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -301,6 +318,7 @@ public class DataProvider extends ContentProvider{
             createChannelVideoAllTab(db);
             createSubscribeLocalTab(db);
             createFavoriteLocalTab(db);
+            createFavoriteOnlineTab(db);
         }
         
         private void createChannelNewsLocalTab(SQLiteDatabase db){
@@ -416,6 +434,26 @@ public class DataProvider extends ContentProvider{
         private void createFavoriteLocalTab(SQLiteDatabase db){
             try{
                 db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_FAVORITE_LOCAL + "(" +
+                        _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                        FAVORITE_ID + " INTEGER default -1," +
+                        FAVORITE_FAVID + " VARCHAR," +
+                        FAVORITE_IDTYPE +" VARCHAR," + 
+                        FAVORITE_SPACEUID + " VARCHAR," +
+                        FAVORITE_TITLE + " VARCHAR," +
+                        FAVORITE_DESC + " VARCHAR," +
+                        FAVORITE_DATELINE + " VARCHAR," +
+                        FAVORITE_URL + " VARCHAR," +
+                        FAVORITE_URLAPI + " VARCHAR" +
+                        ")"
+                        );
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+        private void createFavoriteOnlineTab(SQLiteDatabase db){
+            try{
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_FAVORITE_ONLINE + "(" +
                         _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
                         FAVORITE_ID + " INTEGER default -1," +
                         FAVORITE_FAVID + " VARCHAR," +

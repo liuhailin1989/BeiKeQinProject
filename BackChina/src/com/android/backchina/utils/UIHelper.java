@@ -45,6 +45,12 @@ public class UIHelper {
 		context.sendBroadcast(intent);
 	}
 	
+	public static void notifyFavoriteDataChanged(Context context){
+		Intent intent = new Intent();
+		intent.setAction(BackChinaMode.ACTION_FAVORITE_DATA_CHANGED);
+		context.sendBroadcast(intent);
+	}
+	
     public static void showUrlRedirect(Context context, String url) {
 //        showUrlRedirect(context, 0, url);
     }

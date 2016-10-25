@@ -17,12 +17,10 @@ import com.android.backchina.bean.NewsDetail;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultBean;
-import com.android.backchina.db.DataProvider;
 import com.android.backchina.fragment.NewsDetailFragment;
 import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.ui.dialog.DialogHelper;
 import com.android.backchina.ui.dialog.WaitDialog;
-import com.android.backchina.utils.FileUtil;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
@@ -35,6 +33,8 @@ public class NewsDetailActivity extends BaseDetailActivity{
 
     private final static String BUNDLE_KEY_NEWS = "BUNDLE_KEY_NEWS";
     private final static String BUNDLE_KEY_IS_FAVORITE = "BUNDLE_KEY_IS_FAVORITE";
+    
+    private final static String FAVORITE_ID_TYPE = "aid";
     
     private News currentNews;
     
@@ -61,6 +61,16 @@ public class NewsDetailActivity extends BaseDetailActivity{
     protected void initBundle(Bundle bundle){
         currentNews = (News) bundle.getSerializable(BUNDLE_KEY_NEWS);
         isFavorite = (boolean) bundle.getSerializable(BUNDLE_KEY_IS_FAVORITE);
+        FavoriteBean favoriteBean = null;
+        if (AppContext.getInstance().isLogin()) {
+			 favoriteBean = FavoriteManager.getInstance().getFavoriteBeanFromTabOnlineById(this,"" + currentNews.getId(), FAVORITE_ID_TYPE);
+		}else{
+			favoriteBean = FavoriteManager.getInstance().getFavoriteBeanFromTabLocalById(this, ""+currentNews.getId(), FAVORITE_ID_TYPE);
+    	}
+        isFavorite = (favoriteBean != null) ? true : false;
+        if(isFavorite){
+        	currentNews.setFavid(favoriteBean.getFavid());
+        }
     }
     
     @Override
@@ -132,18 +142,19 @@ public class NewsDetailActivity extends BaseDetailActivity{
 			FavoriteBean favoriteBean = new FavoriteBean();
 			favoriteBean.setId(currentNews.getId());
 			favoriteBean.setFavid("favid_"+currentNews.getId());
-			favoriteBean.setIdtype("aid");
+			favoriteBean.setIdtype(FAVORITE_ID_TYPE);
 			favoriteBean.setSpaceuid("");
 			favoriteBean.setTitle(currentNews.getTitle());
 			favoriteBean.setDesc("");
-			favoriteBean.setDateline(""+currentNews.getDateline());
+			favoriteBean.setDateline(""+System.currentTimeMillis()/1000);
 			favoriteBean.setUrl(currentNews.getUrl());
 			favoriteBean.setUrlapi(currentNews.getUrlapi());
 			FavoriteManager.getInstance().saveFavoriteBeanToTabLocal(this,favoriteBean);
-			Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
 			if (operatorCallBack != null) {
 				operatorCallBack.toFavoriteSucess();
 			}
+			UIHelper.notifyFavoriteDataChanged(this);
+			showFavoriteSucessed();
 		}
     }
     
@@ -154,14 +165,15 @@ public class NewsDetailActivity extends BaseDetailActivity{
 			if (!StringUtils.isEmpty(favid)) {
 				BackChinaApi.cancleFavoriteNews(favid, mCancleFavoriteHandler);
 			}else{
-				Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+				showCancleFavoriteFailed();
 			}
 		}else{
-			FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+currentNews.getId(),"aid");
+			FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+currentNews.getId(),FAVORITE_ID_TYPE);
 			if (operatorCallBack != null) {
 				operatorCallBack.toCancleFavoriteSucess();
 			}
-			Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+			UIHelper.notifyFavoriteDataChanged(this);
+			showCancleFavoriteSucessed();
 		}
     }
 
@@ -232,28 +244,40 @@ public class NewsDetailActivity extends BaseDetailActivity{
     @Override
     protected void handleFavoriteResp(String responseString) {
     	// TODO Auto-generated method stub
-    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+    	Type type = new TypeToken<ActivitiesBean<FavoriteBean>>() {
         }.getType();
-        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
-        StatusBean statusBean = activitiesBean.getActivities();
+        ActivitiesBean<FavoriteBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
+        FavoriteBean favoriteBean = activitiesBean.getActivities();
         //favorite_repeat
-        if (statusBean.getStatus().equals("1")) {
-        	Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
-        	if (operatorCallBack != null) {
-				operatorCallBack.toFavoriteSucess();
+		if (favoriteBean.getStatus() == null) {
+			if (favoriteBean.getFavid() != null) {
+				if(currentNews != null){
+					currentNews.setFavid(favoriteBean.getFavid());
+				}
+				if (operatorCallBack != null) {
+					operatorCallBack.toFavoriteSucess();
+				}
+				FavoriteManager.getInstance().saveFavoriteBeanToTabOnline(this, favoriteBean);
+				UIHelper.notifyFavoriteDataChanged(this);
+				showFavoriteSucessed();
+			} else {
+				showFavoriteFailed();
 			}
-        }else if (statusBean.getStatus().equals("favorite_repeat")) {
-        	Toast.makeText(getContext(), "已收藏", Toast.LENGTH_SHORT).show();
-        	if (operatorCallBack != null) {
-				operatorCallBack.toFavoriteSucess();
+		} else {
+			if (favoriteBean.getStatus().equals("favorite_repeat")) {
+				if (operatorCallBack != null) {
+					operatorCallBack.toFavoriteSucess();
+				}
+				UIHelper.notifyFavoriteDataChanged(this);
+				showHasFavorited();
+			} else if (favoriteBean.getStatus().equals("-1")) {
+				showFavoriteFailed();
+			} else if (favoriteBean.getStatus().equals("-2")) {
+				needLogin();
+			} else {
+				showFavoriteFailed();
 			}
-        }else if (statusBean.getStatus().equals("-1")) {
-        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus().equals("-2")) {
-        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
-        }else{
-        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
-        }
+		}
     }
     
     @Override
@@ -265,21 +289,25 @@ public class NewsDetailActivity extends BaseDetailActivity{
         StatusBean statusBean = activitiesBean.getActivities();
         //favorite_repeat
         if (statusBean.getStatus().equals("1")) {
-        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        	FavoriteManager.getInstance().deleteFavoriteBeanFromTabOnline(this, ""+currentNews.getId(),FAVORITE_ID_TYPE);
         	if (operatorCallBack != null) {
 				operatorCallBack.toCancleFavoriteSucess();
 			}
+        	UIHelper.notifyFavoriteDataChanged(this);
+        	showCancleFavoriteSucessed();
         }else if (statusBean.getStatus().equals("favorite_repeat")) {
-        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        	FavoriteManager.getInstance().deleteFavoriteBeanFromTabOnline(this, ""+currentNews.getId(),FAVORITE_ID_TYPE);
         	if (operatorCallBack != null) {
 				operatorCallBack.toCancleFavoriteSucess();
 			}
+        	UIHelper.notifyFavoriteDataChanged(this);
+        	showCancleFavoriteSucessed();
         }else if (statusBean.getStatus().equals("-1")) {
-        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        	showCancleFavoriteFailed();
         }else if (statusBean.getStatus().equals("-2")) {
-        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        	needLogin();
         }else{
-        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        	showCancleFavoriteFailed();
         }
     }
 

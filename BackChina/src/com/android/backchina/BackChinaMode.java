@@ -6,13 +6,13 @@ import java.util.List;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.FavoriteBean;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ActivitiesBean;
+import com.android.backchina.interf.FavoriteCallback;
 import com.android.backchina.interf.SubscribeCallback;
 import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.manager.SubscribeManager;
@@ -24,9 +24,11 @@ import cz.msebera.android.httpclient.Header;
 public class BackChinaMode extends BroadcastReceiver{
 
 	public final static String ACTION_SUBSCRIBE_DATA_CHANGED = "backchina.action.SUBSCRIBE_DATA_CHANGED";
-	
+	public final static String ACTION_FAVORITE_DATA_CHANGED = "backchina.action.FAVORITE_DATA_CHANGED";
 	
 	private SubscribeCallback subscribeCallback;
+	
+	private FavoriteCallback favoriteCallback;
 	
 	private int localSubscribeCount = 0;
 	
@@ -42,6 +44,8 @@ public class BackChinaMode extends BroadcastReceiver{
 		final String action = intent.getAction();
         if (ACTION_SUBSCRIBE_DATA_CHANGED.equals(action)) {
         	subscribeDataChanged();
+        }else if(ACTION_FAVORITE_DATA_CHANGED.equals(action)){
+        	favoriteDataChanged();
         }else if(Constants.INTENT_ACTION_USER_CHANGE.equals(action)){
         	subscribeLocalData(context);
         	handleFavoriteLocalData(context);
@@ -55,6 +59,16 @@ public class BackChinaMode extends BroadcastReceiver{
 	private void subscribeDataChanged(){
 		if(subscribeCallback != null){
 			subscribeCallback.OnSubscribeDataChanged();
+		}
+	}
+	
+	public void setFavoriteCallback(FavoriteCallback callback){
+		favoriteCallback = callback;
+	}
+	
+	private void favoriteDataChanged(){
+		if(favoriteCallback!=null){
+			favoriteCallback.OnFavoriteDataChanged();
 		}
 	}
 	
@@ -131,7 +145,7 @@ public class BackChinaMode extends BroadcastReceiver{
 						public void onSuccess(int code, Header[] headers, String responseString) {
 							// TODO Auto-generated method stub
 							localFavoriteCount--;
-							boolean result = handleFavoriteResp(responseString);
+							boolean result = handleFavoriteResp(context,responseString);
 							if (result) {
 								FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(context, favoriteBean);
 							}
@@ -152,7 +166,7 @@ public class BackChinaMode extends BroadcastReceiver{
 						public void onSuccess(int code, Header[] headers, String responseString) {
 							// TODO Auto-generated method stub
 							localFavoriteCount--;
-							boolean result = handleFavoriteResp(responseString);
+							boolean result = handleFavoriteResp(context,responseString);
 							if (result) {
 								FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(context, favoriteBean);
 							}
@@ -176,27 +190,35 @@ public class BackChinaMode extends BroadcastReceiver{
 	private void favoriteLocalNotify(){
 		if(localFavoriteCount <= 0){
 			//
+			favoriteDataChanged();
 		}
 	}
 	
-    protected boolean handleFavoriteResp(String responseString) {
+    protected boolean handleFavoriteResp(Context context,String responseString) {
     	// TODO Auto-generated method stub
-    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+    	Type type = new TypeToken<ActivitiesBean<FavoriteBean>>() {
         }.getType();
-        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
-        StatusBean statusBean = activitiesBean.getActivities();
+        ActivitiesBean<FavoriteBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
+        FavoriteBean favoriteBean = activitiesBean.getActivities();
         //favorite_repeat
-        if (statusBean.getStatus().equals("1")) {//成功
-        	return true;
-        }else if (statusBean.getStatus().equals("favorite_repeat")) {//重复收藏
-        	return true;
-        }else if (statusBean.getStatus().equals("-1")) {//收藏失败
-        	return false;
-        }else if (statusBean.getStatus().equals("-2")) {//请登录
-        	return false;
-        }else{//收藏失败
-        	return false;
-        }
+        if (favoriteBean.getStatus() == null) {
+        	if (favoriteBean.getFavid() != null) {
+        		FavoriteManager.getInstance().saveFavoriteBeanToTabOnline(context, favoriteBean);
+        		return true;
+        	}else{
+        		return false;
+        	}
+		} else {
+			if (favoriteBean.getStatus().equals("favorite_repeat")) {// 重复收藏
+				return true;
+			} else if (favoriteBean.getStatus().equals("-1")) {// 收藏失败
+				return false;
+			} else if (favoriteBean.getStatus().equals("-2")) {// 请登录
+				return false;
+			} else {// 收藏失败
+				return false;
+			}
+		}
     }
 
 }

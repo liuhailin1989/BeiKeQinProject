@@ -36,6 +36,8 @@ public class BlogDetailActivity extends BaseDetailActivity {
     private final static String BUNDLE_KEY_BLOG = "BUNDLE_KEY_BLOG";
     private final static String BUNDLE_KEY_IS_FAVORITE = "BUNDLE_KEY_IS_FAVORITE";
     
+    private final static String FAVORITE_ID_TYPE = "blogid";
+    
     private Blog mCurrentBlog;
     
     private BlogDetail mBlogDetail;
@@ -56,6 +58,16 @@ public class BlogDetailActivity extends BaseDetailActivity {
 		// TODO Auto-generated method stub
 		mCurrentBlog = (Blog) bundle.getSerializable(BUNDLE_KEY_BLOG);
 		isFavorite = (boolean) bundle.getSerializable(BUNDLE_KEY_IS_FAVORITE);
+		FavoriteBean favoriteBean = null;
+		if (AppContext.getInstance().isLogin()) {
+			favoriteBean = FavoriteManager.getInstance().getFavoriteBeanFromTabOnlineById(this,"" + mCurrentBlog.getId(), FAVORITE_ID_TYPE);
+		} else {
+			favoriteBean = FavoriteManager.getInstance().getFavoriteBeanFromTabLocalById(this,"" + mCurrentBlog.getId(), FAVORITE_ID_TYPE);
+		}
+		isFavorite = (favoriteBean != null) ? true : false;
+		if (isFavorite) {
+			mCurrentBlog.setFavid(favoriteBean.getFavid());
+		}
 	}
 	
 	@Override
@@ -128,18 +140,19 @@ public class BlogDetailActivity extends BaseDetailActivity {
 			FavoriteBean favoriteBean = new FavoriteBean();
 			favoriteBean.setId(mCurrentBlog.getId());
 			favoriteBean.setFavid("favid_"+mCurrentBlog.getId());
-			favoriteBean.setIdtype("blogid");
+			favoriteBean.setIdtype(FAVORITE_ID_TYPE);
 			favoriteBean.setSpaceuid("");
 			favoriteBean.setTitle(mCurrentBlog.getTitle());
 			favoriteBean.setDesc("");
-			favoriteBean.setDateline(""+mCurrentBlog.getDateline());
+			favoriteBean.setDateline(""+System.currentTimeMillis()/1000);
 			favoriteBean.setUrl(mCurrentBlog.getUrl());
 			favoriteBean.setUrlapi(mCurrentBlog.getUrlapi());
 			FavoriteManager.getInstance().saveFavoriteBeanToTabLocal(this,favoriteBean);
 			if (operatorCallBack != null) {
 				operatorCallBack.toFavoriteSucess();
 			}
-			Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+			UIHelper.notifyFavoriteDataChanged(this);
+			showFavoriteSucessed();
 		}
 	}
 	
@@ -150,14 +163,15 @@ public class BlogDetailActivity extends BaseDetailActivity {
 			if (!StringUtils.isEmpty(favid)) {
 				BackChinaApi.cancleFavoriteBlog(favid, mCancleFavoriteHandler);
 			}else{
-      			Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+      			showCancleFavoriteFailed();
       		}
 		}else{
-			FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+mCurrentBlog.getId(),"blogid");
+			FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+mCurrentBlog.getId(),FAVORITE_ID_TYPE);
 			if (operatorCallBack != null) {
 				operatorCallBack.toCancleFavoriteSucess();
 			}
-			Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+			UIHelper.notifyFavoriteDataChanged(this);
+			showCancleFavoriteSucessed();
 		}
     }
 
@@ -252,28 +266,38 @@ public class BlogDetailActivity extends BaseDetailActivity {
     @Override
     protected void handleFavoriteResp(String responseString) {
     	// TODO Auto-generated method stub
-    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+    	Type type = new TypeToken<ActivitiesBean<FavoriteBean>>() {
         }.getType();
-        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
-        StatusBean statusBean = activitiesBean.getActivities();
+        ActivitiesBean<FavoriteBean> activitiesBean = AppContext.createGson().fromJson(responseString, type);
+        FavoriteBean favoriteBean = activitiesBean.getActivities();
         //favorite_repeat
-        if (statusBean.getStatus().equals("1")) {
-        	if (operatorCallBack != null) {
-				operatorCallBack.toFavoriteSucess();
+        if (favoriteBean.getStatus() == null) {
+        	if (favoriteBean.getFavid() != null) {
+        		mCurrentBlog.setFavid(favoriteBean.getFavid());
+        		if (operatorCallBack != null) {
+					operatorCallBack.toFavoriteSucess();
+				}
+        		FavoriteManager.getInstance().saveFavoriteBeanToTabOnline(this, favoriteBean);
+        		UIHelper.notifyFavoriteDataChanged(this);
+        		showFavoriteSucessed();
+        	}else{
+        		showFavoriteFailed();
+        	}
+		} else {
+			if (favoriteBean.getStatus().equals("favorite_repeat")) {
+				if (operatorCallBack != null) {
+					operatorCallBack.toFavoriteSucess();
+				}
+				UIHelper.notifyFavoriteDataChanged(this);
+				showHasFavorited();
+			} else if (favoriteBean.getStatus().equals("-1")) {
+				showFavoriteFailed();
+			} else if (favoriteBean.getStatus().equals("-2")) {
+				needLogin();
+			} else {
+				showFavoriteFailed();
 			}
-        	Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus().equals("favorite_repeat")) {
-        	if (operatorCallBack != null) {
-				operatorCallBack.toFavoriteSucess();
-			}
-        	Toast.makeText(getContext(), "已收藏", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus().equals("-1")) {
-        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus().equals("-2")) {
-        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
-        }else{
-        	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
-        }
+		}
     }
     
     @Override
@@ -288,19 +312,22 @@ public class BlogDetailActivity extends BaseDetailActivity {
         	if (operatorCallBack != null) {
 				operatorCallBack.toCancleFavoriteSucess();
 			}
-        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        	FavoriteManager.getInstance().deleteFavoriteBeanFromTabOnline(this, ""+mCurrentBlog.getId(),FAVORITE_ID_TYPE);
+        	UIHelper.notifyFavoriteDataChanged(this);
+        	showCancleFavoriteSucessed();
         }else if (statusBean.getStatus().equals("favorite_repeat")) {
         	if (operatorCallBack != null) {
 				operatorCallBack.toCancleFavoriteSucess();
 			}
-        	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+        	FavoriteManager.getInstance().deleteFavoriteBeanFromTabOnline(this, ""+mCurrentBlog.getId(),FAVORITE_ID_TYPE);
+        	UIHelper.notifyFavoriteDataChanged(this);
+        	showCancleFavoriteSucessed();
         }else if (statusBean.getStatus().equals("-1")) {
-        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        	showCancleFavoriteFailed();
         }else if (statusBean.getStatus().equals("-2")) {
-        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        	needLogin();
         }else{
-        	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+        	showCancleFavoriteFailed();
         }
-		FavoriteManager.getInstance().deleteFavoriteBeanFromTabLocal(this,""+mCurrentBlog.getId(),"blogid");
     }
 }

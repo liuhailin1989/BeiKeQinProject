@@ -1,5 +1,7 @@
 package com.android.backchina.adapter;
 
+import java.util.Date;
+
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.FavoriteBean;
@@ -19,13 +21,17 @@ public class MyFavoriteAdapter extends BaseListAdapter<FavoriteBean>{
 //		vh.setImageForNet(R.id.iv_thumb, item.getPic());
 		vh.setGone(R.id.iv_thumb);
 		long dateline = 0;
-		try {
-			dateline = Long.valueOf(item.getDateline());
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+		if(item.getDateline().contains("-")){
+			vh.setText(R.id.tv_time,StringUtils.friendlyTime(item.getDateline()));
+		} else {
+			try {
+				dateline = Long.valueOf(item.getDateline());
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			vh.setText(R.id.tv_time,StringUtils.friendly_time(dateline));
 		}
-		vh.setText(R.id.tv_time,StringUtils.friendly_time(dateline));
 //		vh.setText(R.id.tv_origin,item.getFrom());
 	}
 

@@ -6,6 +6,7 @@ import java.util.Date;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 
 import com.android.backchina.AppContext;
@@ -18,7 +19,7 @@ import com.android.backchina.utils.TLog;
 import com.android.backchina.widget.XListView;
 
 public abstract class BaseListFragment<T> extends BaseFragment<T> implements XListView.IXListViewListener,
-             OnItemClickListener, BaseListAdapter.Callback, View.OnClickListener,OnTabReselectListener {
+             OnItemClickListener,OnItemLongClickListener, BaseListAdapter.Callback, View.OnClickListener,OnTabReselectListener {
 
     //
     protected XListView mListView;
@@ -42,6 +43,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
         mListView.setAutoLoadEnable(true);
         mListView.setXListViewListener(this);
         mListView.setOnItemClickListener(this);
+        mListView.setOnItemLongClickListener(this);
         mErrorLayout.setOnLayoutClickListener(this);
     }
     
@@ -113,6 +115,13 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // TODO Auto-generated method stub
     	TLog.d("called");
+    }
+    
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view,
+    		int position, long id) {
+    	// TODO Auto-generated method stub
+    	return false;
     }
     
     protected void onRequestData() {

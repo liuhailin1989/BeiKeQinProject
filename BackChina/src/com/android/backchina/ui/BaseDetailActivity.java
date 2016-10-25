@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.backchina.R;
 import com.android.backchina.api.remote.BackChinaApi;
@@ -185,6 +186,25 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
     public Fragment getDataViewFragment(){
         return null;
     }
+    
+    protected void showFavoriteFailed(){
+    	Toast.makeText(getContext(), "收藏失败", Toast.LENGTH_SHORT).show();
+    }
+    protected void showFavoriteSucessed(){
+    	Toast.makeText(getContext(), "收藏成功", Toast.LENGTH_SHORT).show();
+    }
+    protected void showHasFavorited(){
+    	Toast.makeText(getContext(), "已收藏", Toast.LENGTH_SHORT).show();
+    }
+    protected void showCancleFavoriteSucessed(){
+    	Toast.makeText(getContext(), "取消收藏", Toast.LENGTH_SHORT).show();
+    }
+    protected void showCancleFavoriteFailed(){
+    	Toast.makeText(getContext(), "取消收藏失败", Toast.LENGTH_SHORT).show();
+    }
+	protected void needLogin() {
+		Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+	}
     
     public abstract void onRequestData();
 }

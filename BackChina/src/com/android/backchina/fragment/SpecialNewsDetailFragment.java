@@ -12,17 +12,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.android.backchina.AppContext;
 import com.android.backchina.R;
+import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.SpecialNewsDetail;
 import com.android.backchina.bean.base.BlogCommentBean;
+import com.android.backchina.manager.SubscribeManager;
 import com.android.backchina.ui.comment.BlogCommentsView;
 import com.android.backchina.ui.comment.OnBlogCommentClickListener;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SpecialNewsDetailFragment extends DetailFragment<Object> implements OnBlogCommentClickListener{
 
@@ -120,6 +128,15 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         //
         mBlogerCardAvatar = (CircleImageView) root.findViewById(R.id.iv_card_avatar);
         mBlogerCardAuthor = (TextView) root.findViewById(R.id.tv_card_author);
+        mBlogerCardSubscribe = (TextView) root.findViewById(R.id.btn_card_subscribe);
+        mBlogerCardSubscribe.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				UIHelper.notifySpecialNewsSubscribe(getActivity());
+			}
+		});
         mInput = (TextView) root.findViewById(R.id.tv_put);
         
         mInput.setOnClickListener(new OnClickListener() {

@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.FavoriteBean;
@@ -13,9 +14,12 @@ import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.interf.FavoriteCallback;
+import com.android.backchina.interf.ISpecialNewsSubscribeListener;
+import com.android.backchina.interf.ISubscribeListener;
 import com.android.backchina.interf.SubscribeCallback;
 import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.manager.SubscribeManager;
+import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -25,10 +29,14 @@ public class BackChinaMode extends BroadcastReceiver{
 
 	public final static String ACTION_SUBSCRIBE_DATA_CHANGED = "backchina.action.SUBSCRIBE_DATA_CHANGED";
 	public final static String ACTION_FAVORITE_DATA_CHANGED = "backchina.action.FAVORITE_DATA_CHANGED";
+	//
+	public final static String ACTION_SPECIAL_NEWS_SUBSCRIBE = "backchina.action.SPECIAL_NEWS_SUBSCRIBE";
 	
 	private SubscribeCallback subscribeCallback;
 	
 	private FavoriteCallback favoriteCallback;
+	
+	private ISpecialNewsSubscribeListener specicalNewsSubscribeCallback; 
 	
 	private int localSubscribeCount = 0;
 	
@@ -49,11 +57,16 @@ public class BackChinaMode extends BroadcastReceiver{
         }else if(Constants.INTENT_ACTION_USER_CHANGE.equals(action)){
         	subscribeLocalData(context);
         	handleFavoriteLocalData(context);
+        }else if(ACTION_SPECIAL_NEWS_SUBSCRIBE.equals(action)){
+        	handleSpecialNewsSubscribe();
         }
 	}
 	
 	public void setSubscribeCallBack(SubscribeCallback callback){
 		subscribeCallback = callback;
+	}
+	public void setSpecialNewsSubscribeCallBack(ISpecialNewsSubscribeListener callback){
+		specicalNewsSubscribeCallback = callback;
 	}
 	
 	private void subscribeDataChanged(){
@@ -116,19 +129,26 @@ public class BackChinaMode extends BroadcastReceiver{
 	}
 	
 	private boolean handleSubscribeResponse(Header[] headers, String response) {
-		Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
-		}.getType();
-		ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson()
-				.fromJson(response, type);
-		StatusBean statusBean = activitiesBean.getActivities();
-		if (statusBean.getStatus().equals("1")) {//成功
-			return true;
-		} else if (statusBean.getStatus().equals("-1")) {//失败
-			return false;
-		} else if (statusBean.getStatus().equals("-2")) {//请登录
-			return false;
-		} else {//失败
-			return false;
+		Type type = new TypeToken<ActivitiesBean<Subscribe>>() {
+        }.getType();
+        ActivitiesBean<Subscribe> activitiesBean = AppContext.createGson().fromJson(response, type);
+        Subscribe subscribe = activitiesBean.getActivities();
+		if (subscribe.getStatus() == null) {
+			if (subscribe.getFavid() != null) {
+				return true;
+			}else{
+				return false;
+			}
+		} else {
+			if (subscribe.getStatus().contains("repeat")) {
+				return true;
+			} else if (subscribe.getStatus().equals("-1")) {
+				return false;
+			} else if (subscribe.getStatus().equals("-2")) {
+				return false;
+			} else {
+				return false;
+			}
 		}
 	}
 	
@@ -219,6 +239,12 @@ public class BackChinaMode extends BroadcastReceiver{
 				return false;
 			}
 		}
+    }
+    
+    private void handleSpecialNewsSubscribe(){
+    	if(specicalNewsSubscribeCallback != null){
+    		specicalNewsSubscribeCallback.onSubscribe();
+    	}
     }
 
 }

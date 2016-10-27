@@ -42,6 +42,7 @@ public class AppContext extends BaseApplication {
 		filter.addAction(BackChinaMode.ACTION_SUBSCRIBE_DATA_CHANGED);
 		filter.addAction(BackChinaMode.ACTION_FAVORITE_DATA_CHANGED);
 		filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
+		filter.addAction(BackChinaMode.ACTION_SPECIAL_NEWS_SUBSCRIBE);
 		instance.registerReceiver(mBackChinaMode, filter);
 		init();
 		initLogin();

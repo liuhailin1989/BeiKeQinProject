@@ -51,6 +51,12 @@ public class UIHelper {
 		context.sendBroadcast(intent);
 	}
 	
+	public static void notifySpecialNewsSubscribe(Context context){
+		Intent intent = new Intent();
+		intent.setAction(BackChinaMode.ACTION_SPECIAL_NEWS_SUBSCRIBE);
+		context.sendBroadcast(intent);
+	}
+	
     public static void showUrlRedirect(Context context, String url) {
 //        showUrlRedirect(context, 0, url);
     }

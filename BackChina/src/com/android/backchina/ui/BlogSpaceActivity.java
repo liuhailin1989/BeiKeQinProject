@@ -120,20 +120,28 @@ public class BlogSpaceActivity extends BaseActivity implements OnItemClickListen
 	}
 	
     private void handleSubscribeResponse(Header[] headers,String response) {
-    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+    	Type type = new TypeToken<ActivitiesBean<Subscribe>>() {
         }.getType();
-        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
-        StatusBean statusBean = activitiesBean.getActivities();
-        if (statusBean.getStatus().equals("1")) {
-        	Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
-        	UIHelper.notifySubscribeDataChanged(this);
-        }else if (statusBean.getStatus().equals("-1")) {
-        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
-        }else if (statusBean.getStatus().equals("-2")) {
-        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
-        }else{
-        	Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
-        }
+        ActivitiesBean<Subscribe> activitiesBean = AppContext.createGson().fromJson(response, type);
+        Subscribe subscribe = activitiesBean.getActivities();
+		if (subscribe.getStatus() == null) {
+			if (subscribe.getFavid() != null) {
+				Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+				UIHelper.notifySubscribeDataChanged(this);
+			}else{
+				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+			}
+		} else {
+			if (subscribe.getStatus().contains("repeat")) {
+				Toast.makeText(getContext(), "已订阅", Toast.LENGTH_SHORT).show();
+			} else if (subscribe.getStatus().equals("-1")) {
+				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+			} else if (subscribe.getStatus().equals("-2")) {
+				Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+			}
+		}
     }
 
 	private void initData() {

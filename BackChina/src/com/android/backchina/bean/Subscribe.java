@@ -11,6 +11,8 @@ public class Subscribe extends Entity {
     /*
      * <link SubscribeAdapter/>
      */
+    private String status;
+    
     private int type;//类型
     
 	private String favid;//
@@ -35,6 +37,14 @@ public class Subscribe extends Entity {
 
     private String urlapi;
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
     public int getType() {
 		return type;
 	}

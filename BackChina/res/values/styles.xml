@@ -16,6 +16,10 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+     <item name="android:background">#FFFFFF</item>
+    </style>
 
     <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">
         <item name="android:windowBackground">@android:color/transparent</item>

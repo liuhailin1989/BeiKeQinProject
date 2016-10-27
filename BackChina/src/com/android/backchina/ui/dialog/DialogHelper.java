@@ -17,7 +17,7 @@ public class DialogHelper {
      * @return
      */
     public static AlertDialog.Builder getDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.AlertDialogCustom);
         return builder;
     }
     

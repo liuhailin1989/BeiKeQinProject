@@ -16,6 +16,7 @@
         android:background="@drawable/ql_textfield_default_emui_new"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:drawableLeft="@drawable/ic_write"
         android:text="@string/comments_hint_text"
         android:textColor="@color/comments_hint_text_color"
         android:textSize="@dimen/comments_hint_text_size" />

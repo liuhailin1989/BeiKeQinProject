@@ -500,7 +500,7 @@ public class XRecyclerView extends RecyclerView {
     public void setRefreshing(boolean refreshing) {
         if (refreshing && pullRefreshEnabled && mLoadingListener != null) {
             mRefreshHeader.setState(ArrowRefreshHeader.STATE_REFRESHING);
-            mRefreshHeader.onMove(mRefreshHeader.getMeasuredHeight());
+            mRefreshHeader.onMove(mRefreshHeader.mMeasuredHeight);
             mLoadingListener.onRefresh();
         }
     }

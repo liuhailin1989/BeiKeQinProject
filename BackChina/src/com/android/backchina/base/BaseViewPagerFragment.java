@@ -1,6 +1,8 @@
 package com.android.backchina.base;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -10,8 +12,9 @@ import com.android.backchina.R;
 import com.android.backchina.adapter.ViewPageFragmentAdapter;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.widget.PagerSlidingTabStrip;
+import com.android.backchina.widget.PagerSlidingTabStrip.OnClickTabListener;
 
-public abstract class BaseViewPagerFragment extends BaseFragment{
+public abstract class BaseViewPagerFragment extends BaseFragment implements OnClickTabListener{
     
     protected PagerSlidingTabStrip mTabStrip;
     protected ViewPager mViewPager;
@@ -57,6 +60,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment{
 		});
          mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(),
                  mTabStrip, mViewPager);
+         mTabStrip.setOnClickTabListener(this);
          setScreenPageLimit();
     }
     
@@ -79,6 +83,12 @@ public abstract class BaseViewPagerFragment extends BaseFragment{
 		if (mErrorLayout != null) {
 			mErrorLayout.dismiss();
 		}
+    }
+    
+    @Override
+    public void onClickTab(View tab, int index) {
+    	// TODO Auto-generated method stub
+    	
     }
     
     public void requestData() {

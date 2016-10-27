@@ -276,8 +276,13 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mComments.setTitle("最新评论");
         mComments.init(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
         
-        mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
-     
+        if (newsDetail.getComments() <= 99) {
+			mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg);
+			mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
+		}else{
+        	mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg_more);
+            mCommentsCount.setText("99  ");
+        }
         //
         if(newsDetail.getRelated_b() != null && newsDetail.getRelated_b().size() > 0){
         	relatedNewsAdapter.clear();

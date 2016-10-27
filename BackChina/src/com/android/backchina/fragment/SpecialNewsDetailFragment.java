@@ -250,7 +250,13 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         mAuthor.setText(specialNewsDetail.getUsername());
         mComments.setTitle("最新评论");
         mComments.init(specialNewsDetail.getBlogcomments(), 0, 20, null, this);
-        mCommentsCount.setText(String.valueOf(specialNewsDetail.getComments()));
+        if (specialNewsDetail.getComments() <= 99) {
+			mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg);
+			mCommentsCount.setText(String.valueOf(specialNewsDetail.getComments()));
+		}else{
+        	mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg_more);
+            mCommentsCount.setText("99  ");
+        }
         setImageFromNet(mBlogerCardAvatar, specialNewsDetail.getAvatar(),R.drawable.default_avatar);
         mBlogerCardAuthor.setText(specialNewsDetail.getUsername());
     }

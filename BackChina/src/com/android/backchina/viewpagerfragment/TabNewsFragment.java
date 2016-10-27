@@ -195,6 +195,19 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
     	
     }
 
+    @Override
+    public void onClickTab(View tab, int index) {
+    	// TODO Auto-generated method stub
+		if (mTabsAdapter != null && mViewPager != null) {
+			Fragment fragment = mTabsAdapter.getItem(index);
+			int currentItemIndex = mViewPager.getCurrentItem();
+			if (fragment != null && fragment instanceof NewsFragment) {
+				if (currentItemIndex == index) {
+					((NewsFragment) fragment).autoRefresh();
+				}
+			}
+		}
+    }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

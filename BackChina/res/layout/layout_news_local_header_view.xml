@@ -33,8 +33,9 @@
         <Button
             android:id="@+id/btn_select_city"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_marginRight="10dp"
+            android:background="@color/back_china_color"
             android:text="切换城市"
             android:textColor="@color/local_button_text_color"
             android:textSize="@dimen/local_header_button_text_size" />

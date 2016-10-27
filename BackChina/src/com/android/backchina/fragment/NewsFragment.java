@@ -6,6 +6,7 @@ import java.util.List;
 import android.R.color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -212,7 +213,7 @@ public class NewsFragment extends BaseListFragment<News> {
 			}
 		});
 	}
-
+	
 	@Override
 	protected void onRequestData() {
 		// TODO Auto-generated method stub
@@ -240,7 +241,8 @@ public class NewsFragment extends BaseListFragment<News> {
 	@Override
 	public void onTabReselect() {
 		// TODO Auto-generated method stub
-		// show();
+//		 show();
+		Log.d("liuhailin", "");
 	}
 
 	@Override

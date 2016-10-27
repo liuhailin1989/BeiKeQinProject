@@ -4,9 +4,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
@@ -18,7 +19,6 @@ import com.android.backchina.fragment.BlogFragment;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.manager.ChannelManager;
 import com.android.backchina.ui.BaseChannelActivity;
-import com.android.backchina.ui.ChannelNewsActivity;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
@@ -143,6 +143,20 @@ public class TabBlogFragment extends BaseViewPagerFragment implements
 	public void onTabReselect() {
 
 	}
+	
+    @Override
+    public void onClickTab(View tab, int index) {
+    	// TODO Auto-generated method stub
+		if (mTabsAdapter != null && mViewPager != null) {
+			Fragment fragment = mTabsAdapter.getItem(index);
+			int currentItemIndex = mViewPager.getCurrentItem();
+			if (fragment != null && fragment instanceof BlogFragment) {
+				if (currentItemIndex == index) {
+					((BlogFragment) fragment).autoRefresh();
+				}
+			}
+		}
+    }
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

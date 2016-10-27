@@ -113,6 +113,10 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 	public void loadMoreNodata() {
 		mRecyclerView.setNoMore(true);
 	}
+	
+	public void autoRefresh(){
+		mRecyclerView.setRefreshing(true);
+	}
 
 	protected void onRequestError(int type) {
 		refreshComplete();

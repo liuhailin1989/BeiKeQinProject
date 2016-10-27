@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
@@ -15,6 +16,7 @@ import com.android.backchina.base.BaseListFragment;
 import com.android.backchina.base.BaseViewPagerFragment;
 import com.android.backchina.bean.ChannelItem;
 import com.android.backchina.bean.base.ChannelBean;
+import com.android.backchina.fragment.BlogFragment;
 import com.android.backchina.fragment.VideoFragment;
 import com.android.backchina.fragment.VideoLinearFrament;
 import com.android.backchina.interf.OnTabReselectListener;
@@ -182,6 +184,24 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
     @Override
     public void onTabReselect() {
     	
+    }
+    
+    @Override
+    public void onClickTab(View tab, int index) {
+    	// TODO Auto-generated method stub
+		if (mTabsAdapter != null && mViewPager != null) {
+			Fragment fragment = mTabsAdapter.getItem(index);
+			int currentItemIndex = mViewPager.getCurrentItem();
+			if (fragment != null && fragment instanceof VideoFragment) {
+				if (currentItemIndex == index) {
+					((VideoFragment) fragment).autoRefresh();
+				}
+			}else if (fragment != null && fragment instanceof VideoLinearFrament) {
+				if (currentItemIndex == index) {
+					((VideoLinearFrament) fragment).autoRefresh();
+				}
+			}
+		}
     }
 
     @Override

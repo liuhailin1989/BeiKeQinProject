@@ -112,7 +112,7 @@ public class BackChinaWebView extends WebView {
                 @Override
                 public void run() {
                     final String body = setupWebContent(content, true, true, "");
-                    FileUtil.saveStringToFile(body);
+//                    FileUtil.saveStringToFile(body);
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -223,9 +223,17 @@ public class BackChinaWebView extends WebView {
 
         //广告居中
         content = content.replaceAll("<div class=\"adblock\">","<div class=\"adblock\" style=\"text-align: center;\">");
+        
+        //视频居中
+        content = content.replaceAll("<div class=\"yvideo\">","<div class=\"yvideo\" style=\"text-align: center;\">");
+        
         //过滤掉iframe
-        content = content.replaceAll("(<iframe class=\"ad\" [^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
-        content = content.replaceAll("(<iframe class=\"ad\" [^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+        content = content.replaceAll("(<iframe class=\"ad\"[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
+        content = content.replaceAll("(<iframe class=\"ad\"[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+        
+        //过滤掉iframe video
+        content = content.replaceAll("(<iframe class=\"video\"[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
+        content = content.replaceAll("(<iframe class=\"video\"[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
         
         // 过滤table的内部属性
         content = content.replaceAll("(<table[^>]*?)\\s+border\\s*=\\s*\\S+", "$1");

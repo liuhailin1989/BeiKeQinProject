@@ -319,7 +319,13 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         mAuthor.setText(blogDetail.getUsername());
         mComments.setTitle("最新评论");
         mComments.init(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
-        mCommentsCount.setText(String.valueOf(blogDetail.getComments()));
+		if (blogDetail.getComments() <= 99) {
+			mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg);
+			mCommentsCount.setText(String.valueOf(blogDetail.getComments()));
+		}else{
+        	mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg_more);
+            mCommentsCount.setText("99  ");
+        }
         setImageFromNet(mBlogerCardAvatar, blogDetail.getAvatar(),R.drawable.default_avatar);
         mBlogerCardAuthor.setText(blogDetail.getUsername());
     }

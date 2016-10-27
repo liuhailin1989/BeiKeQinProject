@@ -3,6 +3,7 @@ package com.android.backchina.fragment;
 import java.lang.reflect.Type;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -81,6 +82,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     
     private  boolean isFavorite = false;
     
+    private float titleTextSize = 0;
+    
 	public static BlogDetailFragment newInstance() {
 		BlogDetailFragment fragment = new BlogDetailFragment();
 		return fragment;
@@ -96,7 +99,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
     protected void setupViews(View root) {
         // TODO Auto-generated method stub
         super.setupViews(root);
-        
+        titleTextSize = getActivity().getResources().getDimension(R.dimen.common_detail_title_text_size);
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
         mAuthor = (TextView) root.findViewById(R.id.tv_author);
@@ -256,6 +259,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 				int value = seekBar.getProgress();
 				int textZoom = value + 80;
 				mWebView.setTextZoom(textZoom);
+				float resultSize = titleTextSize * (textZoom)/100;
+				mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,resultSize);
 			}
 			
 			@Override
@@ -316,6 +321,9 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         }
         setWebViewContent(blogDetail.getContent());
         mTitle.setText(blogDetail.getTitle());
+        //
+		float resultSize = titleTextSize * (mWebView.getTextZoom())/100;
+		mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,resultSize);
         mPubTime.setText(StringUtils.friendlyTime(blogDetail.getDateline()));
         mAuthor.setText(blogDetail.getUsername());
         mComments.setTitle("最新评论");

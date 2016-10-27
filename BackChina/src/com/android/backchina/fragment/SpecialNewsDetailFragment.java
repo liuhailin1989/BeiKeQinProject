@@ -1,6 +1,7 @@
 package com.android.backchina.fragment;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -74,6 +75,8 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     
     private  boolean isFavorite = false;
     
+    private float titleTextSize = 0;
+    
 	public static SpecialNewsDetailFragment newInstance() {
 		SpecialNewsDetailFragment fragment = new SpecialNewsDetailFragment();
 		return fragment;
@@ -89,7 +92,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
     protected void setupViews(View root) {
         // TODO Auto-generated method stub
         super.setupViews(root);
-        
+        titleTextSize = getActivity().getResources().getDimension(R.dimen.common_detail_title_text_size);
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
         mAuthor = (TextView) root.findViewById(R.id.tv_author);
@@ -214,6 +217,8 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 				int value = seekBar.getProgress();
 				int textZoom = value + 80;
 				mWebView.setTextZoom(textZoom);
+				float resultSize = titleTextSize * (textZoom)/100;
+				mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,resultSize);
 			}
 			
 			@Override
@@ -263,6 +268,9 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         }
         setWebViewContent(specialNewsDetail.getContent());
         mTitle.setText(specialNewsDetail.getTitle());
+        //
+ 		float resultSize = titleTextSize * (mWebView.getTextZoom())/100;
+ 		mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,resultSize);
         mPubTime.setText(StringUtils.friendlyTime(specialNewsDetail.getDateline()));
         mAuthor.setText(specialNewsDetail.getUsername());
         mComments.setTitle("最新评论");

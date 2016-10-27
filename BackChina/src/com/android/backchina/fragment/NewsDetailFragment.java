@@ -1,6 +1,7 @@
 package com.android.backchina.fragment;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     
     private  boolean isFavorite = false;
     
+    float titleTextSize = 0;
+    
 	public static NewsDetailFragment newInstance() {
 		NewsDetailFragment fragment = new NewsDetailFragment();
 		return fragment;
@@ -88,6 +91,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
     protected void setupViews(View root) {
         // TODO Auto-generated method stub
         super.setupViews(root);
+        titleTextSize = getActivity().getResources().getDimension(R.dimen.common_detail_title_text_size);
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
@@ -211,6 +215,8 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 				int value = seekBar.getProgress();
 				int textZoom = value + 80;
 				mWebView.setTextZoom(textZoom);
+				float resultSize = titleTextSize * (textZoom)/100;
+				mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,resultSize);
 			}
 			
 			@Override
@@ -270,6 +276,10 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         }
         setWebViewContent(newsDetail.getContent());
         mTitle.setText(newsDetail.getTitle());
+        //
+		float resultSize = titleTextSize * (mWebView.getTextZoom())/100;
+		mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,resultSize);
+        //
         mPubTime.setText(StringUtils.friendlyTime(newsDetail.getDateline()));
         mFrom.setText(newsDetail.getFrom());
         

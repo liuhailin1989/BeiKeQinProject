@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnBlogCommentClickListener{
 
+	private ScrollView mScrollView;
     private TextView mTitle;
     private TextView mPubTime;
     private TextView mAuthor;
@@ -100,6 +102,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         // TODO Auto-generated method stub
         super.setupViews(root);
         titleTextSize = getActivity().getResources().getDimension(R.dimen.common_detail_title_text_size);
+        mScrollView = (ScrollView) root.findViewById(R.id.sv_detail_scrollview);
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
         mAuthor = (TextView) root.findViewById(R.id.tv_author);
@@ -113,7 +116,14 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         layFontControlContainer.setVisibility(View.GONE);
         //
         mCommentsCount = (TextView) root.findViewById(R.id.tv_commit_count);
-        
+        mCommentsCount.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				scrollToCommentsLocation();
+			}
+		});
         layRealComentEdit = (RelativeLayout) root.findViewById(R.id.lay_real_comment_edit);
         layRealComentEdit.setOnClickListener(new OnClickListener() {
             
@@ -401,6 +411,13 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 		// TODO Auto-generated method stub
 		BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
 		mComments.refreshComments(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
+	}
+	
+
+	@Override
+	public void scrollToCommentsLocation() {
+		// TODO Auto-generated method stub
+		mScrollView.smoothScrollTo(0, (int)mComments.getY());
 	}
 	
     private void handleSubscribeResponse(Header[] headers,String response) {

@@ -72,6 +72,16 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
         });
         tvTitle = (TextView) findViewById(R.id.tv_title);
         tvCommentCount = (TextView) findViewById(R.id.tv_comment_count);
+        tvCommentCount.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(operatorCallBack != null){
+					operatorCallBack.scrollToCommentsLocation();
+				}
+			}
+		});
 	}
 	
 	protected void setTitle(String title) {

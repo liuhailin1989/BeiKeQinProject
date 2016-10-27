@@ -12,4 +12,6 @@ public interface OperatorCallBack {
 
 	   // 提交评价
 	   void toSendCommentSucess();
+	   
+	   void scrollToCommentsLocation();
 }

@@ -1,6 +1,5 @@
 package com.android.backchina.ui.comment;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 import android.content.Context;
@@ -11,18 +10,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.backchina.AppContext;
 import com.android.backchina.R;
-import com.android.backchina.api.remote.BackChinaApi;
-import com.android.backchina.bean.Comment;
 import com.android.backchina.bean.base.BlogCommentBean;
-import com.android.backchina.bean.base.CommentBean;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.widget.CircleImageView;
 import com.bumptech.glide.RequestManager;
-import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.TextHttpResponseHandler;
-
-import cz.msebera.android.httpclient.Header;
 
 
 public class BlogCommentsView extends LinearLayout implements View.OnClickListener {
@@ -62,7 +54,7 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
         }
     }
     
-    public void init(List<BlogCommentBean> listBlogCommentBean, int type, final int commentTotal, final RequestManager imageLoader, final OnBlogCommentClickListener onCommentClickListener) {
+    public void init(List<BlogCommentBean> listBlogCommentBean, int type, final int commentTotal, final RequestManager imageLoader, final OnBlogCommentOpsListener onBlogCommentOpsListener) {
         this.mType = type;
 
         mSeeMore.setVisibility(View.GONE);
@@ -70,15 +62,15 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
         if(listBlogCommentBean == null){
         	return;
         }
-        addBlogComment(listBlogCommentBean, commentTotal, imageLoader, onCommentClickListener);
+        addBlogComment(listBlogCommentBean, commentTotal, imageLoader, onBlogCommentOpsListener);
     }
     
-    public void refreshComments(List<BlogCommentBean> listBlogCommentBean, int type, final int commentTotal, final RequestManager imageLoader, final OnBlogCommentClickListener onCommentClickListener){
+    public void refreshComments(List<BlogCommentBean> listBlogCommentBean, int type, final int commentTotal, final RequestManager imageLoader, final OnBlogCommentOpsListener onBlogCommentOpsListener){
         mLayComments.removeAllViews();
-        init(listBlogCommentBean,type, commentTotal, imageLoader, onCommentClickListener);
+        init(listBlogCommentBean,type, commentTotal, imageLoader, onBlogCommentOpsListener);
     }
 
-    private void addBlogComment(List<BlogCommentBean> listBlogCommentBean, int commentTotal, RequestManager imageLoader, final OnBlogCommentClickListener onCommentClickListener) {
+    private void addBlogComment(List<BlogCommentBean> listBlogCommentBean, int commentTotal, RequestManager imageLoader, final OnBlogCommentOpsListener onBlogCommentOpsListener) {
         if (listBlogCommentBean != null && listBlogCommentBean.size() > 0) {
             if (listBlogCommentBean.size() > commentTotal) {
                 mSeeMore.setVisibility(VISIBLE);
@@ -87,8 +79,8 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						if (onCommentClickListener != null) {
-							onCommentClickListener.seeMoreComments(v);
+						if (onBlogCommentOpsListener != null) {
+							onBlogCommentOpsListener.seeMoreComments(v);
 						}
 					}
 				});
@@ -103,26 +95,33 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
                 if (comment == null ){
                     continue;
                 }
-                ViewGroup lay = addComment(false,i+1, comment, imageLoader, onCommentClickListener);
+                ViewGroup lay = addComment(false,i+1, comment, imageLoader, onBlogCommentOpsListener);
             }
         } else {
             setVisibility(View.GONE);
         }
     }
 
-    public ViewGroup addComment(int position, final BlogCommentBean comment, RequestManager imageLoader, final OnBlogCommentClickListener onCommentClickListener) {
+    public ViewGroup addComment(int position, final BlogCommentBean comment, RequestManager imageLoader, final OnBlogCommentOpsListener onBlogCommentOpsListener) {
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
-        return addComment(true, position,comment, imageLoader, onCommentClickListener);
+        return addComment(true, position,comment, imageLoader, onBlogCommentOpsListener);
     }
 
-    private ViewGroup addComment(boolean first,final int position, final BlogCommentBean comment, RequestManager imageLoader, final OnBlogCommentClickListener onCommentClickListener) {
+    private ViewGroup addComment(boolean first,final int position, final BlogCommentBean comment, RequestManager imageLoader, final OnBlogCommentOpsListener onBlogCommentOpsListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.layout_comment_item, null, false);
 //        imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
 //                .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
+        CircleImageView userAvatar = (CircleImageView) lay.findViewById(R.id.user_avatar);
+        userAvatar.setVisibility(View.VISIBLE);
+        if(onBlogCommentOpsListener != null){
+        	onBlogCommentOpsListener.setUserAvatarImage(userAvatar, comment.getAvatar(), R.drawable.default_avatar);
+        }else{
+        	userAvatar.setVisibility(View.GONE);
+        }
 		((TextView) lay.findViewById(R.id.tv_username)).setText(comment.getAuthor());
 		
 		TextView floor = (TextView) lay.findViewById(R.id.tv_floor);
@@ -155,8 +154,8 @@ public class BlogCommentsView extends LinearLayout implements View.OnClickListen
         lay.setOnClickListener(new OnClickListener() {
             @Override
 			public void onClick(View v) {
-				if (onCommentClickListener != null) {
-					onCommentClickListener.onClick(v, position,comment);
+				if (onBlogCommentOpsListener != null) {
+					onBlogCommentOpsListener.onClick(v, position,comment);
 				}
 			}
         });

@@ -70,7 +70,7 @@
     <color name="comments_hint_text_color">#808080</color>
     <color name="comments_text_color">#000000</color>
     <color name="comments_group_title_text_color">#111111</color>
-    <color name="comments_user_name_text_color">#111111</color>
+    <color name="comments_user_name_text_color">#5AA4C3</color>
     <color name="comments_pub_date_text_color">#6a6a6a</color>
     <color name="comments_content_text_color">#111111</color>
     <color name="comments_see_more_text_color">#24cf5f</color>

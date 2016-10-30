@@ -100,9 +100,11 @@
     <dimen name="comments_hint_text_size">14dp</dimen>
     <dimen name="comments_text_size">14dp</dimen>
     <dimen name="comments_group_title_text_size">14dp</dimen>
+    <dimen name="comments_user_avatar_width">50dp</dimen>
+    <dimen name="comments_user_avatar_height">50dp</dimen>
     <dimen name="comments_user_name_text_size">16dp</dimen>
     <dimen name="comments_pub_date_text_size">14dp</dimen>
-    <dimen name="comments_content_text_size">14dp</dimen>
+    <dimen name="comments_content_text_size">16dp</dimen>
     <dimen name="comments_see_more_text_size">14dp</dimen>
     <dimen name="comments_iv_fontsize_width">30dp</dimen>
     <dimen name="comments_iv_fontsize_height">30dp</dimen>

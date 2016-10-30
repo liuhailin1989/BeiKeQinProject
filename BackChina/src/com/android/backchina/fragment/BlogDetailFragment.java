@@ -30,7 +30,7 @@ import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.ui.comment.BlogCommentsView;
-import com.android.backchina.ui.comment.OnBlogCommentClickListener;
+import com.android.backchina.ui.comment.OnBlogCommentOpsListener;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
@@ -39,7 +39,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnBlogCommentClickListener{
+public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnBlogCommentOpsListener{
 
 	private ScrollView mScrollView;
     private TextView mTitle;
@@ -444,4 +444,10 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 			}
 		}
     }
+
+	@Override
+	public void setUserAvatarImage(ImageView imageView, String imageUrl, int placeholder) {
+		// TODO Auto-generated method stub
+		setImageFromNet(imageView, imageUrl, placeholder);
+	}
 }

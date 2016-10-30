@@ -26,7 +26,7 @@ import com.android.backchina.bean.SpecialNewsDetail;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.manager.SubscribeManager;
 import com.android.backchina.ui.comment.BlogCommentsView;
-import com.android.backchina.ui.comment.OnBlogCommentClickListener;
+import com.android.backchina.ui.comment.OnBlogCommentOpsListener;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
@@ -34,7 +34,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SpecialNewsDetailFragment extends DetailFragment<Object> implements OnBlogCommentClickListener{
+public class SpecialNewsDetailFragment extends DetailFragment<Object> implements OnBlogCommentOpsListener{
 
 	private ScrollView mScrollView;
     private TextView mTitle;
@@ -353,5 +353,12 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 	public void scrollToCommentsLocation() {
 		// TODO Auto-generated method stub
 		mScrollView.smoothScrollTo(0, (int)mComments.getY());
+	}
+
+	@Override
+	public void setUserAvatarImage(ImageView imageView, String imageUrl,
+			int placeholder) {
+		// TODO Auto-generated method stub
+		setImageFromNet(imageView, imageUrl, placeholder);
 	}
 }

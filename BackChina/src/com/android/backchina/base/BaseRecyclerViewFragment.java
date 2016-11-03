@@ -114,7 +114,8 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 		mRecyclerView.setNoMore(true);
 	}
 	
-	public void autoRefresh(){
+	public void autoRefresh() {
+		mRecyclerView.scrollToPosition(0);
 		mRecyclerView.setRefreshing(true);
 	}
 

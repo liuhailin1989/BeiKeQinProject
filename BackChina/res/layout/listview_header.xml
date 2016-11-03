@@ -24,7 +24,8 @@
                 android:id="@+id/refresh_status_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/listview_header_hint_normal" />
+                android:text="@string/listview_header_hint_normal"
+                android:textColor="@color/black" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

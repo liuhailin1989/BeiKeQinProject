@@ -86,9 +86,12 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
     	mListView.completeLoadMore();
     }
     
-    public void autoRefresh(){
-    	mListView.autoRefresh();
-    }
+	public void autoRefresh() {
+		mListView.setSelection(0);
+		mListView.autoRefresh();
+
+	}
+    
     /**
      * request network data
      */

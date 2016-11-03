@@ -31,6 +31,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -332,6 +333,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 				if(title instanceof TextView){
 					TextPaint tp = ((TextView)title).getPaint();
 					tp.setFakeBoldText(false);
+					((TextView)title).setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
 				}
 			}
 			currentSelectedTabView = tabsLayout
@@ -342,6 +344,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 				if(title instanceof TextView){
 					TextPaint tp = ((TextView)title).getPaint();
 					tp.setFakeBoldText(true);
+					((TextView)title).setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 				}
 			}
 		}

@@ -94,6 +94,9 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
 		if (tvCommentCount != null) {
 			String temp = getResources().getString(R.string.detial_title_bar_count);
 			String value = String.format(temp, String.valueOf(count));
+			if (count > 99) {
+				value = String.format(temp, "99+");
+			}
 			tvCommentCount.setText(value);
 		}
 	}

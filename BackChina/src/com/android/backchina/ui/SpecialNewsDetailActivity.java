@@ -62,7 +62,8 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
     	// TODO Auto-generated method stub
     	super.setupViews();
     	setTitle("专题详情");
-    	setCommentCount(mCurrentSubscribeDetail.getComments());
+//    	setCommentCount(mCurrentSubscribeDetail.getComments());
+    	setCommentCount(0);
     }
     
     
@@ -105,6 +106,12 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 		onRequestDataSuccess();
 	}
 
+    @Override
+    public void resfreshTitleComments(int value) {
+    	// TODO Auto-generated method stub
+    	setCommentCount(value);
+    }
+    
 	@Override
 	public void toSeeMoreComments() {
 		// TODO Auto-generated method stub

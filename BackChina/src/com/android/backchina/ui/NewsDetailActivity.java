@@ -78,7 +78,8 @@ public class NewsDetailActivity extends BaseDetailActivity{
     	// TODO Auto-generated method stub
     	super.setupViews();
     	setTitle("");
-    	setCommentCount(currentNews.getComments());
+//    	setCommentCount(currentNews.getComments());
+    	setCommentCount(0);
     }
     
     @Override
@@ -125,6 +126,12 @@ public class NewsDetailActivity extends BaseDetailActivity{
     public void hideLoading() {
         // TODO Auto-generated method stub
         onRequestDataSuccess();
+    }
+    
+    @Override
+    public void resfreshTitleComments(int value) {
+    	// TODO Auto-generated method stub
+    	setCommentCount(value);
     }
 
 	@Override

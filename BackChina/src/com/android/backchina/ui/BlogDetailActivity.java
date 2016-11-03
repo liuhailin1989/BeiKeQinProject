@@ -75,7 +75,8 @@ public class BlogDetailActivity extends BaseDetailActivity {
 		// TODO Auto-generated method stub
 		super.setupViews();
 		setTitle("博文详情");
-		setCommentCount(mCurrentBlog.getComments());
+//		setCommentCount(mCurrentBlog.getComments());
+		setCommentCount(0);
 	}
 	
 	@Override
@@ -125,6 +126,12 @@ public class BlogDetailActivity extends BaseDetailActivity {
 		onRequestDataSuccess();
 	}
 	
+    @Override
+    public void resfreshTitleComments(int value) {
+    	// TODO Auto-generated method stub
+    	setCommentCount(value);
+    }
+    
 	@Override
 	public void toSeeMoreComments() {
 		// TODO Auto-generated method stub

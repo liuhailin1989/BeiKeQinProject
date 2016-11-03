@@ -22,4 +22,7 @@ public interface IContractDetail {
    
    //
    void toSeeMoreComments();
+   
+   //
+   void resfreshTitleComments(int value);
 }

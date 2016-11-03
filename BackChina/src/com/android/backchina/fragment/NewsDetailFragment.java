@@ -29,12 +29,12 @@ import com.android.backchina.bean.News;
 import com.android.backchina.bean.NewsDetail;
 import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.ui.comment.CommentsView;
-import com.android.backchina.ui.comment.OnCommentClickListener;
+import com.android.backchina.ui.comment.OnCommentOpsListener;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.FixedHeightListView;
 
-public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentClickListener,OnItemClickListener{
+public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentOpsListener,OnItemClickListener{
 
 	private ScrollView mScrollView;
     private TextView mTitle;
@@ -296,14 +296,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         
         mComments.setTitle("最新评论");
         mComments.init(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
-        
-        if (newsDetail.getComments() <= 99) {
-			mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg);
-			mCommentsCount.setText(String.valueOf(newsDetail.getComments()));
-		}else{
-        	mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg_more);
-            mCommentsCount.setText("99  ");
-        }
+
         //
         if(newsDetail.getRelated_b() != null && newsDetail.getRelated_b().size() > 0){
         	relatedNewsAdapter.clear();
@@ -331,6 +324,23 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 	public void seeMoreComments(View view) {
 		// TODO Auto-generated method stub
 		iDetail.toSeeMoreComments();
+	}
+	
+	@Override
+	public void refreshCommentsCount(int value) {
+		// TODO Auto-generated method stub
+		// 设置标题栏评论数量
+		if (iDetail != null) {
+			iDetail.resfreshTitleComments(value);
+		}
+        //
+        if (value <= 99) {
+			mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg);
+			mCommentsCount.setText(String.valueOf(value));
+		}else{
+        	mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg_more);
+            mCommentsCount.setText("99  ");
+        }
 	}
     
     private void handleSendComment() {
@@ -373,6 +383,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 		// TODO Auto-generated method stub
 		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
 		mComments.refreshComments(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
+		scrollToCommentsLocation();
 	}
 
 	@Override

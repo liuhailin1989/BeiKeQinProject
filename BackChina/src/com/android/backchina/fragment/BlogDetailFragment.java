@@ -15,17 +15,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.BlogDetail;
-import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.BlogCommentBean;
@@ -338,16 +337,24 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         mAuthor.setText(blogDetail.getUsername());
         mComments.setTitle("最新评论");
         mComments.init(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
-		if (blogDetail.getComments() <= 99) {
+        
+        refreshCommentsCount(blogDetail.getComments());
+        setImageFromNet(mBlogerCardAvatar, blogDetail.getAvatar(),R.drawable.default_avatar);
+        mBlogerCardAuthor.setText(blogDetail.getUsername());
+    }
+
+	private void refreshCommentsCount(int count) {
+		//设置标题栏评论数量
+        iDetail.resfreshTitleComments(count);
+        
+		if (count <= 99) {
 			mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg);
-			mCommentsCount.setText(String.valueOf(blogDetail.getComments()));
+			mCommentsCount.setText(String.valueOf(count));
 		}else{
         	mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg_more);
             mCommentsCount.setText("99  ");
         }
-        setImageFromNet(mBlogerCardAvatar, blogDetail.getAvatar(),R.drawable.default_avatar);
-        mBlogerCardAuthor.setText(blogDetail.getUsername());
-    }
+	}
 
     @Override
     public void onClick(View view, int position, BlogCommentBean comment) {
@@ -411,6 +418,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 		// TODO Auto-generated method stub
 		BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
 		mComments.refreshComments(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
+		refreshCommentsCount(blogDetail.getComments());
+		scrollToCommentsLocation();
 	}
 	
 

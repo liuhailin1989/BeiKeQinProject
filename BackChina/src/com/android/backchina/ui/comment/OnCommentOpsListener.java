@@ -1,11 +1,11 @@
 package com.android.backchina.ui.comment;
 
-import com.android.backchina.bean.Comment;
-import com.android.backchina.bean.base.BlogCommentBean;
-
 import android.view.View;
 
-public interface OnCommentClickListener {
+import com.android.backchina.bean.Comment;
+
+public interface OnCommentOpsListener {
     void onClick(View view, Comment comment);
     void seeMoreComments(View view);
+    void refreshCommentsCount(int value);
 }

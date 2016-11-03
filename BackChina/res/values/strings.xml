@@ -22,7 +22,7 @@
     <string name="comments_see_more_text">See More</string>
     <string name="related_more_title_text">Related More</string>
     
-    <string name="detial_title_bar_count">%1$s Follow</string>
+    <string name="detial_title_bar_count">%1$s Comments</string>
 
     <!-- blog -->
     <string name="blog_item_views">%1$d comments / %2$s views</string>

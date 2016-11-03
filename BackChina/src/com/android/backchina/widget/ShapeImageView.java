@@ -21,7 +21,7 @@ import com.android.backchina.utils.ImageUtils;
 /**
  * 可设置形状的ImageView，抗边缘锯齿
  *
- * @author huangziwei
+ * @author 
  */
 public class ShapeImageView extends ImageView {
 

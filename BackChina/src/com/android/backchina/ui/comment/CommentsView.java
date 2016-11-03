@@ -64,7 +64,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    public void init(String url, int type, final int commentTotal, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    public void init(String url, int type, final int commentTotal, final RequestManager imageLoader, final OnCommentOpsListener onCommentClickListener) {
         this.mType = type;
 
         mSeeMore.setVisibility(View.GONE);
@@ -98,7 +98,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         });
     }
     
-    public void refreshComments(String url,int type,final int commentTotal,final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener){
+    public void refreshComments(String url,int type,final int commentTotal,final RequestManager imageLoader, final OnCommentOpsListener onCommentOpsListener){
         this.mType = type;
         mLayComments.removeAllViews();
         mSeeMore.setVisibility(View.GONE);
@@ -121,7 +121,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 
                     CommentBean<List<Comment>> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null) {
-                        addComment(resultBean.getNewscomms().get(0), commentTotal, imageLoader, onCommentClickListener);
+                        addComment(resultBean.getNewscomms().get(0), commentTotal, imageLoader, onCommentOpsListener);
                         return;
                     }
                     onFailure(statusCode, headers, responseString, null);
@@ -132,7 +132,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         });
     }
     
-    private void addComment(List<Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    private void addComment(List<Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentOpsListener onCommentOpsListener) {
         if (comments != null && comments.size() > 0) {
             if (comments.size() > commentTotal) {
                 mSeeMore.setVisibility(VISIBLE);
@@ -141,8 +141,8 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						if (onCommentClickListener != null) {
-							onCommentClickListener.seeMoreComments(v);
+						if (onCommentOpsListener != null) {
+							onCommentOpsListener.seeMoreComments(v);
 						}
 					}
 				});
@@ -157,21 +157,27 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
                 if (comment == null || comment.getId() == 0){
                     continue;
                 }
-                ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
+                ViewGroup lay = addComment(false, comment, imageLoader, onCommentOpsListener);
+            }
+            if (onCommentOpsListener != null) {
+            	onCommentOpsListener.refreshCommentsCount(comments.get(0).getPosition() - 1);
             }
         } else {
             setVisibility(View.GONE);
+            if (onCommentOpsListener != null) {
+            	onCommentOpsListener.refreshCommentsCount(0);
+            }
         }
     }
 
-    public ViewGroup addComment(final Comment comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    public ViewGroup addComment(final Comment comment, RequestManager imageLoader, final OnCommentOpsListener onCommentClickListener) {
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
         return addComment(true, comment, imageLoader, onCommentClickListener);
     }
 
-    private ViewGroup addComment(boolean first, final Comment comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+    private ViewGroup addComment(boolean first, final Comment comment, RequestManager imageLoader, final OnCommentOpsListener onCommentOpsListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.layout_comment_item, null, false);
 //        imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
@@ -215,8 +221,8 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         lay.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-				if (onCommentClickListener != null) {
-					onCommentClickListener.onClick(v, comment);
+				if (onCommentOpsListener != null) {
+					onCommentOpsListener.onClick(v, comment);
 				}
             }
         });

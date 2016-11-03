@@ -285,6 +285,10 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         mAuthor.setText(specialNewsDetail.getUsername());
         mComments.setTitle("最新评论");
         mComments.init(specialNewsDetail.getBlogcomments(), 0, 20, null, this);
+        
+        //设置标题栏评论数量
+        iDetail.resfreshTitleComments(specialNewsDetail.getComments());
+        
         if (specialNewsDetail.getComments() <= 99) {
 			mCommentsCount.setBackgroundResource(R.drawable.ic_comment_count_bg);
 			mCommentsCount.setText(String.valueOf(specialNewsDetail.getComments()));
@@ -346,7 +350,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 	@Override
 	public void toSendCommentSucess() {
 		// TODO Auto-generated method stub
-		
+		scrollToCommentsLocation();
 	}
 	
 	@Override

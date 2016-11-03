@@ -9,7 +9,10 @@
         android:id="@+id/city_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="5dp"
         android:textColor="#FF767676"
         android:textSize="14dp" />
 

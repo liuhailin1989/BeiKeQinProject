@@ -167,7 +167,13 @@ public class CityListActivity extends BaseActivity implements
 
 	private void initData() {
 		mAllCityData = new ResultListBean<City>();
+		//
 		mHistoryCityData = new ResultListBean<City>();
+		City historyCityGroup = new City();
+		historyCityGroup.setTitle("最近访问城市");
+		historyCityGroup.setListItemType(CityListAdapter.TYPE_CITY_GROUP);
+		mHistoryCityData.getItems().add(0,historyCityGroup);
+		//
 		mCityListAdapter = new CityListAdapter(this);
 		mListView.setAdapter(mCityListAdapter);
 		mListView.setOnItemClickListener(this);

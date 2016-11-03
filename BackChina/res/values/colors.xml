@@ -83,6 +83,9 @@
     <color name="local_header_text_color">#111111</color>
     <color name="local_button_text_color">#FFFFFF</color>
 
+    <!-- city list -->
+    <color name="city_list_item_text_color">#000000</color>
+    
     <!-- blog item -->
     <color name="blog_item_title_color">#000000</color>
     <color name="blog_item_subtitle_color">#808080</color>

@@ -8,9 +8,12 @@
         android:id="@+id/city_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:textColor="#FF767676"
-        android:textSize="16dp" />
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:textColor="@color/city_list_item_text_color"
+        android:textSize="16dp"/>
 
     <View
         style="@style/h_line"/>

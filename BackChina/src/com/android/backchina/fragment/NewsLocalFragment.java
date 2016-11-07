@@ -220,6 +220,7 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 						// TODO Auto-generated method stub
 						if (bean == null || mCurrentCity == null) {
 							onRequestError(EmptyLayout.NODATA);
+							UIHelper.enterCityListActivity(getActivity(),getParentFragment());
 						} else {
 							setListData(bean, false);
 							onRequestSuccess();

@@ -38,7 +38,7 @@ public class CityListAdapter extends BaseAdapter {
 
 	public void setData(List<City> history,List<City> list) {
 		mListData.clear();
-		if (history != null && history.size() > 1) {
+		if (history != null ) {
 			mListData.addAll(0, history);
 		}
 		mListData.addAll(list);

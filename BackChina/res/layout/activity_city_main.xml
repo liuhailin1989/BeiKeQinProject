@@ -11,6 +11,7 @@
         android:background="@color/back_china_color" >
 
         <Button
+            android:id="@+id/btn_cancle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

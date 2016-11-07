@@ -15,8 +15,10 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,6 +52,8 @@ public class CityListActivity extends BaseActivity implements
 
 	public final static String BUNDLE_KEY_SELECT_CITY = "BUNDLE_KEY_SELECT_CITY";
 	private EditText etCityName;
+	
+	private Button mBtnCalcle;
 
 	private ListView mListView;
 
@@ -72,6 +76,8 @@ public class CityListActivity extends BaseActivity implements
 	private CityListAdapter mSearchCityListAdapter;
 
 	private Context mContext;
+	
+	private City noHistroyData = null;
 
 	public static void show(Context context, Fragment fragment) {
 		Intent intent = new Intent(context, CityListActivity.class);
@@ -89,6 +95,15 @@ public class CityListActivity extends BaseActivity implements
 	}
 
 	private void setupViews() {
+		mBtnCalcle = (Button) findViewById(R.id.btn_cancle);
+		mBtnCalcle.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 		etCityName = (EditText) findViewById(R.id.et_city_name);
 		mListView = (ListView) findViewById(R.id.list_view);
 		mSearchListView = (ListView) findViewById(R.id.search_result);
@@ -168,6 +183,10 @@ public class CityListActivity extends BaseActivity implements
 	private void initData() {
 		mAllCityData = new ResultListBean<City>();
 		//
+		noHistroyData = new City();
+		noHistroyData.setTitle("暂无数据");
+		noHistroyData.setListItemType(CityListAdapter.TYPE_NORMAL);
+		//
 		mHistoryCityData = new ResultListBean<City>();
 		City historyCityGroup = new City();
 		historyCityGroup.setTitle("最近访问城市");
@@ -194,6 +213,13 @@ public class CityListActivity extends BaseActivity implements
 					String responseString) {
 				if (handleResponse(responseString)) {
 					// mCityListAdapter.setData(mAllCityListData);
+					if(mHistoryCityData.getItems().size() == 1){
+						mHistoryCityData.getItems().add(noHistroyData);
+					}else{
+						if (noHistroyData != null && isInHistory(noHistroyData)) {
+							mHistoryCityData.getItems().remove(noHistroyData);
+						}
+					}
 					mCityListAdapter.setData(mHistoryCityData.getItems(),mAllCityData.getItems());
 					mCityListAdapter.notifyDataSetChanged();
 					saveCache(mAllCityData,getCacheKey());
@@ -225,6 +251,13 @@ public class CityListActivity extends BaseActivity implements
 			mAllCityData = allCityBean;
 			if (historyCityBean != null) {
 				mHistoryCityData = historyCityBean;
+			}
+			if(mHistoryCityData.getItems().size() == 1){
+				mHistoryCityData.getItems().add(noHistroyData);
+			}else{
+				if (noHistroyData != null && isInHistory(noHistroyData)) {
+					mHistoryCityData.getItems().remove(noHistroyData);
+				}
 			}
 			mCityListAdapter.setData(mHistoryCityData.getItems(),mAllCityData.getItems());
 			mCityListAdapter.notifyDataSetChanged();
@@ -299,6 +332,10 @@ public class CityListActivity extends BaseActivity implements
 			intent.putExtras(bundle);
 			setResult(RESULT_OK, intent);
 			//
+			if (noHistroyData != null && isInHistory(noHistroyData)) {
+				mHistoryCityData.getItems().remove(noHistroyData);
+			}
+			
 			if (!isInHistory(city)) {
 				mHistoryCityData.getItems().add(city);
 				saveCache(mHistoryCityData, getHistoryCacheKey());

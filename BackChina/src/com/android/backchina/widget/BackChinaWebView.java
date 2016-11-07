@@ -300,9 +300,10 @@ public class BackChinaWebView extends WebView {
         	TLog.d("called");
 //            UIHelper.showUrlRedirect(view.getContext(), url);
 //            return true;
-        	Uri uri = Uri.parse(url);
-        	Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-        	view.getContext().startActivity(intent);
+//        	Uri uri = Uri.parse(url);
+//        	Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+//        	view.getContext().startActivity(intent);
+        	UIHelper.enterCommonWebActivity(view.getContext(), url);
         	return true;
         }
 

@@ -28,6 +28,7 @@ import com.android.backchina.ui.ChannelVideoActivity;
 import com.android.backchina.ui.CityListActivity;
 import com.android.backchina.ui.CommentBlogActivity;
 import com.android.backchina.ui.CommentNewsActivity;
+import com.android.backchina.ui.CommonWebActivity;
 import com.android.backchina.ui.LoginActivity;
 import com.android.backchina.ui.MyFavoriteActivity;
 import com.android.backchina.ui.NewsDetailActivity;
@@ -62,6 +63,10 @@ public class UIHelper {
     	Uri uri = Uri.parse(url);
     	Intent intent = new Intent(Intent.ACTION_VIEW,uri);
     	context.startActivity(intent);
+    }
+    
+    public static void enterCommonWebActivity(Context context, String url) {
+    	CommonWebActivity.show(context, url);
     }
     
     public static void enterChannelNewsActivity(Context context,Fragment fragment) {

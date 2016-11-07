@@ -136,6 +136,8 @@
     <item name="subscribe_item_text_color_normal" type="color">@color/default_text</item>
 
     <color name="subscribe_item_text_color_pressed">#ffb9b9b9</color>
+    
+    <!--  -->
     <color name="count_text_color_light">#9d9d9d</color>
 
     <!--  -->

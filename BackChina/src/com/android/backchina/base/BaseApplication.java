@@ -50,6 +50,15 @@ public class BaseApplication extends Application{
         apply(editor);
     }
     
+    /**
+     * 读取是否是已读的文章列表
+     *
+     * @return
+     */
+    public static boolean isOnReadedPostList(String prefFileName, String key) {
+        return getPreferences(prefFileName).contains(key);
+    }
+    
     public static void apply(SharedPreferences.Editor editor) {
         if (sIsAtLeastGB) {
             editor.apply();

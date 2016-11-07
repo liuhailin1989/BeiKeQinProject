@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
@@ -31,6 +32,8 @@ import cz.msebera.android.httpclient.Header;
 public class BlogFragment extends BaseListFragment<Blog> implements
 		OnTabReselectListener {
 
+	public static final String HISTORY_BLOG = "history_blog";
+	
 	public static final String BUNDLE_KEY_CHANNELITEM = "BUNDLE_KEY_CHANNELITEM";
 	public static final String BUNDLE_KEY_CATTITLE = "BUNDLE_KEY_CATTITLE";
 
@@ -185,7 +188,14 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 			long id) {
 		// TODO Auto-generated method stub
 		Blog item = (Blog) parent.getAdapter().getItem(position);
-		 UIHelper.enterBlogDetail(getActivity(), item,false);
+		UIHelper.enterBlogDetail(getActivity(), item, false);
+		//
+		TextView title = (TextView) view.findViewById(R.id.tv_title);
+		TextView summary = (TextView) view.findViewById(R.id.tv_summary);
+		TextView username = (TextView) view.findViewById(R.id.tv_user_name);
+		updateTextColor(title, summary);
+		updateTextColor(username, null);
+		saveToReadedList(BlogFragment.HISTORY_BLOG, item.getId() + "");
 	}
 
 	@Override

@@ -251,6 +251,10 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 		// TODO Auto-generated method stub
 		News item = (News) parent.getAdapter().getItem(position);
 		UIHelper.enterNewsDetail(getActivity(), item,false);
+		TextView title = (TextView) view.findViewById(R.id.tv_title);
+//      TextView content = (TextView) view.findViewById(R.id.tv_item_blog_body);
+        updateTextColor(title, null);
+        saveToReadedList(NewsFragment.HISTORY_NEWS, item.getId() +"");
 	}
 
 	@Override

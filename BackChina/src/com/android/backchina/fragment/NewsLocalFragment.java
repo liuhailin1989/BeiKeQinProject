@@ -104,6 +104,7 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 	protected void setupViews(View root) {
 		// TODO Auto-generated method stub
 		super.setupViews(root);
+		//
 		View headerView = root.inflate(getActivity(), R.layout.layout_news_local_header_view, null);
 		mBtnSelectCity = (Button) headerView.findViewById(R.id.btn_select_city);
 		mBtnSelectCity.setOnClickListener(new OnClickListener() {
@@ -116,6 +117,12 @@ public class NewsLocalFragment  extends BaseListFragment<News> {
 		});
 		mTvCityName = (TextView) headerView.findViewById(R.id.tv_city_name);
 		mListView.addHeaderView(headerView);
+	}
+	
+	@Override
+	protected boolean isNeedSearchBar() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

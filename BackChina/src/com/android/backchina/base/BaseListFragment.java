@@ -3,6 +3,8 @@ package com.android.backchina.base;
 import java.lang.reflect.Type;
 import java.util.Date;
 
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -16,6 +18,7 @@ import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.XListView;
 
 public abstract class BaseListFragment<T> extends BaseFragment<T> implements XListView.IXListViewListener,
@@ -27,6 +30,8 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
     protected EmptyLayout mErrorLayout;
     
     protected BaseListAdapter<T> mAdapter;
+    
+    protected View searchView;
     
     @Override
     protected int getLayoutId() {
@@ -40,6 +45,11 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
         super.setupViews(root);
         mListView = (XListView) root.findViewById(R.id.pull_and_load_listview);
         mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
+		if (isNeedSearchBar()) {
+			searchView = LayoutInflater.from(getActivity()).inflate(
+					R.layout.layout_header_search, null);
+			mListView.addHeaderView(searchView);
+		}
         mListView.setAutoLoadEnable(true);
         mListView.setXListViewListener(this);
         mListView.setOnItemClickListener(this);
@@ -184,7 +194,13 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
         return true;
     }
     
+    protected void enterSearch(){
+    	UIHelper.showUrlRedirect(getActivity(), "http://www.backchina.com/search.php?mod=portal&mobile=2");
+    }
+    
     protected abstract BaseListAdapter<T> getListAdapter();
 
     protected abstract Type getType();
+    
+    protected abstract boolean isNeedSearchBar();
 }

@@ -4,6 +4,7 @@ package com.android.backchina.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -58,7 +59,9 @@ public class UIHelper {
 	}
 	
     public static void showUrlRedirect(Context context, String url) {
-//        showUrlRedirect(context, 0, url);
+    	Uri uri = Uri.parse(url);
+    	Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+    	context.startActivity(intent);
     }
     
     public static void enterChannelNewsActivity(Context context,Fragment fragment) {

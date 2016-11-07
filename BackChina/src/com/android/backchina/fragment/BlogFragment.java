@@ -76,6 +76,12 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 	}
 
 	@Override
+	protected boolean isNeedSearchBar() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	@Override
 	protected void initData() {
 		// TODO Auto-generated method stub
 		super.initData();
@@ -187,15 +193,22 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		Blog item = (Blog) parent.getAdapter().getItem(position);
-		UIHelper.enterBlogDetail(getActivity(), item, false);
-		//
-		TextView title = (TextView) view.findViewById(R.id.tv_title);
-		TextView summary = (TextView) view.findViewById(R.id.tv_summary);
-		TextView username = (TextView) view.findViewById(R.id.tv_user_name);
-		updateTextColor(title, summary);
-		updateTextColor(username, null);
-		saveToReadedList(BlogFragment.HISTORY_BLOG, item.getId() + "");
+		Object obj = parent.getAdapter().getItem(position);
+		if(view != null && view.getId() == R.id.search_container){
+			enterSearch();
+			return;
+		}
+		if (obj instanceof Blog) {
+			Blog item = (Blog) obj;
+			UIHelper.enterBlogDetail(getActivity(), item, false);
+			//
+			TextView title = (TextView) view.findViewById(R.id.tv_title);
+			TextView summary = (TextView) view.findViewById(R.id.tv_summary);
+			TextView username = (TextView) view.findViewById(R.id.tv_user_name);
+			updateTextColor(title, summary);
+			updateTextColor(username, null);
+			saveToReadedList(BlogFragment.HISTORY_BLOG, item.getId() + "");
+		}
 	}
 
 	@Override

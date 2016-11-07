@@ -78,6 +78,11 @@ public class MyFavoriteFragment extends BaseListFragment<FavoriteBean> implement
 		super.setupViews(root);
 	}
 	
+	@Override
+	protected boolean isNeedSearchBar() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	private void resetFlag(){
 		mFavoriteBeanList.clear();

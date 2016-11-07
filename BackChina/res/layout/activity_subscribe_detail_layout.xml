@@ -60,7 +60,8 @@
     <FrameLayout
         android:id="@+id/lay_content_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@color/background_color" >
 
         <com.android.backchina.widget.XListView
             android:id="@+id/list_view"
@@ -75,6 +76,7 @@
             android:id="@+id/error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/background_color"
             android:visibility="visible" />
     </FrameLayout>
 

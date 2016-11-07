@@ -79,6 +79,12 @@ public class NewsHistoryFragment extends BaseListFragment<News> {
 		// TODO Auto-generated method stub
 		super.setupViews(root);
 	}
+	
+	@Override
+	protected boolean isNeedSearchBar() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	@Override
 	protected void initData() {

@@ -90,6 +90,12 @@ public class NewsFragment extends BaseListFragment<News> {
 	}
 
 	@Override
+	protected boolean isNeedSearchBar() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	@Override
 	protected void initData() {
 		// TODO Auto-generated method stub
 		super.initData();
@@ -235,12 +241,21 @@ public class NewsFragment extends BaseListFragment<News> {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		News item = (News) parent.getAdapter().getItem(position);
-		UIHelper.enterNewsDetail(getActivity(), item,false);
-		TextView title = (TextView) view.findViewById(R.id.tv_title);
-//         TextView content = (TextView) view.findViewById(R.id.tv_item_blog_body);
-        updateTextColor(title, null);
-        saveToReadedList(NewsFragment.HISTORY_NEWS, item.getId() +"");
+		if(view != null && view.getId() == R.id.search_container){
+			enterSearch();
+			return;
+		}
+		Object obj = parent.getAdapter().getItem(position);
+		//
+		if (obj instanceof News) {
+			News item = (News) obj;
+			UIHelper.enterNewsDetail(getActivity(), item, false);
+			TextView title = (TextView) view.findViewById(R.id.tv_title);
+			// TextView content = (TextView)
+			// view.findViewById(R.id.tv_item_blog_body);
+			updateTextColor(title, null);
+			saveToReadedList(NewsFragment.HISTORY_NEWS, item.getId() + "");
+		}
 	}
 
 	@Override

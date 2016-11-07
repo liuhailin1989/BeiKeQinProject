@@ -52,6 +52,7 @@
             android:layout_toLeftOf="@id/header_text_layout"
             android:layout_marginRight="30dp"
             android:layout_centerVertical="true"
+            android:indeterminateDrawable="@drawable/progressbar"
             android:visibility="gone" />
 
         <ImageView

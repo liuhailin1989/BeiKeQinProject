@@ -79,6 +79,12 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> imp
 	}
 
 	@Override
+	protected boolean isNeedSearchBar() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
 	protected void initData() {
 		super.initData();
 		mCurrentPage = 1;

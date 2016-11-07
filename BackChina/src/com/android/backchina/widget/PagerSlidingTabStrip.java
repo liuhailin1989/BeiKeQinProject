@@ -222,7 +222,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		ViewGroup tabsLayout = getTabsLayout();
 		if (tabsLayout != null && tabsLayout.getChildCount() > 0
 				&& slidingBlockDrawable != null) {
-		    TLog.i("draw start");
+//		    TLog.i("draw start");
 			View currentTab = tabsLayout.getChildAt(currentPosition);
 			if (currentTab != null) {
 				float slidingBlockLeft = currentTab.getLeft();
@@ -240,7 +240,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 								* slidingBlockRight);
 					}
 				}
-				TLog.i("slidingBlockLeft =" + slidingBlockLeft);
+//				TLog.i("slidingBlockLeft =" + slidingBlockLeft);
 				slidingBlockDrawable.setBounds((int) slidingBlockLeft, 0,
 						(int) slidingBlockRight, getHeight());
 				slidingBlockDrawable.draw(canvas);

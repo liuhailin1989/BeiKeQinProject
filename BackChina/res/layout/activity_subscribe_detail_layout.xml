@@ -11,25 +11,38 @@
         android:layout_height="150dp"
         android:background="@color/back_china_color" >
 
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/selector_btn_back_white" />
+
         <LinearLayout
             android:id="@+id/header_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/btn_back"
             android:gravity="center"
             android:orientation="vertical" >
 
             <com.android.backchina.widget.CircleImageView
                 android:id="@+id/iv_logo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:src="@drawable/default_avatar" />
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name" />
+                android:layout_marginTop="10dp"
+                android:text="Name"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
         </LinearLayout>
 
         <TextView
@@ -39,7 +52,9 @@
             android:layout_alignTop="@id/header_content"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/header_content"
-            android:text="+ 订阅" />
+            android:text="+ 订阅"
+            android:textColor="@color/white"
+            android:textSize="14dp"  />
     </RelativeLayout>
 
     <FrameLayout

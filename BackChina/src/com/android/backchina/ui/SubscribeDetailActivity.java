@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,8 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 
 	public final static String BUNDLE_KEY_SUBSCRIBE = "BUNDLE_KEY_SUBSCRIBE";
 
+	private ImageView mBtnBack;
+	
 	private CircleImageView mLogo;
 
 	private TextView mName;
@@ -87,6 +90,15 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	}
 
 	private void setupViews() {
+		mBtnBack = (ImageView) findViewById(R.id.btn_back);
+		mBtnBack.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 		mLogo = (CircleImageView) findViewById(R.id.iv_logo);
 		mName = (TextView) findViewById(R.id.tv_name);
 		mBtnSubscribe = (TextView) findViewById(R.id.btn_subscribe);

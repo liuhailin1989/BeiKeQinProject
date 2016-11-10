@@ -60,6 +60,9 @@ public class UIHelper {
 	}
 	
     public static void showUrlRedirect(Context context, String url) {
+    	if(StringUtils.isEmpty(url)){
+    		return;
+    	}
     	Uri uri = Uri.parse(url);
     	Intent intent = new Intent(Intent.ACTION_VIEW,uri);
     	context.startActivity(intent);

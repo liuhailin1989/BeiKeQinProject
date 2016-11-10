@@ -249,10 +249,12 @@ public class NewsFragment extends BaseListFragment<News> {
 		//
 		if (obj instanceof News) {
 			News item = (News) obj;
-			UIHelper.enterNewsDetail(getActivity(), item, false);
+			if(StringUtils.isEmpty(item.getUrlapi())){
+				UIHelper.showUrlRedirect(getActivity(), item.getUrl());
+			} else {
+				UIHelper.enterNewsDetail(getActivity(), item, false);
+			}
 			TextView title = (TextView) view.findViewById(R.id.tv_title);
-			// TextView content = (TextView)
-			// view.findViewById(R.id.tv_item_blog_body);
 			updateTextColor(title, null);
 			saveToReadedList(NewsFragment.HISTORY_NEWS, item.getId() + "");
 		}

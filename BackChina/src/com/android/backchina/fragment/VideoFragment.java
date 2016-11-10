@@ -23,6 +23,7 @@ import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.RecycleViewItemDecoration;
 import com.google.gson.reflect.TypeToken;
@@ -243,6 +244,12 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 	protected void onVideoItemClick(View view, int position) {
 		// TODO Auto-generated method stub
 		List<Video> datas = mAdapter.getmDatas();
-		UIHelper.enterVideoPlayerActivity(getActivity(), datas.get(position));
+		Video video = datas.get(position);
+		//
+		if(StringUtils.isEmpty(video.getUrlapi())){
+			UIHelper.showUrlRedirect(getActivity(), video.getUrl());
+		} else {
+			UIHelper.enterVideoPlayerActivity(getActivity(), video);
+		}
 	}
 }

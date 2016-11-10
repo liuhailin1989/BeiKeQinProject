@@ -195,7 +195,8 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements XLi
     }
     
     protected void enterSearch(){
-    	UIHelper.showUrlRedirect(getActivity(), "http://www.backchina.com/search.php?mod=portal&mobile=2");
+//    	UIHelper.showUrlRedirect(getActivity(), "http://www.backchina.com/search.php?mod=portal&mobile=2");
+    	UIHelper.enterCommonWebActivity(getActivity(), "http://www.backchina.com/search.php?mod=portal&mobile=2");
     }
     
     protected abstract BaseListAdapter<T> getListAdapter();

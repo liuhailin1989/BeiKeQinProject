@@ -22,6 +22,7 @@ import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
@@ -200,7 +201,11 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 		}
 		if (obj instanceof Blog) {
 			Blog item = (Blog) obj;
-			UIHelper.enterBlogDetail(getActivity(), item, false);
+			if(StringUtils.isEmpty(item.getUrlapi())){
+				UIHelper.showUrlRedirect(getActivity(), item.getUrl());
+			} else {
+				UIHelper.enterBlogDetail(getActivity(), item, false);
+			}
 			//
 			TextView title = (TextView) view.findViewById(R.id.tv_title);
 			TextView summary = (TextView) view.findViewById(R.id.tv_summary);

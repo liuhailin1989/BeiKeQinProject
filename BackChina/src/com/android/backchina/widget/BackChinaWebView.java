@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
+import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.interf.OnWebViewImageListener;
 import com.android.backchina.ui.AboutUsActivity;
 import com.android.backchina.utils.FileUtil;
@@ -298,12 +299,17 @@ public class BackChinaWebView extends WebView {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
         	TLog.d("called");
-//            UIHelper.showUrlRedirect(view.getContext(), url);
-//            return true;
-//        	Uri uri = Uri.parse(url);
-//        	Intent intent = new Intent(Intent.ACTION_VIEW,uri);
-//        	view.getContext().startActivity(intent);
-        	UIHelper.enterCommonWebActivity(view.getContext(), url);
+        	if(!StringUtils.isEmpty(url)){
+        		if(url.contains(ApiHttpClient.HOST)){
+                  	UIHelper.enterCommonWebActivity(view.getContext(), url);
+				} else {
+					// UIHelper.showUrlRedirect(view.getContext(), url);
+					// return true;
+					Uri uri = Uri.parse(url);
+					Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+					view.getContext().startActivity(intent);
+				}
+        	}
         	return true;
         }
 

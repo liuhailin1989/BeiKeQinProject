@@ -37,13 +37,13 @@ public class VideoLinearAdapter extends BaseRecyclerViewAdapter<Video> {
 				}
 			});
 			Video item = mDatas.get(position);
-			if (StringUtils.isEmpty(item.getPic_large())) {
+			if (StringUtils.isEmpty(item.getPic())) {
 				setImageForNet(viewHolder.thumb,
-						ApiHttpClient.getAbsoluteApiUrl(item.getPic()),
+						ApiHttpClient.getAbsoluteApiUrl(item.getPic_large()),
 						R.drawable.bg_normal);
 			} else {
 				setImageForNet(viewHolder.thumb,
-						ApiHttpClient.getAbsoluteApiUrl(item.getPic_large()),
+						ApiHttpClient.getAbsoluteApiUrl(item.getPic()),
 						R.drawable.bg_normal);
 			}
 			if (StringUtils.isEmpty(item.getAvatar())) {
@@ -58,6 +58,8 @@ public class VideoLinearAdapter extends BaseRecyclerViewAdapter<Video> {
 			} else {
 				viewHolder.author.setText(item.getUsername());
 			}
+			viewHolder.title.setText(item.getTitle());
+			
 			String fromat = mContext.getResources().getString(
 					R.string.video_item_views);
 			String viewsValue = String.format(fromat, item.getViews());
@@ -81,6 +83,7 @@ public class VideoLinearAdapter extends BaseRecyclerViewAdapter<Video> {
 		public ImageView thumb;
 		public ImageView avatar;
 		public TextView author;
+		public TextView title;
 		public TextView playCount;
 		public TextView comments;
 		public ImageView share;
@@ -91,6 +94,7 @@ public class VideoLinearAdapter extends BaseRecyclerViewAdapter<Video> {
 			thumb = (ImageView) itemView.findViewById(R.id.iv_thmub);
 			avatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
 			author = (TextView) itemView.findViewById(R.id.author);
+			title = (TextView) itemView.findViewById(R.id.title);
 			playCount = (TextView) itemView.findViewById(R.id.tv_play_count);
 			comments = (TextView) itemView.findViewById(R.id.tv_comments);
 			share = (ImageView) itemView.findViewById(R.id.iv_share);

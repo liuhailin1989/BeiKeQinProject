@@ -5,6 +5,7 @@ import java.util.List;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseListAdapter;
@@ -40,14 +41,18 @@ public class SubscribeAdapter extends BaseListAdapter<Subscribe>{
         // TODO Auto-generated method stub
         vh.setImageForNet(R.id.iv_icon, item.getLogo());
         vh.setText(R.id.tv_name, item.getTitle());
+        TextView btnSubscribe = vh.getView(R.id.btn_add_subscribe);
 		if (item.getType() == TYPE_INFOLIST) {
 			if (StringUtils.isEmpty(item.getFavid())) {
-				vh.setText(R.id.btn_add_subscribe, "+ 订阅");
+				btnSubscribe.setText(mCallback.getContext().getResources().getString(R.string.btn_subscribe_text));
+				btnSubscribe.setBackgroundDrawable(mCallback.getContext().getResources().getDrawable(R.drawable.selector_btn_subscribe));
 			} else {
-				vh.setText(R.id.btn_add_subscribe, "取消订阅");
+				btnSubscribe.setText(mCallback.getContext().getResources().getString(R.string.btn_subscribe_cancle_text));
+				btnSubscribe.setBackgroundDrawable(mCallback.getContext().getResources().getDrawable(R.drawable.selector_btn_cancle_subscribe));
 			}
 		}else if(item.getType() == TYPE_SPACE){
-			vh.setText(R.id.btn_add_subscribe, "取消订阅");
+			btnSubscribe.setText(mCallback.getContext().getResources().getString(R.string.btn_subscribe_cancle_text));
+			btnSubscribe.setBackgroundDrawable(mCallback.getContext().getResources().getDrawable(R.drawable.selector_btn_cancle_subscribe));
 		}
         vh.getView(R.id.btn_add_subscribe).setOnClickListener(new OnClickListener() {
 			
@@ -55,7 +60,7 @@ public class SubscribeAdapter extends BaseListAdapter<Subscribe>{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(listener != null){
-					listener.onSubscribe(item);
+					listener.onSubscribe(v,item);
 				}
 			}
 		});;

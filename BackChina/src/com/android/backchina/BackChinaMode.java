@@ -6,20 +6,17 @@ import java.util.List;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.FavoriteBean;
-import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.interf.FavoriteCallback;
 import com.android.backchina.interf.ISpecialNewsSubscribeListener;
-import com.android.backchina.interf.ISubscribeListener;
 import com.android.backchina.interf.SubscribeCallback;
+import com.android.backchina.interf.SubscribeCatCallback;
 import com.android.backchina.manager.FavoriteManager;
 import com.android.backchina.manager.SubscribeManager;
-import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -33,6 +30,8 @@ public class BackChinaMode extends BroadcastReceiver{
 	public final static String ACTION_SPECIAL_NEWS_SUBSCRIBE = "backchina.action.SPECIAL_NEWS_SUBSCRIBE";
 	
 	private SubscribeCallback subscribeCallback;
+	
+	private SubscribeCatCallback subscribeCatCallback;
 	
 	private FavoriteCallback favoriteCallback;
 	
@@ -52,6 +51,7 @@ public class BackChinaMode extends BroadcastReceiver{
 		final String action = intent.getAction();
         if (ACTION_SUBSCRIBE_DATA_CHANGED.equals(action)) {
         	subscribeDataChanged();
+        	subscribeCatDataStatusChanged();
         }else if(ACTION_FAVORITE_DATA_CHANGED.equals(action)){
         	favoriteDataChanged();
         }else if(Constants.INTENT_ACTION_USER_CHANGE.equals(action)){
@@ -65,6 +65,11 @@ public class BackChinaMode extends BroadcastReceiver{
 	public void setSubscribeCallBack(SubscribeCallback callback){
 		subscribeCallback = callback;
 	}
+	
+	public void setSubscribeCatCallBack(SubscribeCatCallback callback){
+		subscribeCatCallback = callback;
+	}
+	
 	public void setSpecialNewsSubscribeCallBack(ISpecialNewsSubscribeListener callback){
 		specicalNewsSubscribeCallback = callback;
 	}
@@ -72,6 +77,12 @@ public class BackChinaMode extends BroadcastReceiver{
 	private void subscribeDataChanged(){
 		if(subscribeCallback != null){
 			subscribeCallback.OnSubscribeDataChanged();
+		}
+	}
+	
+	private void subscribeCatDataStatusChanged(){
+		if(subscribeCatCallback != null){
+			subscribeCatCallback.OnSubscribeCatDataStatusChanged();
 		}
 	}
 	

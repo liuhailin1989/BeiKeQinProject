@@ -66,6 +66,17 @@
     <string name="subscribe_manager_category_info_2">单击增删频道，长按拖拽排序</string>
     <string name="subscribe_more_category">更多频道</string>
     <string name="subscribe_views">%1$s 评论 / %2$s 阅读</string>
+    <string name="btn_subscribe_text">+ 订阅</string>
+    <string name="btn_subscribe_cancle_text">- 取消订阅</string>
+    
+    <!-- Toast -->
+    <string name="toast_need_login">请先登录</string>
+    <string name="toast_subscribe_sucessed">订阅成功</string>
+    <string name="toast_subscribed">已订阅</string>
+    <string name="toast_subscribe_failed">订阅失败</string>
+    <string name="toast_cancle_subscribe_failed">取消失败</string>
+    <string name="toast_cancle_subscribe_sucessed">取消成功</string>
+    <string name="toast_cancle_subscribed">已取消</string>
     
 
     <!--  -->

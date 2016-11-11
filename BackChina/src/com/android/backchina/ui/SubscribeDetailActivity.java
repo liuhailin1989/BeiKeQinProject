@@ -18,6 +18,7 @@ import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.BackChinaMode;
 import com.android.backchina.R;
+import com.android.backchina.adapter.SubscribeAdapter;
 import com.android.backchina.adapter.SubscribeDetailAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseActivity;
@@ -27,9 +28,12 @@ import com.android.backchina.bean.SubscribeDetail;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
+import com.android.backchina.fragment.TabSubscribeFragment;
 import com.android.backchina.interf.ISpecialNewsSubscribeListener;
 import com.android.backchina.manager.SubscribeManager;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.ToastUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
 import com.android.backchina.widget.XListView;
@@ -42,7 +46,7 @@ import cz.msebera.android.httpclient.Header;
 public class SubscribeDetailActivity extends BaseActivity implements OnItemClickListener,IXListViewListener,ISpecialNewsSubscribeListener{
 
 	public final static String BUNDLE_KEY_SUBSCRIBE = "BUNDLE_KEY_SUBSCRIBE";
-
+	
 	private ImageView mBtnBack;
 	
 	private CircleImageView mLogo;
@@ -66,6 +70,8 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	private int mCurrentPage = 1;
 	
 	private boolean isLoadMoreAction = false;
+	
+	 private boolean isSubscribed;
 
 	public static void show(Context context, Subscribe subscribe) {
 		Intent intent = new Intent(context, SubscribeDetailActivity.class);
@@ -87,6 +93,16 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	protected void initBundle(Bundle bundle) {
 		mCurrentSubscribe = (Subscribe) bundle
 				.getSerializable(BUNDLE_KEY_SUBSCRIBE);
+		Subscribe subscribe = null;
+		 if (AppContext.getInstance().isLogin()) {
+			 subscribe = SubscribeManager.getInstance().getSubscribeFromTabOnlineById(this, ""+mCurrentSubscribe.getId(),mCurrentSubscribe.getIdtype());
+		 }else{
+			 subscribe = SubscribeManager.getInstance().getSubscribeFromTabLocalById(this, ""+mCurrentSubscribe.getId(),mCurrentSubscribe.getIdtype());
+		 }
+		 isSubscribed = (subscribe != null) ? true : false;
+//		 if(isSubscribed){
+//			 mCurrentSubscribe.setFavid(subscribe.getFavid());
+//		 }
 	}
 
 	private void setupViews() {
@@ -102,11 +118,16 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 		mLogo = (CircleImageView) findViewById(R.id.iv_logo);
 		mName = (TextView) findViewById(R.id.tv_name);
 		mBtnSubscribe = (TextView) findViewById(R.id.btn_subscribe);
+		checkSubscribeBtnStatus(mCurrentSubscribe);
 		mBtnSubscribe.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				subscribeFunction();
+				if(isSubscribed){
+					cancleSubscribeFunction();
+				} else {
+					subscribeFunction();
+				}
 			}
 		});
 		mListView = (XListView) findViewById(R.id.list_view);
@@ -117,34 +138,121 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 		mEmptyLayout = (EmptyLayout) findViewById(R.id.error_layout);
 	}
 
+	private void checkSubscribeBtnStatus(Subscribe subscribe) {
+		if (subscribe == null || StringUtils.isEmpty(subscribe.getFavid())) {
+			mBtnSubscribe.setText(mContext.getResources().getString(R.string.btn_subscribe_text));
+			isSubscribed = false;
+		} else {
+			mBtnSubscribe.setText(mContext.getResources().getString(R.string.btn_subscribe_cancle_text));
+			isSubscribed = true;
+		}
+	}
+
 	private void subscribeFunction() {
-		if (AppContext.getInstance().isLogin()) {
-			BackChinaApi.subscribe(mCurrentSubscribe.getId(),
+		if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID)) {
+			if (AppContext.getInstance().isLogin()) {
+				BackChinaApi.subscribe(mCurrentSubscribe.getId(),
+						new TextHttpResponseHandler() {
+
+							@Override
+							public void onSuccess(int code, Header[] headers,
+									String responseString) {
+								// TODO Auto-generated method stub
+								handleSubscribeResponse(headers, responseString);
+							}
+
+							@Override
+							public void onFailure(int code, Header[] headers,
+									String responseString, Throwable arg3) {
+								// TODO Auto-generated method stub
+								ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
+							}
+						});
+			} else {
+				mCurrentSubscribe
+						.setFavid("local_" + mCurrentSubscribe.getId());
+				mCurrentSubscribe
+						.setIdtype(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID);
+				checkSubscribeBtnStatus(mCurrentSubscribe);
+				SubscribeManager.getInstance().saveSubscribeToTabLocal(
+						mContext, mCurrentSubscribe);
+				ToastUtils.show(getContext(), R.string.toast_subscribe_sucessed);
+				UIHelper.notifySubscribeDataChanged(mContext);
+			}
+		}else if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_UID)) {
+			BackChinaApi.subscribeBlog(""+mCurrentSubscribe.getId(),
 					new TextHttpResponseHandler() {
 
 						@Override
-						public void onSuccess(int code,
-								Header[] headers, String responseString) {
+						public void onSuccess(int code, Header[] headers,
+								String response) {
 							// TODO Auto-generated method stub
-							handleSubscribeResponse(headers,
-									responseString);
+							handleSubscribeResponse(headers, response);
 						}
 
 						@Override
-						public void onFailure(int code,
-								Header[] headers,
-								String responseString, Throwable arg3) {
+						public void onFailure(int code, Header[] headers,
+								String response, Throwable throwable) {
 							// TODO Auto-generated method stub
-							Toast.makeText(getContext(), "订阅失败",
-									Toast.LENGTH_SHORT).show();
+							ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 						}
 					});
-		}else{
-			mCurrentSubscribe.setFavid("local_"+mCurrentSubscribe.getId());
-			SubscribeManager.getInstance().saveSubscribeToTabLocal(mContext, mCurrentSubscribe);
-			Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT)
-					.show();
-			UIHelper.notifySubscribeDataChanged(mContext);
+		}
+	}
+	
+	private void cancleSubscribeFunction(){
+		if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID)) {
+			if (AppContext.getInstance().isLogin()) {
+				BackChinaApi.cancelSubscribe(mCurrentSubscribe.getFavid(),
+						new TextHttpResponseHandler() {
+
+							@Override
+							public void onSuccess(int code, Header[] headers,
+									String responseString) {
+								// TODO Auto-generated method stub
+								handleCancelSubscribeResponse(
+										mCurrentSubscribe, headers,
+										responseString);
+							}
+
+							@Override
+							public void onFailure(int code, Header[] headers,
+									String responseString, Throwable arg3) {
+								// TODO Auto-generated method stub
+								ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_failed);
+							}
+						});
+			} else {
+				SubscribeManager.getInstance().deleteSubscribeToTabLocal(this,
+						mCurrentSubscribe);
+				checkSubscribeBtnStatus(null);
+				ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_sucessed);
+				UIHelper.notifySubscribeDataChanged(this);
+			}
+		}else if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_UID)) {
+			if (AppContext.getInstance().isLogin()) {
+				BackChinaApi.cancleSubscribeBlog(mCurrentSubscribe.getId(),
+						new TextHttpResponseHandler() {
+
+							@Override
+							public void onSuccess(int code, Header[] headers,
+									String responseString) {
+								// TODO Auto-generated method stub
+								handleCancelSubscribeResponse(
+										mCurrentSubscribe, headers,
+										responseString);
+							}
+
+							@Override
+							public void onFailure(int code, Header[] headers,
+									String responseString, Throwable arg3) {
+								// TODO Auto-generated method stub
+								ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_failed);
+							}
+						});
+			}else{
+				//
+			}
 		}
 	}
 	
@@ -155,23 +263,49 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
         Subscribe subscribe = activitiesBean.getActivities();
 		if (subscribe.getStatus() == null) {
 			if (subscribe.getFavid() != null) {
-				Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_sucessed);
+				checkSubscribeBtnStatus(subscribe);
+				SubscribeManager.getInstance().saveSubscribeToTabOnline(this, subscribe);
 				UIHelper.notifySubscribeDataChanged(this);
 			}else{
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			}
 		} else {
-			if (subscribe.getStatus().contains("repeat")) {
-				Toast.makeText(getContext(), "已订阅", Toast.LENGTH_SHORT).show();
+			if(subscribe.getStatus().equals("1")){
+				ToastUtils.show(getContext(), R.string.toast_subscribe_sucessed);
+				checkSubscribeBtnStatus(mCurrentSubscribe);
+				UIHelper.notifySubscribeDataChanged(this);
+			}else if (subscribe.getStatus().contains("repeat")) {
+				ToastUtils.show(getContext(), R.string.toast_subscribed);
 			} else if (subscribe.getStatus().equals("-1")) {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			} else if (subscribe.getStatus().equals("-2")) {
-				Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_need_login);
 			} else {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			}
 		}
     }
+    
+	private void handleCancelSubscribeResponse(Subscribe subscribe,Header[] headers, String response) {
+		Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+		}.getType();
+		ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson()
+				.fromJson(response, type);
+		StatusBean statusBean = activitiesBean.getActivities();
+		if (statusBean.getStatus().equals("1")) {
+			ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_sucessed);
+			checkSubscribeBtnStatus(null);
+			SubscribeManager.getInstance().deleteSubscribeTabOnline(this, ""+subscribe.getId(),subscribe.getIdtype());
+			UIHelper.notifySubscribeDataChanged(this);
+		} else if (statusBean.getStatus().equals("-1")) {
+			ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_failed);
+		} else if (statusBean.getStatus().equals("-2")) {
+			ToastUtils.show(getContext(), R.string.toast_need_login);
+		} else {
+			ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_failed);
+		}
+	}
     
 	private void initData() {
 		mCurrentPage = 1;

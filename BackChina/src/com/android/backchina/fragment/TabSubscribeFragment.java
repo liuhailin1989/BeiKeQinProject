@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
-import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.adapter.SubscribeAdapter;
 import com.android.backchina.api.ApiHttpClient;
@@ -27,13 +26,13 @@ import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultListBean;
-import com.android.backchina.cache.CacheManager;
 import com.android.backchina.interf.ISubscribeListener;
 import com.android.backchina.interf.OnTabReselectListener;
 import com.android.backchina.interf.SubscribeCallback;
 import com.android.backchina.manager.SubscribeManager;
 import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
+import com.android.backchina.utils.ToastUtils;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
@@ -113,6 +112,8 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 				if (resultListBean != null && resultListBean.getItems() != null) {
 					for (Subscribe subscribe : resultListBean.getItems()) {
 						subscribe.setType(SubscribeAdapter.TYPE_SPACE);
+						subscribe.setFavid("uid_"+subscribe.getId());
+						SubscribeManager.getInstance().saveSubscribeToTabOnline(getActivity(), subscribe);
 						mTotalSubscribeList.add(subscribe);
 					}
 					setDataList(mTotalSubscribeList);
@@ -264,7 +265,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 	}
 
 	@Override
-	public void onSubscribe(Subscribe subscribe) {
+	public void onSubscribe(View v,final Subscribe subscribe) {
 		// TODO Auto-generated method stub
 		if (subscribe.getType() == SubscribeAdapter.TYPE_INFOLIST) {
 			if (StringUtils.isEmpty(subscribe.getFavid())) {
@@ -285,16 +286,14 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 										Header[] headers,
 										String responseString, Throwable arg3) {
 									// TODO Auto-generated method stub
-									Toast.makeText(getContext(), "订阅失败",
-											Toast.LENGTH_SHORT).show();
+									ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 								}
 							});
 				} else {
 					subscribe.setFavid("local_"+subscribe.getId());
-					SubscribeManager.getInstance().saveSubscribeToTabLocal(
-							getActivity(), subscribe);
-					Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT)
-							.show();
+					subscribe.setIdtype(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID);
+					SubscribeManager.getInstance().saveSubscribeToTabLocal(getActivity(), subscribe);
+					ToastUtils.show(getActivity(), R.string.toast_subscribe_sucessed);
 					UIHelper.notifySubscribeDataChanged(getActivity());
 				}
 			} else {
@@ -306,7 +305,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 								public void onSuccess(int code,
 										Header[] headers, String responseString) {
 									// TODO Auto-generated method stub
-									handleCancelSubscribeResponse(headers,
+									handleCancelSubscribeResponse(subscribe,headers,
 											responseString);
 								}
 
@@ -315,14 +314,12 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 										Header[] headers,
 										String responseString, Throwable arg3) {
 									// TODO Auto-generated method stub
-									Toast.makeText(getContext(), "取消成功",
-											Toast.LENGTH_SHORT).show();
+									ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_failed);
 								}
 							});
 				} else {
 					SubscribeManager.getInstance().deleteSubscribeToTabLocal(getActivity(), subscribe);
-					Toast.makeText(getContext(), "取消成功", Toast.LENGTH_SHORT)
-							.show();
+					ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_sucessed);
 					UIHelper.notifySubscribeDataChanged(getActivity());
 				}
 			}
@@ -334,7 +331,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 						public void onSuccess(int code, Header[] headers,
 								String responseString) {
 							// TODO Auto-generated method stub
-							handleCancelSubscribeResponse(headers,
+							handleCancelSubscribeResponse(subscribe,headers,
 									responseString);
 						}
 
@@ -342,8 +339,7 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 						public void onFailure(int code, Header[] headers,
 								String responseString, Throwable arg3) {
 							// TODO Auto-generated method stub
-							Toast.makeText(getContext(), "取消成功",
-									Toast.LENGTH_SHORT).show();
+							ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_sucessed);
 						}
 					});
 		}
@@ -356,39 +352,41 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
         Subscribe subscribe = activitiesBean.getActivities();
 		if (subscribe.getStatus() == null) {
 			if (subscribe.getFavid() != null) {
-				Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getActivity(), R.string.toast_subscribe_sucessed);
+				SubscribeManager.getInstance().saveSubscribeToTabOnline(getActivity(), subscribe);
 				UIHelper.notifySubscribeDataChanged(getActivity());
 			}else{
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getActivity(), R.string.toast_subscribe_failed);
 			}
 		} else {
 			if (subscribe.getStatus().contains("repeat")) {
-				Toast.makeText(getContext(), "已订阅", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getActivity(), R.string.toast_subscribed);
 			} else if (subscribe.getStatus().equals("-1")) {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getActivity(), R.string.toast_subscribe_failed);
 			} else if (subscribe.getStatus().equals("-2")) {
-				Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getActivity(), R.string.toast_need_login);
 			} else {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getActivity(), R.string.toast_subscribe_failed);
 			}
 		}
 	}
 
-	private void handleCancelSubscribeResponse(Header[] headers, String response) {
+	private void handleCancelSubscribeResponse(Subscribe subscribe,Header[] headers, String response) {
 		Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
 		}.getType();
 		ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson()
 				.fromJson(response, type);
 		StatusBean statusBean = activitiesBean.getActivities();
 		if (statusBean.getStatus().equals("1")) {
-			Toast.makeText(getContext(), "取消成功", Toast.LENGTH_SHORT).show();
+			ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_sucessed);
+			SubscribeManager.getInstance().deleteSubscribeTabOnline(getActivity(), ""+subscribe.getId(),SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID);
 			UIHelper.notifySubscribeDataChanged(getActivity());
 		} else if (statusBean.getStatus().equals("-1")) {
-			Toast.makeText(getContext(), "取消失败", Toast.LENGTH_SHORT).show();
+			ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_failed);
 		} else if (statusBean.getStatus().equals("-2")) {
-			Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+			ToastUtils.show(getContext(), R.string.toast_need_login);
 		} else {
-			Toast.makeText(getContext(), "取消败", Toast.LENGTH_SHORT).show();
+			ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_failed);
 		}
 	}
 

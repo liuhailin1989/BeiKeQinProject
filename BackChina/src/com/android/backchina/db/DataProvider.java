@@ -63,20 +63,25 @@ public class DataProvider extends ContentProvider{
     public static final String TAB_SUBSCRIBE_LOCAL = "subscribe_local";
     public static final Uri SUBSCRIBE_LOCAL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_SUBSCRIBE_LOCAL);
     
+    public static final int CODE_SUBSCRIBE_ONLINE = 8;
+    public static final String TAB_SUBSCRIBE_ONLINE = "subscribe_online";
+    public static final Uri SUBSCRIBE_ONLINE_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_SUBSCRIBE_ONLINE);
+    
     public static final String SUBSCRIBE_ID = "id";
     public static final String SUBSCRIBE_FAVID = "favid";
     public static final String SUBSCRIBE_TYPE = "type";
+    public static final String SUBSCRIBE_ID_TYPE = "idtype";
     public static final String SUBSCRIBE_TITLE = "title";
     public static final String SUBSCRIBE_LOGO = "logo";
     public static final String SUBSCRIBE_URL = "url";
     public static final String SUBSCRIBE_URLAPI = "urlapi";
     
     //favorite
-    public static final int CODE_FAVORITE_LOCAL = 8;
+    public static final int CODE_FAVORITE_LOCAL = 9;
     public static final String TAB_FAVORITE_LOCAL = "favorite_local";
     public static final Uri FAVORITE_LOCAL_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_FAVORITE_LOCAL);
     
-    public static final int CODE_FAVORITE_ONLINE = 9;
+    public static final int CODE_FAVORITE_ONLINE = 10;
     public static final String TAB_FAVORITE_ONLINE = "favorite_online";
     public static final Uri FAVORITE_ONELINE_URI = Uri.parse("content://"+DATA_AUTHORITY+"/" + TAB_FAVORITE_ONLINE);
     
@@ -104,6 +109,7 @@ public class DataProvider extends ContentProvider{
         uriMatcher.addURI(DATA_AUTHORITY, TAB_CHANNEL_VIDEO_ALL, CODE_CHANNEL_VIDEO_ALL);
         //subscribe
         uriMatcher.addURI(DATA_AUTHORITY, TAB_SUBSCRIBE_LOCAL, CODE_SUBSCRIBE_LOCAL);
+        uriMatcher.addURI(DATA_AUTHORITY, TAB_SUBSCRIBE_ONLINE, CODE_SUBSCRIBE_ONLINE);
         //favorite
         uriMatcher.addURI(DATA_AUTHORITY, TAB_FAVORITE_LOCAL, CODE_FAVORITE_LOCAL);
         uriMatcher.addURI(DATA_AUTHORITY, TAB_FAVORITE_ONLINE, CODE_FAVORITE_ONLINE);
@@ -147,6 +153,9 @@ public class DataProvider extends ContentProvider{
                 break;
             case CODE_SUBSCRIBE_LOCAL:
                 c = db.query(TAB_SUBSCRIBE_LOCAL, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CODE_SUBSCRIBE_ONLINE:
+                c = db.query(TAB_SUBSCRIBE_ONLINE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case CODE_FAVORITE_LOCAL:
                 c = db.query(TAB_FAVORITE_LOCAL, projection, selection, selectionArgs, null, null, sortOrder);
@@ -195,6 +204,9 @@ public class DataProvider extends ContentProvider{
             case CODE_SUBSCRIBE_LOCAL:
                 id = db.insert(TAB_SUBSCRIBE_LOCAL, "", values);
                 break;
+            case CODE_SUBSCRIBE_ONLINE:
+                id = db.insert(TAB_SUBSCRIBE_ONLINE, "", values);
+                break;
             case CODE_FAVORITE_LOCAL:
                 id = db.insert(TAB_FAVORITE_LOCAL, "", values);
                 break;
@@ -237,6 +249,9 @@ public class DataProvider extends ContentProvider{
             case CODE_SUBSCRIBE_LOCAL:
                 result = db.delete(TAB_SUBSCRIBE_LOCAL, selection, selectionArgs);
                 break;
+            case CODE_SUBSCRIBE_ONLINE:
+                result = db.delete(TAB_SUBSCRIBE_ONLINE, selection, selectionArgs);
+                break;
             case CODE_FAVORITE_LOCAL:
                 result = db.delete(TAB_FAVORITE_LOCAL, selection, selectionArgs);
                 break;
@@ -278,6 +293,9 @@ public class DataProvider extends ContentProvider{
             case CODE_SUBSCRIBE_LOCAL:
                 result = db.update(TAB_SUBSCRIBE_LOCAL, values, selection, selectionArgs);
                 break;
+            case CODE_SUBSCRIBE_ONLINE:
+                result = db.update(TAB_SUBSCRIBE_ONLINE, values, selection, selectionArgs);
+                break;
             case CODE_FAVORITE_LOCAL:
                 result = db.update(TAB_FAVORITE_LOCAL, values, selection, selectionArgs);
                 break;
@@ -317,6 +335,7 @@ public class DataProvider extends ContentProvider{
             createChannelVideoLocalTab(db);
             createChannelVideoAllTab(db);
             createSubscribeLocalTab(db);
+            createSubscribeOnlineTab(db);
             createFavoriteLocalTab(db);
             createFavoriteOnlineTab(db);
         }
@@ -419,7 +438,27 @@ public class DataProvider extends ContentProvider{
                         _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
                         SUBSCRIBE_ID + " INTEGER default -1," +
                         SUBSCRIBE_FAVID + " VARCHAR," +
-                        SUBSCRIBE_TYPE +" INTEGER default -1," + 
+                        SUBSCRIBE_TYPE +" INTEGER default -1," +
+                        SUBSCRIBE_ID_TYPE + " VARCHAR," +
+                        SUBSCRIBE_TITLE + " VARCHAR," +
+                        SUBSCRIBE_LOGO + " VARCHAR," +
+                        SUBSCRIBE_URL + " VARCHAR," +
+                        SUBSCRIBE_URLAPI + " VARCHAR" +
+                        ")"
+                        );
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+        private void createSubscribeOnlineTab(SQLiteDatabase db){
+            try{
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TAB_SUBSCRIBE_ONLINE + "(" +
+                        _ID +" INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                        SUBSCRIBE_ID + " INTEGER default -1," +
+                        SUBSCRIBE_FAVID + " VARCHAR," +
+                        SUBSCRIBE_TYPE +" INTEGER default -1," +
+                        SUBSCRIBE_ID_TYPE + " VARCHAR," +
                         SUBSCRIBE_TITLE + " VARCHAR," +
                         SUBSCRIBE_LOGO + " VARCHAR," +
                         SUBSCRIBE_URL + " VARCHAR," +

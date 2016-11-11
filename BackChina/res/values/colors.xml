@@ -110,6 +110,8 @@
     <!--  -->
     <color name="title_color">#333333</color>
     <color name="subscribe_btn_pressed_color">#4CD964</color>
+    <color name="subscribe_btn_cancle_color">#808080</color>
+    <color name="subscribe_btn_cancle_pressed_color">#4CD964</color>
     <!-- 下拉刷新时，颜色值 -->
     <color name="swiperefresh_color1">#ff00ddff</color>
     <color name="swiperefresh_color2">#ffffbb33</color>

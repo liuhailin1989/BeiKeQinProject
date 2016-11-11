@@ -68,7 +68,18 @@
     <string name="subscribe_manager_category_info_2">Click change,long press order</string>
     <string name="subscribe_more_category">More Channel</string>
     <string name="subscribe_views">%1$s comments / %2$s views</string>
-
+    <string name="btn_subscribe_text">+ subscribe</string>
+    <string name="btn_subscribe_cancle_text">- Cancle</string>
+    
+    <!-- Toast -->
+    <string name="toast_need_login">Please Login</string>
+    <string name="toast_subscribe_sucessed">Subscribe Sucessed</string>
+    <string name="toast_subscribed">Subscribed</string>
+    <string name="toast_subscribe_failed">Subscribe Failed</string>
+    <string name="toast_cancle_subscribe_failed">Cancle Failed</string>
+    <string name="toast_cancle_subscribe_sucessed">Cancle Sucessed</string>
+    <string name="toast_cancle_subscribed">Cancled</string>
+    
     <!--  -->
     <string name="footer_type_loading">Loading…</string>
     <string name="footer_type_error">Load failed</string>

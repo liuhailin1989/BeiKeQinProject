@@ -28,9 +28,11 @@ import com.android.backchina.bean.BlogDetail;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.BlogCommentBean;
+import com.android.backchina.manager.SubscribeManager;
 import com.android.backchina.ui.comment.BlogCommentsView;
 import com.android.backchina.ui.comment.OnBlogCommentOpsListener;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.ToastUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
 import com.google.gson.reflect.TypeToken;
@@ -187,8 +189,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 							public void onFailure(int code, Header[] headers,
 									String response, Throwable throwable) {
 								// TODO Auto-generated method stub
-								Toast.makeText(getContext(), "订阅失败",
-										Toast.LENGTH_SHORT).show();
+								ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 							}
 						});
 			}
@@ -434,22 +435,25 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         }.getType();
         ActivitiesBean<Subscribe> activitiesBean = AppContext.createGson().fromJson(response, type);
         Subscribe subscribe = activitiesBean.getActivities();
-		if (subscribe.getStatus() == null) {
+		if (StringUtils.isEmpty(subscribe.getStatus())) {
 			if (subscribe.getFavid() != null) {
-				Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_sucessed);
 				UIHelper.notifySubscribeDataChanged(getActivity());
 			}else{
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			}
 		} else {
-			if (subscribe.getStatus().contains("repeat")) {
-				Toast.makeText(getContext(), "已订阅", Toast.LENGTH_SHORT).show();
+			if(subscribe.getStatus().equals("1")){
+				ToastUtils.show(getContext(), R.string.toast_subscribe_sucessed);
+				UIHelper.notifySubscribeDataChanged(getActivity());
+			}else if (subscribe.getStatus().contains("repeat")) {
+				ToastUtils.show(getContext(), R.string.toast_subscribed);
 			} else if (subscribe.getStatus().equals("-1")) {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			} else if (subscribe.getStatus().equals("-2")) {
-				Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_need_login);
 			} else {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			}
 		}
     }

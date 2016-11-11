@@ -28,6 +28,7 @@ import com.android.backchina.bean.base.ActivitiesBean;
 import com.android.backchina.bean.base.ResultListBean;
 import com.android.backchina.cache.CacheManager;
 import com.android.backchina.ui.empty.EmptyLayout;
+import com.android.backchina.utils.ToastUtils;
 import com.android.backchina.utils.UIHelper;
 import com.android.backchina.widget.CircleImageView;
 import com.android.backchina.widget.XListView;
@@ -105,8 +106,7 @@ public class BlogSpaceActivity extends BaseActivity implements OnItemClickListen
 					@Override
 					public void onFailure(int code, Header[] headers, String response, Throwable throwable) {
 						// TODO Auto-generated method stub
-						Toast.makeText(getContext(), "订阅失败",
-								Toast.LENGTH_SHORT).show();
+						ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 					}
 				});
 			}
@@ -126,20 +126,20 @@ public class BlogSpaceActivity extends BaseActivity implements OnItemClickListen
         Subscribe subscribe = activitiesBean.getActivities();
 		if (subscribe.getStatus() == null) {
 			if (subscribe.getFavid() != null) {
-				Toast.makeText(getContext(), "订阅成功", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_sucessed);
 				UIHelper.notifySubscribeDataChanged(this);
 			}else{
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			}
 		} else {
 			if (subscribe.getStatus().contains("repeat")) {
-				Toast.makeText(getContext(), "已订阅", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribed);
 			} else if (subscribe.getStatus().equals("-1")) {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			} else if (subscribe.getStatus().equals("-2")) {
-				Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_need_login);
 			} else {
-				Toast.makeText(getContext(), "订阅失败", Toast.LENGTH_SHORT).show();
+				ToastUtils.show(getContext(), R.string.toast_subscribe_failed);
 			}
 		}
     }

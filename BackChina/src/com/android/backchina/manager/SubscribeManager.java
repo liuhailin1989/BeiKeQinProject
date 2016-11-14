@@ -14,6 +14,7 @@ import android.net.Uri;
 import com.android.backchina.bean.FavoriteBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.db.DataProvider;
+import com.android.backchina.utils.StringUtils;
 import com.android.backchina.utils.TLog;
 
 public class SubscribeManager {
@@ -38,6 +39,28 @@ public class SubscribeManager {
 		return instance;
 	}
 
+	//
+	
+	public boolean isSearchIdType(Subscribe subscribe){
+		if(subscribe != null 
+				&& !StringUtils.isEmpty(subscribe.getIdtype()) 
+				&& subscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean isUIdType(Subscribe subscribe){
+		if(subscribe != null 
+				&& !StringUtils.isEmpty(subscribe.getIdtype()) 
+				&& subscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_UID)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	//local
 	public Subscribe getSubscribeFromTabLocalById(Context context,String id,String idType){
 		List<Subscribe> result = querrySubscribeById(context,DataProvider.SUBSCRIBE_LOCAL_URI,id,idType);

@@ -139,6 +139,10 @@ public class TabSubscribeFragment extends BaseFragment<Subscribe> implements
 			ResultListBean<Subscribe> resultListBean = AppContext.createGson()
 					.fromJson(responseString, type);
 			if (resultListBean != null && resultListBean.getItems() != null) {
+				List<Subscribe> resultData = resultListBean.getItems();
+				for(Subscribe subscribe : resultData){
+					subscribe.setIdtype(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID);
+				}
 				setDataList(resultListBean.getItems());
 			}
 		}

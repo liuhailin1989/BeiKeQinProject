@@ -149,7 +149,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	}
 
 	private void subscribeFunction() {
-		if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID)) {
+		if (SubscribeManager.getInstance().isSearchIdType(mCurrentSubscribe)) {
 			if (AppContext.getInstance().isLogin()) {
 				BackChinaApi.subscribe(mCurrentSubscribe.getId(),
 						new TextHttpResponseHandler() {
@@ -179,7 +179,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 				ToastUtils.show(getContext(), R.string.toast_subscribe_sucessed);
 				UIHelper.notifySubscribeDataChanged(mContext);
 			}
-		}else if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_UID)) {
+		}else if (SubscribeManager.getInstance().isUIdType(mCurrentSubscribe)) {
 			BackChinaApi.subscribeBlog(""+mCurrentSubscribe.getId(),
 					new TextHttpResponseHandler() {
 
@@ -201,7 +201,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 	}
 	
 	private void cancleSubscribeFunction(){
-		if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID)) {
+		if (SubscribeManager.getInstance().isSearchIdType(mCurrentSubscribe)) {
 			if (AppContext.getInstance().isLogin()) {
 				BackChinaApi.cancelSubscribe(mCurrentSubscribe.getFavid(),
 						new TextHttpResponseHandler() {
@@ -229,7 +229,7 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 				ToastUtils.show(getContext(), R.string.toast_cancle_subscribe_sucessed);
 				UIHelper.notifySubscribeDataChanged(this);
 			}
-		}else if (mCurrentSubscribe.getIdtype().equals(SubscribeManager.SUBSCRIBE_ID_TYPE_UID)) {
+		}else if (SubscribeManager.getInstance().isUIdType(mCurrentSubscribe)) {
 			if (AppContext.getInstance().isLogin()) {
 				BackChinaApi.cancleSubscribeBlog(mCurrentSubscribe.getId(),
 						new TextHttpResponseHandler() {

@@ -160,6 +160,7 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> imp
 			if(querrySubscribe != null){
 				subscribe.setFavid(querrySubscribe.getFavid());
 			}
+			subscribe.setIdtype(SubscribeManager.SUBSCRIBE_ID_TYPE_SEARCHID);
 		}
 		if (isrefresh) {
 			mAdapter.clear();

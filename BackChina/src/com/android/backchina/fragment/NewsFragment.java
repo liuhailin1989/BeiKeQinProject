@@ -16,6 +16,7 @@ import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.adapter.NewsAdapter;
+import com.android.backchina.api.ApiHttpClient;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseListFragment;
 import com.android.backchina.base.adapter.BaseListAdapter;
@@ -125,7 +126,11 @@ public class NewsFragment extends BaseListFragment<News> {
 							&& resultBean.getResult().getItems() != null) {
 						//
 						for(News news : resultBean.getResult().getItems()){
-							news.setNewsType(News.TYPE_NEWS_NORMAL);
+							if(StringUtils.isEmpty(news.getUrlapi()) && news.getUrlapi().contains(ApiHttpClient.SHOPPING_HOST)){
+								news.setNewsType(News.TYPE_NEWS_SHOPPING);
+							} else {
+								news.setNewsType(News.TYPE_NEWS_NORMAL);
+							}
 						}
 						//
 						if (mCurrentPage == 1) {

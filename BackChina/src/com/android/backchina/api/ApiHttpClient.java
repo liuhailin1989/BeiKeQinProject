@@ -26,6 +26,8 @@ public class ApiHttpClient {
     public static final String POST = "POST";
     public static final String PUT = "PUT";
     public static AsyncHttpClient client;
+    
+    public static final String SHOPPING_HOST = "http://www.21usdeal.com/zh/";
 
     public ApiHttpClient() {
         RequestConfig config =  RequestConfig.DEFAULT;

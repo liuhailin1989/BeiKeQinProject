@@ -12,6 +12,7 @@ public class News extends BaseBean {
 
 	public final static int TYPE_NEWS_NORMAL = 0;//0普通 新闻
 	public final static int TYPE_NEWS_LOCAL = 1;//1 本地新闻
+	public final static int TYPE_NEWS_SHOPPING = 2;//2 购物频道
 	
     /**
      * 发布日期

@@ -171,7 +171,9 @@ public class BackChinaApi {
         String url = "plugin.php?";
         if (newsType == News.TYPE_NEWS_LOCAL) {
         	url = "http://www.21uscity.com/plugin.php?";
-		} else {
+		} else if(newsType == News.TYPE_NEWS_SHOPPING){
+			url = ApiHttpClient.SHOPPING_HOST + "plugin.php?";
+		}else {
 			url = "plugin.php?";
 		}
         ApiHttpClient.post(url, params, handler);

@@ -15,6 +15,7 @@ import com.android.backchina.AppContext;
 import com.android.backchina.R;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.Comment;
+import com.android.backchina.bean.News;
 import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.bean.base.CommentBean;
 import com.android.backchina.ui.CommentNewsActivity;
@@ -160,7 +161,11 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
                 ViewGroup lay = addComment(false, comment, imageLoader, onCommentOpsListener);
             }
             if (onCommentOpsListener != null) {
-            	onCommentOpsListener.refreshCommentsCount(comments.get(0).getPosition() - 1);
+            	if(mType == News.TYPE_NEWS_LOCAL){
+            		onCommentOpsListener.refreshCommentsCount(comments.size());
+				} else {
+					onCommentOpsListener.refreshCommentsCount(comments.get(0).getPosition() - 1);
+				}
             }
         } else {
             setVisibility(View.GONE);

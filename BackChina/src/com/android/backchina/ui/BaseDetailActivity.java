@@ -32,7 +32,7 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
     
     private TextView tvTitle;
     
-    private TextView tvCommentCount;
+    protected TextView tvCommentCount;
     
     protected TextHttpResponseHandler mHandler;
     

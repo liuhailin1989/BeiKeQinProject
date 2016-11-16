@@ -297,7 +297,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mFrom.setText(newsDetail.getFrom());
         
         mComments.setTitle("最新评论");
-        mComments.init(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
+        mComments.init(newsDetail.getCommurlapi(), newsDetail.getNewsType(), AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
 
         //
         if(newsDetail.getRelated_b() != null && newsDetail.getRelated_b().size() > 0){
@@ -384,19 +384,15 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 	public void toSendCommentSucess() {
 		// TODO Auto-generated method stub
 		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
-		mComments.refreshComments(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
-		if(mComments.getY() == 0){
-			mComments.postDelayed(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					scrollToCommentsLocation();
-				}
-			}, 500);
-		} else {
-			scrollToCommentsLocation();
-		}
+		mComments.refreshComments(newsDetail.getCommurlapi(), newsDetail.getNewsType(), AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
+		mComments.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				scrollToCommentsLocation();
+			}
+		}, 500);
 	}
 
 	@Override

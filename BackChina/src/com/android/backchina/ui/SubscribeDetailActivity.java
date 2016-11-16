@@ -22,6 +22,7 @@ import com.android.backchina.adapter.SubscribeAdapter;
 import com.android.backchina.adapter.SubscribeDetailAdapter;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseActivity;
+import com.android.backchina.bean.Blog;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.Subscribe;
 import com.android.backchina.bean.SubscribeDetail;
@@ -422,7 +423,16 @@ public class SubscribeDetailActivity extends BaseActivity implements OnItemClick
 			long id) {
 		// TODO Auto-generated method stub
 		SubscribeDetail subscribeDetail = (SubscribeDetail) parent.getAdapter().getItem(position);
-		UIHelper.enterSpecialNewsDetailActivity(this,subscribeDetail);
+		if(SubscribeManager.getInstance().isUIdType(mCurrentSubscribe)){
+			Blog blog = new Blog();
+			blog.setId(subscribeDetail.getId());
+			blog.setTitle(subscribeDetail.getTitle());
+			blog.setUrl(subscribeDetail.getUrl());
+			blog.setUrlapi(subscribeDetail.getUrlapi());
+			UIHelper.enterBlogDetail(this, blog,false);
+		} else {
+			UIHelper.enterSpecialNewsDetailActivity(this, subscribeDetail);
+		}
 	}
 
 	private void requestData() {

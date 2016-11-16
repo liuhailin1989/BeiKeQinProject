@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.backchina.AppContext;
 import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.bean.FavoriteBean;
+import com.android.backchina.bean.News;
 import com.android.backchina.bean.SpecialNewsDetail;
 import com.android.backchina.bean.StatusBean;
 import com.android.backchina.bean.SubscribeDetail;
@@ -20,9 +21,15 @@ import com.android.backchina.bean.base.BlogCommentBean;
 import com.android.backchina.bean.base.ResultBean;
 import com.android.backchina.fragment.SpecialNewsDetailFragment;
 import com.android.backchina.manager.FavoriteManager;
+import com.android.backchina.ui.dialog.DialogHelper;
+import com.android.backchina.ui.dialog.WaitDialog;
 import com.android.backchina.utils.StringUtils;
+import com.android.backchina.utils.TLog;
 import com.android.backchina.utils.UIHelper;
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SpecialNewsDetailActivity extends BaseDetailActivity{
 
@@ -34,6 +41,8 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 	
 	private SpecialNewsDetail<BlogCommentBean> mSpecialNewsDetail;
 	
+	 private WaitDialog mWaitDialog;
+	 
 	 private boolean isFavorite;
 	
     public static void show(Context context, SubscribeDetail subscribeDetail) {
@@ -66,6 +75,12 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
     	setCommentCount(0);
     }
     
+    @Override
+    protected void initData() {
+    	// TODO Auto-generated method stub
+    	super.initData();
+    	mWaitDialog = DialogHelper.getWaitDialog(this, "正在提交...");
+    }
     
     @Override
     public void onRequestData(){
@@ -188,22 +203,47 @@ public class SpecialNewsDetailActivity extends BaseDetailActivity{
 //          AppContext.showToastShort("评论不能为空");
           return;
       }
+        mWaitDialog.show();
       int id = mSpecialNewsDetail.getId();
-//      BackChinaApi.sendNewsComment(id,cid,position,comment,"专题",new TextHttpResponseHandler() {
-//
-//          @Override
-//          public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//              // TODO Auto-generated method stub
-//              TLog.d("called");
-//          }
-//
-//          @Override
-//          public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//              // TODO Auto-generated method stub
-//              TLog.d("called");
-//          }
-//      });
+      int type = News.TYPE_NEWS_NORMAL;
+      BackChinaApi.sendNewsComment(type,id,cid,position,"回帖",comment,new TextHttpResponseHandler() {
+
+          @Override
+          public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+              // TODO Auto-generated method stub
+              TLog.d("called");
+              mWaitDialog.hide();
+              Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
+          }
+
+          @Override
+          public void onSuccess(int statusCode, Header[] headers, String responseString) {
+              // TODO Auto-generated method stub
+              TLog.d("called");
+              handleCommentResponse(headers,responseString);
+              mWaitDialog.hide();
+          }
+      });
 	}
+    
+    private void handleCommentResponse(Header[] headers,String response) {
+    	Type type = new TypeToken<ActivitiesBean<StatusBean>>() {
+        }.getType();
+        ActivitiesBean<StatusBean> activitiesBean = AppContext.createGson().fromJson(response, type);
+        StatusBean statusBean = activitiesBean.getActivities();
+        if (statusBean.getStatus().equals("1")) {
+        	Toast.makeText(getContext(), "评论成功", Toast.LENGTH_SHORT).show();
+			if (operatorCallBack != null) {
+				operatorCallBack.toSendCommentSucess();
+			}
+        }else if (statusBean.getStatus().equals("-1")) {
+        	Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
+        }else if (statusBean.getStatus().equals("-2")) {
+        	Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+        }else{
+        	Toast.makeText(getContext(), "评论失败", Toast.LENGTH_SHORT).show();
+        }
+    }
     
     @Override
     protected void handleFavoriteResp(String responseString) {

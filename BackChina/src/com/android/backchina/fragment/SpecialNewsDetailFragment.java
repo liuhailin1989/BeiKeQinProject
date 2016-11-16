@@ -352,18 +352,14 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 	@Override
 	public void toSendCommentSucess() {
 		// TODO Auto-generated method stub
-		if(mComments.getY() == 0){
-			mComments.postDelayed(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					scrollToCommentsLocation();
-				}
-			}, 500);
-		} else {
-			scrollToCommentsLocation();
-		}
+		mComments.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				scrollToCommentsLocation();
+			}
+		}, 500);
 	}
 	
 	@Override

@@ -424,18 +424,14 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 		BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
 		mComments.refreshComments(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
 		refreshCommentsCount(blogDetail.getComments());
-		if(mComments.getY() == 0){
-			mComments.postDelayed(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					scrollToCommentsLocation();
-				}
-			}, 500);
-		} else {
-			scrollToCommentsLocation();
-		}
+		mComments.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				scrollToCommentsLocation();
+			}
+		}, 500);
 	}
 	
 

@@ -37,6 +37,7 @@ import cz.msebera.android.httpclient.Header;
 public class SpecialNewsDetailFragment extends DetailFragment<Object> implements OnBlogCommentOpsListener{
 
 	private ScrollView mScrollView;
+	private LinearLayout layDetailTitleContainer;
     private TextView mTitle;
     private TextView mPubTime;
     private TextView mAuthor;
@@ -96,6 +97,7 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
         super.setupViews(root);
         titleTextSize = getActivity().getResources().getDimension(R.dimen.common_detail_title_text_size);
         mScrollView = (ScrollView) root.findViewById(R.id.sv_detail_scrollview);
+        layDetailTitleContainer = (LinearLayout) root.findViewById(R.id.ll_detail_title_container);
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
         mAuthor = (TextView) root.findViewById(R.id.tv_author);
@@ -350,7 +352,18 @@ public class SpecialNewsDetailFragment extends DetailFragment<Object> implements
 	@Override
 	public void toSendCommentSucess() {
 		// TODO Auto-generated method stub
-		scrollToCommentsLocation();
+		if(mComments.getY() == 0){
+			mComments.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					scrollToCommentsLocation();
+				}
+			}, 500);
+		} else {
+			scrollToCommentsLocation();
+		}
 	}
 	
 	@Override

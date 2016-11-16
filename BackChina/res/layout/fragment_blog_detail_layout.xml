@@ -46,6 +46,7 @@
                     android:background="@color/list_divider_color" />
 
                 <include
+                    android:id="@+id/lay_bloger_card"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     layout="@layout/layout_blog_detail_bloger_card" />

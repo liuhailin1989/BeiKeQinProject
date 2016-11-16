@@ -6,6 +6,7 @@
     android:background="@color/white" >
 
     <include
+        android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_detail_titlebar_height"
         layout="@layout/layout_detail_title_bar" />

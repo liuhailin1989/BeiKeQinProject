@@ -37,6 +37,7 @@ import com.android.backchina.widget.FixedHeightListView;
 public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnCommentOpsListener,OnItemClickListener{
 
 	private ScrollView mScrollView;
+	private LinearLayout layDetailTitleContainer;
     private TextView mTitle;
     private TextView mPubTime;
     private TextView mFrom;
@@ -95,6 +96,7 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         super.setupViews(root);
         titleTextSize = getActivity().getResources().getDimension(R.dimen.common_detail_title_text_size);
         mScrollView = (ScrollView) root.findViewById(R.id.sv_detail_scrollview);
+        layDetailTitleContainer = (LinearLayout) root.findViewById(R.id.ll_detail_title_container);
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
@@ -383,7 +385,18 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 		// TODO Auto-generated method stub
 		NewsDetail newsDetail = (NewsDetail) iDetail.getData();
 		mComments.refreshComments(newsDetail.getCommurlapi(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
-		scrollToCommentsLocation();
+		if(mComments.getY() == 0){
+			mComments.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					scrollToCommentsLocation();
+				}
+			}, 500);
+		} else {
+			scrollToCommentsLocation();
+		}
 	}
 
 	@Override

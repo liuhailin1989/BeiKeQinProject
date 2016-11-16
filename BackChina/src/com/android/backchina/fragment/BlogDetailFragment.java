@@ -43,6 +43,8 @@ import cz.msebera.android.httpclient.Header;
 public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnBlogCommentOpsListener{
 
 	private ScrollView mScrollView;
+	private LinearLayout layDetailTitleContainer;
+	private RelativeLayout layBlogerCard;
     private TextView mTitle;
     private TextView mPubTime;
     private TextView mAuthor;
@@ -104,6 +106,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         super.setupViews(root);
         titleTextSize = getActivity().getResources().getDimension(R.dimen.common_detail_title_text_size);
         mScrollView = (ScrollView) root.findViewById(R.id.sv_detail_scrollview);
+        layDetailTitleContainer = (LinearLayout) root.findViewById(R.id.ll_detail_title_container);
         mTitle = (TextView) root.findViewById(R.id.tv_title);
         mPubTime = (TextView) root.findViewById(R.id.tv_pub_date);
         mAuthor = (TextView) root.findViewById(R.id.tv_author);
@@ -147,6 +150,7 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
         });
         
         //
+        layBlogerCard = (RelativeLayout) root.findViewById(R.id.lay_bloger_card);
         mBlogerCardAvatar = (CircleImageView) root.findViewById(R.id.iv_card_avatar);
         mBlogerCardAvatar.setOnClickListener(new OnClickListener() {
 			
@@ -420,7 +424,18 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 		BlogDetail<BlogCommentBean> blogDetail = (BlogDetail<BlogCommentBean>) iDetail.getData();
 		mComments.refreshComments(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
 		refreshCommentsCount(blogDetail.getComments());
-		scrollToCommentsLocation();
+		if(mComments.getY() == 0){
+			mComments.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					scrollToCommentsLocation();
+				}
+			}, 500);
+		} else {
+			scrollToCommentsLocation();
+		}
 	}
 	
 

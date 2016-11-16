@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,8 @@ import cz.msebera.android.httpclient.Header;
 public abstract class BaseDetailActivity extends BaseActivity implements IContractDetail{
 
     private EmptyLayout mEmptyLayout;
+    
+    protected LinearLayout layTitleBar;
     
     private ImageView btnBack;
     
@@ -61,6 +64,7 @@ public abstract class BaseDetailActivity extends BaseActivity implements IContra
 	
 	protected void setupViews(){
         mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
+        layTitleBar = (LinearLayout) findViewById(R.id.title_bar);
         btnBack = (ImageView) findViewById(R.id.btn_back);
         btnBack.setOnClickListener(new OnClickListener() {
             

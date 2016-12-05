@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -249,6 +250,24 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mTvFontSize = (TextView) root.findViewById(R.id.tv_fontsize);
     }
     
+    @Override
+    public void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    	getFocus();
+    }
+    //主界面获取焦点
+    private void getFocus() {
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                return false;
+            }
+        });
+    }
+    
 	private void handleInputComment(String hintString) {
 		layCommit.setVisibility(View.GONE);
         layRealComentEdit.setVisibility(View.VISIBLE);
@@ -256,6 +275,21 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         mCommentEditView.setFocusable(true);  
         mCommentEditView.setFocusableInTouchMode(true);  
         mCommentEditView.requestFocus();
+        mCommentEditView.setOnKeyListener(new OnKeyListener() {
+			
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				if (keyCode == KeyEvent.KEYCODE_BACK
+						&& event.getAction() == KeyEvent.ACTION_UP) {
+					hideCommentView();
+					// 使得根View重新获取焦点，以监听返回键
+					getFocus();
+					return true;
+				}
+				return false;
+			}
+		});
         showSoftInput(mCommentEditView);
 	}
     

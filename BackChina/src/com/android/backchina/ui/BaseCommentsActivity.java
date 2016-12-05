@@ -132,6 +132,16 @@ OnItemClickListener, View.OnClickListener{
 		});
 	}
 	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		if(layRealComentEdit.getVisibility() == View.VISIBLE){
+			hideCommentView();
+			return;
+		}
+		super.onBackPressed();
+	}
+	
 	protected void handleInputComment(String hintString) {
 		layCommit.setVisibility(View.GONE);
         layRealComentEdit.setVisibility(View.VISIBLE);

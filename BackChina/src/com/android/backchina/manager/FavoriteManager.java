@@ -166,6 +166,9 @@ public class FavoriteManager {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		if (cursor != null) {
+			cursor.close();
+		}
 
 		return localFavoriteBean;
 	}
@@ -187,6 +190,9 @@ public class FavoriteManager {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		}
+		if (cursor != null) {
+			cursor.close();
 		}
 
 		return localFavoriteBean;

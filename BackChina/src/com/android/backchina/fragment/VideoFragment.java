@@ -252,4 +252,11 @@ public class VideoFragment extends BaseRecyclerViewFragment<Video> implements On
 			UIHelper.enterVideoPlayerActivity(getActivity(), video);
 		}
 	}
+	
+	public void autoRefreshIfNecessary(){
+		if (isNeedToAutoRefresh(getCacheKeyPrefix())) {
+			autoRefresh();
+			saveRefreshTime(getCacheKeyPrefix());
+		}
+	}
 }

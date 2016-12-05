@@ -39,6 +39,10 @@ public class AppConfig {
     public static final String KEY_WEBVIEW_TEXT_SIZE = "KEY_WEBVIEW_TEXT_SIZE";
     
     public static final int CONF_DETAIL_COMMENTS_MAX_COUNT = 10;
+    
+    public static final int SHOW_TAB_ITEM_NUM = 8;
+    
+    public static final long AUTO_REFRESH_TIME = 1000 * 60 * 5;//5分钟
 
     // 默认存放图片的路径
     public final static String DEFAULT_SAVE_IMAGE_PATH = Environment

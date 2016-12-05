@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView.ItemDecoration;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.View;
 
+import com.android.backchina.AppConfig;
+import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.R;
 import com.android.backchina.base.adapter.BaseRecyclerViewAdapter;
@@ -139,6 +141,21 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T>
 		}
 	}
 
+    public void saveRefreshTime(String key){
+    	long time = System.currentTimeMillis();
+    	AppContext.setToPreferences(key, time);
+    }
+    
+    public boolean isNeedToAutoRefresh(String key){
+    	long lastTime = AppContext.getPreferences().getLong(key, 0);
+    	long temp = (System.currentTimeMillis() - lastTime);
+    	if(temp >= AppConfig.AUTO_REFRESH_TIME){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
 	@Override
 	public Date getSystemTime() {
 		// TODO Auto-generated method stub

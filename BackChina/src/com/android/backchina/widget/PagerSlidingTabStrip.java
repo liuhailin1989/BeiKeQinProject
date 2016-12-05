@@ -333,7 +333,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 				if(title instanceof TextView){
 					TextPaint tp = ((TextView)title).getPaint();
 					tp.setFakeBoldText(false);
-					((TextView)title).setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+					((TextView)title).setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 				}
 			}
 			currentSelectedTabView = tabsLayout
@@ -344,7 +344,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 				if(title instanceof TextView){
 					TextPaint tp = ((TextView)title).getPaint();
 					tp.setFakeBoldText(true);
-					((TextView)title).setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+					((TextView)title).setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
 				}
 			}
 		}

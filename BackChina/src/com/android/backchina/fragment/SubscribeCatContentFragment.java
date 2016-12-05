@@ -148,7 +148,7 @@ public class SubscribeCatContentFragment extends BaseListFragment<Subscribe> imp
 		};
 	}
 
-	protected void setListData(final ResultListBean<Subscribe> resultListBean, boolean isrefresh) {
+	protected synchronized void setListData(final ResultListBean<Subscribe> resultListBean, boolean isrefresh) {
 		List<Subscribe> resultData = resultListBean.getItems();
 		for(Subscribe subscribe : resultData){
 			Subscribe querrySubscribe = null;

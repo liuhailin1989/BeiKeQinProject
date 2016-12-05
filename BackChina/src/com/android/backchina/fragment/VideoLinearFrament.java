@@ -257,4 +257,11 @@ public class VideoLinearFrament extends BaseRecyclerViewFragment<Video> implemen
 			UIHelper.enterVideoPlayerActivity(getActivity(), video);
 		}
 	}
+	
+	public void autoRefreshIfNecessary(){
+		if (isNeedToAutoRefresh(getCacheKeyPrefix())) {
+			autoRefresh();
+			saveRefreshTime(getCacheKeyPrefix());
+		}
+	}
 }

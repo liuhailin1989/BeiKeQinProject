@@ -150,6 +150,11 @@ public class SubscribeActivity extends BaseActivity implements OnItemClickListen
     	final ResultListBean<SubscribeCat> resultListBean = AppContext.createGson().fromJson(responseString, getType());
     	if(resultListBean != null && resultListBean.getItems() != null){
     		List<SubscribeCat> listCat = resultListBean.getItems();
+    		//
+    		listCat.add(0, getNewSubscribecat());
+    		listCat.add(1, getHotSubscribecat());
+    		listCat.add(2, getFanSubscribecat());
+    		//
     		mSubscribeCatAdapter.clear();
     		mSubscribeCatAdapter.addItem(listCat);
     		AppOperator.runOnThread(new Runnable() {
@@ -162,6 +167,33 @@ public class SubscribeActivity extends BaseActivity implements OnItemClickListen
     		return true;
     	}
     	return false;
+    }
+    
+    private SubscribeCat getNewSubscribecat(){
+    	SubscribeCat subscribeCat = new SubscribeCat();
+    	subscribeCat.setId(1000);
+    	subscribeCat.setCatid(1000);
+    	subscribeCat.setName("最新");
+    	subscribeCat.setUrlapi("http://www.backchina.com/api/appxml/subscription.php?new=1&json=1");
+    	return subscribeCat;
+    }
+    
+    private SubscribeCat getHotSubscribecat(){
+    	SubscribeCat subscribeCat = new SubscribeCat();
+    	subscribeCat.setId(1001);
+    	subscribeCat.setCatid(1001);
+    	subscribeCat.setName("最热");
+    	subscribeCat.setUrlapi("http://www.backchina.com/api/appxml/subscription.php?hot=1&json=1");
+    	return subscribeCat;
+    }
+    
+    private SubscribeCat getFanSubscribecat(){
+    	SubscribeCat subscribeCat = new SubscribeCat();
+    	subscribeCat.setId(1002);
+    	subscribeCat.setCatid(1002);
+    	subscribeCat.setName("最有趣");
+    	subscribeCat.setUrlapi("http://www.backchina.com/api/appxml/subscription.php?fan=1&json=1");
+    	return subscribeCat;
     }
     
     private void setData(ResultListBean<SubscribeCat> bean){

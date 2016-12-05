@@ -153,7 +153,7 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
             ChannelManager.getInstance().saveNewsChannelItemToTabAll(getActivity(), datas);
             //
             List<ChannelItem> defaultLocalChannelItems = new ArrayList<ChannelItem>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < AppConfig.SHOW_TAB_ITEM_NUM; i++) {
                 if (null != datas.get(i)) {
                     defaultLocalChannelItems.add(datas.get(i));
                 }
@@ -203,7 +203,7 @@ public class TabNewsFragment extends BaseViewPagerFragment implements
 			int currentItemIndex = mViewPager.getCurrentItem();
 			if (fragment != null && fragment instanceof NewsFragment) {
 				if (currentItemIndex == index) {
-					((NewsFragment) fragment).autoRefresh();
+					((NewsFragment) fragment).autoRefreshIfNecessary();
 				}
 			}
 		}

@@ -1,6 +1,8 @@
 package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.os.Bundle;
@@ -110,7 +112,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 							.fromJson(responseString, getType());
 					if (resultBean != null && resultBean.getItems() != null) {
 						if (mCurrentPage == 1) {
-							showDataUpdate(resultBean.getItems());
+//							showDataUpdate(resultBean.getItems());
 							setListData(resultBean, true);
 						}else{
 							setListData(resultBean, false);
@@ -159,9 +161,12 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 	protected void setListData(final ResultListBean<Blog> resultBean,
 			boolean isrefresh) {
 		// is refresh
+		List<Blog> blogData = resultBean.getItems();
+		Collections.sort(blogData,new BlogBeanComparator());
 		if (isrefresh) {
 			mAdapter.clear();
-			mAdapter.addItem(resultBean.getItems());
+			mAdapter.addItem(blogData);
+			showDataUpdate(blogData);
 			AppOperator.runOnThread(new Runnable() {
 				@Override
 				public void run() {
@@ -170,7 +175,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 				}
 			});
 		} else {
-			mAdapter.addItem(resultBean.getItems());
+			mAdapter.addItem(blogData);
 		}
 	}
 
@@ -261,6 +266,33 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 		// TODO Auto-generated method stub
 		return new TypeToken<ResultListBean<Blog>>() {
 		}.getType();
+	}
+	
+	public void autoRefreshIfNecessary(){
+		if (isNeedToAutoRefresh(getCacheKeyPrefix())) {
+			autoRefresh();
+			saveRefreshTime(getCacheKeyPrefix());
+		}
+	}
+	
+	public class BlogBeanComparator implements Comparator<Blog>{
+
+		@Override
+		public int compare(Blog lhs, Blog rhs) {
+			// TODO Auto-generated method stub
+			try {
+				if(lhs.getDateline() > rhs.getDateline()){
+					return -1;
+				}else if(lhs.getDateline() < rhs.getDateline()){
+					return 1;
+				}else{
+					return 0;
+				}
+			}catch(Exception ex){
+				return -1;
+			}
+		}
+		
 	}
 
 }

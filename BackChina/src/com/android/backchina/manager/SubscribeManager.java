@@ -171,6 +171,9 @@ public class SubscribeManager {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		if (cursor != null) {
+			cursor.close();
+		}
 
 		return localSubscribe;
 	}
@@ -193,7 +196,9 @@ public class SubscribeManager {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-
+		if (cursor != null) {
+			cursor.close();
+		}
 		return localSubscribe;
 	}
 

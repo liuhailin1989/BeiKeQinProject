@@ -93,4 +93,11 @@ public class BaseApplication extends Application{
         apply(editor);
     }
     
+    public static void setToPreferences(String key, long value) {
+    	SharedPreferences preferences = getPreferences();
+    	Editor editor = preferences.edit();
+        editor.putLong(key, value);
+        apply(editor);
+    }
+    
 }

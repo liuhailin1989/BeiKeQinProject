@@ -1,6 +1,9 @@
 package com.android.backchina.fragment;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import android.R.color;
@@ -21,6 +24,7 @@ import com.android.backchina.api.remote.BackChinaApi;
 import com.android.backchina.base.BaseListFragment;
 import com.android.backchina.base.adapter.BaseListAdapter;
 import com.android.backchina.bean.ChannelItem;
+import com.android.backchina.bean.FavoriteBean;
 import com.android.backchina.bean.News;
 import com.android.backchina.bean.base.NewsListBean;
 import com.android.backchina.bean.base.ResultBean;
@@ -67,7 +71,7 @@ public class NewsFragment extends BaseListFragment<News> {
 	private String getCacheKey() {
 		return getCacheKeyPrefix() + "_" + 1;//1表示page=1
 	}
-
+	
 	@Override
 	protected void initBundle(Bundle bundle) {
 		// TODO Auto-generated method stub
@@ -134,7 +138,7 @@ public class NewsFragment extends BaseListFragment<News> {
 						}
 						//
 						if (mCurrentPage == 1) {
-							showDataUpdate(resultBean.getResult().getItems());
+//							showDataUpdate(resultBean.getResult().getItems());
 							setListData(resultBean.getResult(), true);
 						}else{
 							setListData(resultBean.getResult(), false);
@@ -174,19 +178,34 @@ public class NewsFragment extends BaseListFragment<News> {
 					updateValue = i;
 					break;
 				}
+//				if(!isInOldData(temp, oldDatas)){
+//					updateValue++;
+//				}
 			}
 		}
 		String value = getActivity().getResources().getString(R.string.header_hint_refresh_notify);
 		String resultData = String.format(value, updateValue);
 		showCrouton(resultData,(ViewGroup)mRoot);
 	}
+	
+//	private boolean isInOldData(News news,List<News> oldDatas){
+//		for(News oldNews : oldDatas){
+//			if(news.getId() == oldNews.getId()){
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 	protected void setListData(final NewsListBean<News> pageBean,
 			boolean isrefresh) {
 		// is refresh
+		List<News> newsData = pageBean.getItems();
+		Collections.sort(newsData,new NewsBeanComparator());
 		if (isrefresh) {
 			mAdapter.clear();
-			mAdapter.addItem(pageBean.getItems());
+			mAdapter.addItem(newsData);
+			showDataUpdate(newsData);
 			AppOperator.runOnThread(new Runnable() {
 				@Override
 				public void run() {
@@ -195,7 +214,7 @@ public class NewsFragment extends BaseListFragment<News> {
 				}
 			});
 		} else {
-			mAdapter.addItem(pageBean.getItems());
+			mAdapter.addItem(newsData);
 		}
 	}
 
@@ -291,4 +310,30 @@ public class NewsFragment extends BaseListFragment<News> {
 		super.onSaveInstanceState(outState);
 	}
 
+	public void autoRefreshIfNecessary(){
+		if (isNeedToAutoRefresh(getCacheKeyPrefix())) {
+			autoRefresh();
+			saveRefreshTime(getCacheKeyPrefix());
+		}
+	}
+	
+	public class NewsBeanComparator implements Comparator<News>{
+
+		@Override
+		public int compare(News lhs, News rhs) {
+			// TODO Auto-generated method stub
+			try {
+				if(lhs.getDateline() > rhs.getDateline()){
+					return -1;
+				}else if(lhs.getDateline() < rhs.getDateline()){
+					return 1;
+				}else{
+					return 0;
+				}
+			}catch(Exception ex){
+				return -1;
+			}
+		}
+		
+	}
 }

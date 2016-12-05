@@ -125,7 +125,9 @@ public class ChannelManager {
             // TODO: handle exception
             e.printStackTrace();
         }
-
+        if (cursor != null) {
+			cursor.close();
+		}
         return localChannelItems;
     }
     

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.android.backchina.AppConfig;
 import com.android.backchina.AppContext;
 import com.android.backchina.AppOperator;
 import com.android.backchina.api.remote.BackChinaApi;
@@ -142,7 +143,7 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
             ChannelManager.getInstance().saveVideoChannelItemToTabAll(getActivity(), datas);
             //
             List<ChannelItem> defaultLocalChannelItems = new ArrayList<ChannelItem>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < AppConfig.SHOW_TAB_ITEM_NUM; i++) {
                 if (null != datas.get(i)) {
                     defaultLocalChannelItems.add(datas.get(i));
                 }
@@ -194,11 +195,11 @@ public class TabVideoFragment extends BaseViewPagerFragment implements OnTabRese
 			int currentItemIndex = mViewPager.getCurrentItem();
 			if (fragment != null && fragment instanceof VideoFragment) {
 				if (currentItemIndex == index) {
-					((VideoFragment) fragment).autoRefresh();
+					((VideoFragment) fragment).autoRefreshIfNecessary();
 				}
 			}else if (fragment != null && fragment instanceof VideoLinearFrament) {
 				if (currentItemIndex == index) {
-					((VideoLinearFrament) fragment).autoRefresh();
+					((VideoLinearFrament) fragment).autoRefreshIfNecessary();
 				}
 			}
 		}

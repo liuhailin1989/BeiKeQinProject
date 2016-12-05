@@ -406,7 +406,11 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
 		// TODO Auto-generated method stub
 		if (parent instanceof FixedHeightListView) {
 			News item = (News) parent.getAdapter().getItem(position);
-			UIHelper.enterNewsDetail(getActivity(), item,false);
+			if(StringUtils.isEmpty(item.getUrlapi())){
+				UIHelper.showUrlRedirect(getActivity(), item.getUrl());
+			} else {
+				UIHelper.enterNewsDetail(getActivity(), item, false);
+			}
 		}
 	}
 }

@@ -41,6 +41,7 @@ import android.widget.TextView;
 public class PagerSlidingTabStrip extends HorizontalScrollView implements
 		View.OnClickListener {
 	private int currentPosition; // 当前位置
+	private int lastPosition = -1;
 	private int lastOffset;
 	private int lastScrollX = 0;
 	private float currentPositionOffset; // 当前位置偏移量
@@ -189,8 +190,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 			currentPosition = viewPager != null ? viewPager.getCurrentItem()
 					: 0;
 			if (!disableViewPager) {
-				scrollToChild(currentPosition, 0); // 移动滑块到指定位置
-				selectedTab(currentPosition); // 选中指定位置的TAB
+				if (lastPosition != currentPosition) {
+					scrollToChild(currentPosition, 0); // 移动滑块到指定位置
+					boolean result = selectedTab(currentPosition); // 选中指定位置的TAB
+					if (result) {//result true 有内容
+						lastPosition = currentPosition;
+					}
+				}  
 			}
 
 			// 给每一个tab设置点击事件，当点击的时候切换Pager
@@ -323,7 +329,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 	/**
 	 * 选中指定位置的TAB
 	 */
-	private void selectedTab(int currentSelectedTabPosition) {
+	private boolean selectedTab(int currentSelectedTabPosition) {
 		ViewGroup tabsLayout = getTabsLayout();
 		if (currentSelectedTabPosition > -1 && tabsLayout != null
 				&& currentSelectedTabPosition < tabsLayout.getChildCount()) {
@@ -347,6 +353,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements
 					((TextView)title).setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
 				}
 			}
+			return true;
+		}else{
+			return false;
 		}
 	}
 

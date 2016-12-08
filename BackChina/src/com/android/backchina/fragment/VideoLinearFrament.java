@@ -252,7 +252,8 @@ public class VideoLinearFrament extends BaseRecyclerViewFragment<Video> implemen
 		Video video = datas.get(position);
 		//
 		if(StringUtils.isEmpty(video.getUrlapi())){
-			UIHelper.showUrlRedirect(getActivity(), video.getUrl());
+//			UIHelper.showUrlRedirect(getActivity(), video.getUrl());
+			UIHelper.enterCommonWebActivity(getActivity(), video.getUrl());
 		} else {
 			UIHelper.enterVideoPlayerActivity(getActivity(), video);
 		}

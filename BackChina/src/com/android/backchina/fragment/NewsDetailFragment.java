@@ -329,7 +329,9 @@ public class NewsDetailFragment<T> extends DetailFragment<Object> implements OnC
         //
         mPubTime.setText(StringUtils.friendlyTime(newsDetail.getDateline()));
         mFrom.setText(newsDetail.getFrom());
-        
+        //
+        mCommentsCount.setText("0");
+        //
         mComments.setTitle("最新评论");
         mComments.init(newsDetail.getCommurlapi(), newsDetail.getNewsType(), AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
 

@@ -374,6 +374,8 @@ public class BlogDetailFragment<T> extends DetailFragment<Object> implements OnB
 		mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,resultSize);
         mPubTime.setText(StringUtils.friendlyTime(blogDetail.getDateline()));
         mAuthor.setText(blogDetail.getUsername());
+        //
+        mCommentsCount.setText("0");
         mComments.setTitle("最新评论");
         mComments.init(blogDetail.getBlogcomments(), 0, AppConfig.CONF_DETAIL_COMMENTS_MAX_COUNT, getImgLoader(), this);
         

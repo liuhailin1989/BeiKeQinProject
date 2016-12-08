@@ -167,14 +167,15 @@ public class NewsFragment extends BaseListFragment<News> {
 		}
 		int updateValue = 0;
 		final NewsListBean<News> bean = (NewsListBean<News>) CacheManager.readObject(getActivity(), getCacheKey());
+		updateValue = newDatas.size();
 		if (bean == null) {
-			updateValue = newDatas.size();
+//			updateValue = newDatas.size();
 		} else {
 			List<News> oldDatas = bean.getItems();
 			News news = oldDatas.get(0);
 			for(int i = 0; i < newDatas.size(); i++){
 				News temp = newDatas.get(i);
-				if(temp.getId() == news.getId()){
+				if(temp.getId() == news.getId() && temp.getDateline() == news.getDateline()){
 					updateValue = i;
 					break;
 				}
@@ -201,7 +202,7 @@ public class NewsFragment extends BaseListFragment<News> {
 			boolean isrefresh) {
 		// is refresh
 		List<News> newsData = pageBean.getItems();
-		Collections.sort(newsData,new NewsBeanComparator());
+//		Collections.sort(newsData,new NewsBeanComparator());
 		if (isrefresh) {
 			mAdapter.clear();
 			mAdapter.addItem(newsData);
@@ -317,7 +318,7 @@ public class NewsFragment extends BaseListFragment<News> {
 		}
 	}
 	
-	public class NewsBeanComparator implements Comparator<News>{
+/*	public class NewsBeanComparator implements Comparator<News>{
 
 		@Override
 		public int compare(News lhs, News rhs) {
@@ -335,5 +336,5 @@ public class NewsFragment extends BaseListFragment<News> {
 			}
 		}
 		
-	}
+	}*/
 }

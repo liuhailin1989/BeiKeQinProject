@@ -141,14 +141,15 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 		}
 		int updateValue = 0;
 		final ResultListBean<Blog> bean = (ResultListBean<Blog>) CacheManager.readObject(getActivity(), getCacheKey());
+		updateValue = newDatas.size();
 		if (bean == null) {
-			updateValue = newDatas.size();
+//			updateValue = newDatas.size();
 		} else {
 			List<Blog> oldDatas = bean.getItems();
 			Blog blog = oldDatas.get(0);
 			for(int i = 0; i < newDatas.size(); i++){
 				Blog temp = newDatas.get(i);
-				if(temp.getId() == blog.getId()){
+				if((temp.getId() == blog.getId()) && (temp.getDateline() == blog.getDateline())){
 					updateValue = i;
 					break;
 				}
@@ -162,7 +163,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 			boolean isrefresh) {
 		// is refresh
 		List<Blog> blogData = resultBean.getItems();
-		Collections.sort(blogData,new BlogBeanComparator());
+//		Collections.sort(blogData,new BlogBeanComparator());
 		if (isrefresh) {
 			mAdapter.clear();
 			mAdapter.addItem(blogData);
@@ -275,7 +276,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 		}
 	}
 	
-	public class BlogBeanComparator implements Comparator<Blog>{
+	/*public class BlogBeanComparator implements Comparator<Blog>{
 
 		@Override
 		public int compare(Blog lhs, Blog rhs) {
@@ -293,6 +294,6 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 			}
 		}
 		
-	}
+	}*/
 
 }

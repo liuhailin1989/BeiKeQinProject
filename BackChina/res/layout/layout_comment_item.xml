@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <com.android.backchina.widget.CircleImageView
+        <com.news.soft.backchina.widget.CircleImageView
             android:id="@+id/user_avatar"
             android:layout_width="@dimen/comments_user_avatar_width"
             android:layout_height="@dimen/comments_user_avatar_height"

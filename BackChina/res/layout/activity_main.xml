@@ -6,7 +6,7 @@
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.android.backchina.MainActivity" >
+    tools:context="com.news.soft.backchina.MainActivity" >
 
     <LinearLayout
         android:id="@+id/main_content"
@@ -26,7 +26,7 @@
         android:id="@+id/split_line"
         style="@style/h_line" />
 
-    <com.android.backchina.widget.MainFragmentTabHost
+    <com.news.soft.backchina.widget.MainFragmentTabHost
         android:id="@android:id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

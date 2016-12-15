@@ -14,7 +14,7 @@
         android:background="@color/back_china_color"
         android:orientation="horizontal" >
 
-        <com.android.backchina.widget.PagerSlidingTabStrip
+        <com.news.soft.backchina.widget.PagerSlidingTabStrip
             android:id="@+id/pager_tabstrip"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -22,7 +22,7 @@
             android:background="@color/back_china_color"
             app:allowWidthFull="false"
             app:slidingBlock="@color/transparent" >
-        </com.android.backchina.widget.PagerSlidingTabStrip>
+        </com.news.soft.backchina.widget.PagerSlidingTabStrip>
 
         <ImageView
             android:id="@+id/iv_btn_add_tab"
@@ -48,7 +48,7 @@
         android:layout_below="@id/view_pager_line" >
     </android.support.v4.view.ViewPager>
 
-    <com.android.backchina.ui.empty.EmptyLayout
+    <com.news.soft.backchina.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         style="@style/fill_fill"
         android:visibility="gone" />

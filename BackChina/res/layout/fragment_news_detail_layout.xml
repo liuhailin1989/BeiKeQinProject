@@ -44,12 +44,12 @@
                     android:layout_height="1px"
                     android:background="@color/list_divider_color" />
 
-                <com.android.backchina.ui.comment.CommentsView
+                <com.news.soft.backchina.ui.comment.CommentsView
                     android:id="@+id/lay_comment_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <com.android.backchina.widget.FixedHeightListView
+                <com.news.soft.backchina.widget.FixedHeightListView
                     android:id="@+id/related_list_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

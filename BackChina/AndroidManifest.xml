@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.backchina"
+    package="com.news.soft.backchina"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -31,20 +31,20 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <permission
-        android:name="com.android.backchina.permission.C2D_MESSAGE"
+        android:name="com.news.soft.backchina.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.android.backchina.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.news.soft.backchina.permission.C2D_MESSAGE" />
     <!--end fcm 权限 -->
     
     <application
-        android:name="com.android.backchina.AppContext"
+        android:name="com.news.soft.backchina.AppContext"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.android.backchina.WellcomeActivity"
+            android:name="com.news.soft.backchina.WellcomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppStartLoad" >
@@ -56,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.android.backchina.MainActivity"
+            android:name="com.news.soft.backchina.MainActivity"
             android:hardwareAccelerated="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -66,102 +66,102 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.android.backchina.ui.ChannelNewsActivity"
+            android:name="com.news.soft.backchina.ui.ChannelNewsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.ChannelBlogActivity"
+            android:name="com.news.soft.backchina.ui.ChannelBlogActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.ChannelVideoActivity"
+            android:name="com.news.soft.backchina.ui.ChannelVideoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.NewsDetailActivity"
+            android:name="com.news.soft.backchina.ui.NewsDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.BlogDetailActivity"
+            android:name="com.news.soft.backchina.ui.BlogDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.BlogSpaceActivity"
+            android:name="com.news.soft.backchina.ui.BlogSpaceActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.YouToBeVideoPlayerActivity"
+            android:name="com.news.soft.backchina.ui.YouToBeVideoPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="nosensor" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.LoginActivity"
+            android:name="com.news.soft.backchina.ui.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
        <activity
-            android:name="com.android.backchina.ui.MyFavoriteActivity"
+            android:name="com.news.soft.backchina.ui.MyFavoriteActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.AboutUsActivity"
+            android:name="com.news.soft.backchina.ui.AboutUsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.SubscribeActivity"
+            android:name="com.news.soft.backchina.ui.SubscribeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.SubscribeDetailActivity"
+            android:name="com.news.soft.backchina.ui.SubscribeDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.SpecialNewsDetailActivity"
+            android:name="com.news.soft.backchina.ui.SpecialNewsDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.RegisterActivity"
+            android:name="com.news.soft.backchina.ui.RegisterActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.CityListActivity"
+            android:name="com.news.soft.backchina.ui.CityListActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.CommentNewsActivity"
+            android:name="com.news.soft.backchina.ui.CommentNewsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.CommentBlogActivity"
+            android:name="com.news.soft.backchina.ui.CommentBlogActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.CommonWebActivity"
+            android:name="com.news.soft.backchina.ui.CommonWebActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.backchina.ui.PushMessageActivity"
+            android:name="com.news.soft.backchina.ui.PushMessageActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="com.android.backchina.ACTION_FCM" />
+                <action android:name="com.news.soft.backchina.ACTION_FCM" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -176,7 +176,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.android.backchina.fcmpush" />
+                <category android:name="com.news.soft.backchina.fcmpush" />
             </intent-filter>
         </receiver>
 
@@ -192,7 +192,7 @@
              no need for explicit permissions despite exported="true"
         -->
         <service
-            android:name="com.android.backchina.fcmpush.MyIDService"
+            android:name="com.news.soft.backchina.fcmpush.MyIDService"
             android:exported="true" >
             <intent-filter android:priority="-500" >
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -204,7 +204,7 @@
         <!-- FirebaseMessagingService performs security checks at runtime,
              no need for explicit permissions despite exported="true" -->
         <service
-            android:name="com.android.backchina.fcmpush.MyMessagingService"
+            android:name="com.news.soft.backchina.fcmpush.MyMessagingService"
             android:exported="true">
             <intent-filter android:priority="-500">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -213,8 +213,8 @@
         <!-- cloudMessage服务end -->
      <!--end FCM  -->
         <provider
-            android:name="com.android.backchina.db.DataProvider"
-            android:authorities="com.android.backchina.DataProvider"
+            android:name="com.news.soft.backchina.db.DataProvider"
+            android:authorities="com.news.soft.backchina.DataProvider"
             android:exported="false" />
         
          <meta-data

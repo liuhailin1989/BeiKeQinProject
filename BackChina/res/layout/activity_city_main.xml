@@ -81,7 +81,7 @@
         android:textSize="16sp"
         android:visibility="gone" />
 
-    <com.android.backchina.widget.LetterListView
+    <com.news.soft.backchina.widget.LetterListView
         android:id="@+id/letter_listView"
         android:layout_width="25dip"
         android:layout_height="match_parent"

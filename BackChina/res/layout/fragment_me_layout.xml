@@ -10,7 +10,7 @@
         android:layout_height="200dp"
         android:background="@color/back_china_color" >
 
-        <com.android.backchina.widget.CircleImageView
+        <com.news.soft.backchina.widget.CircleImageView
             android:id="@+id/iv_avatar"
             android:layout_width="@dimen/mine_avatar_width"
             android:layout_height="@dimen/mine_avatar_height"

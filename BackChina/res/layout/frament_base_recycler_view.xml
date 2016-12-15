@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.android.backchina.widget.xrecyclerview.XRecyclerView
+    <com.news.soft.backchina.widget.xrecyclerview.XRecyclerView
         android:id="@+id/base_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.android.backchina.ui.empty.EmptyLayout
+    <com.news.soft.backchina.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -29,7 +29,7 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <com.android.backchina.widget.CircleImageView
+            <com.news.soft.backchina.widget.CircleImageView
                 android:id="@+id/iv_logo"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
@@ -63,7 +63,7 @@
         android:layout_height="match_parent"
         android:background="@color/background_color" >
 
-        <com.android.backchina.widget.XListView
+        <com.news.soft.backchina.widget.XListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -72,7 +72,7 @@
             android:scrollbars="none"
             android:visibility="visible" />
 
-        <com.android.backchina.ui.empty.EmptyLayout
+        <com.news.soft.backchina.ui.empty.EmptyLayout
             android:id="@+id/error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

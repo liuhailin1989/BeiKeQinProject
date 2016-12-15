@@ -19,7 +19,7 @@
             android:background="@drawable/selector_btn_close_channels" />
     </LinearLayout>
 
-    <com.android.backchina.widget.ChannelScrollView
+    <com.news.soft.backchina.widget.ChannelScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true" >
@@ -61,7 +61,7 @@
                 style="@style/h_line"
                 android:layout_marginTop="10dp" />
 
-            <com.android.backchina.widget.DragRecyclerView
+            <com.news.soft.backchina.widget.DragRecyclerView
                 android:id="@+id/myChanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,13 +91,13 @@
                     android:textSize="18dp" />
             </LinearLayout>
 
-            <com.android.backchina.widget.UnsignedRecyclerView
+            <com.news.soft.backchina.widget.UnsignedRecyclerView
                 android:id="@+id/moreChanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp" />
         </LinearLayout>
-    </com.android.backchina.widget.ChannelScrollView>
+    </com.news.soft.backchina.widget.ChannelScrollView>
 
 </LinearLayout>
